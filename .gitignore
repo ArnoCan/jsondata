@@ -12,9 +12,12 @@
 /**/2check/
 /**/backup/
 /**/tmp/
+
+#Python + stuptools + sphinx
 /**/build/
 /**/dist/
-/**/jsondata.egg-info//
+/**/jsondata.egg-info/
+
 
 # by default these are copies only, the source are in components 
 # and/or src if required set individually
@@ -44,8 +47,6 @@
 /config.log
 /config.h
 /configure
-
-*.zip
 
 #
 # common suffixes

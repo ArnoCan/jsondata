@@ -8,5 +8,4 @@ Shortcuts
    :maxdepth: 3
 
    shortcuts
-   usecases
 

@@ -1,7 +1,7 @@
-Process data by 'jsondata.JSONPatch' 
+Process data by 'jsondata.jsonpatch'
 ************************************
 
-The module jsondata.JSONPatch provides patch operations in 
+The module jsondata.jsonpatch provides patch operations in 
 accordance to RFC6901.
 
 
@@ -80,7 +80,7 @@ Keyword operators::
    ops := apply
 
 
-Examples 
+Examples
 ========
 
 Examples for the provided basic calculations are:
@@ -142,7 +142,7 @@ Export List
 
 
 Import List
-----------
+-----------
 * **Import Job List**::
 
     implist = JSONPatch()

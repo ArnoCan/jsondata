@@ -1,0 +1,15 @@
+{
+  "address":{},
+  "phoneNumber":
+  [
+    {
+      "type":"office",
+      "number":"313 123-456"
+    },
+    {
+    	"type":"office",
+    	"number":"444 444-444"
+    }
+    
+  ]
+}

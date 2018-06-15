@@ -1,0 +1,12 @@
+#documentation
+recursive-include doc/en/html/man3/jsondata *
+
+#Misc
+include .gitignore
+include ArtisticLicense20.html
+include README.md
+include callDocSphinx.sh
+include licenses-amendments.txt
+include setup.cfg
+include setup.py
+include dosrc/jsondata-64x64.png

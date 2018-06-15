@@ -1,7 +1,7 @@
-Serialize branch data by 'jsondata.JSONDataSerializer' 
+Serialize branch data by 'jsondata.jsondataserializer' 
 ******************************************************
 
-The module jsondata.JSONDataSerializer extends the JSONData class 
+The module jsondata.jsondataserializer extends the JSONData class 
 with serialization for JSON documents and substructures.
 
 Provided basic operations are:
@@ -42,7 +42,7 @@ Import-Document
    kargs['nodefaultpath'] = True
    kargs['nosubdata'] = True
    kargs['pathlist'] = os.path.dirname(__file__)
-   kargs['validator'] = MODE_SCHEMA_DRAFT4
+   kargs['validator'] = MS_DRAFT4
 
    # load JSON data, with validation by draft4
    configdata = ConfigData(appname,**kargs)
@@ -70,7 +70,7 @@ Import-Branch
    kargs['nodefaultpath'] = True
    kargs['nosubdata'] = True
    kargs['pathlist'] = os.path.dirname(__file__)
-   kargs['validator'] = MODE_SCHEMA_DRAFT4
+   kargs['validator'] = MS_DRAFT4
 
    # target container
    target = configdata.data['phoneNumber']
@@ -104,6 +104,6 @@ Export-Branch
     # Export a branch.
     #
     datafile = os.path.abspath(os.path.dirname(__file__))+os.sep+str('export-doc.json')
-    branch = JSONPointer('/phoneNumber/0').get_node(configdata.data)
+    branch = JSONPointer('/phoneNumber/0')(configdata.data)
     ret = configdata.json_export(branch, datafile)
     assert ret == True

@@ -49,10 +49,10 @@ The overall design is structured for component wise reuse.
 Therefore a layered software stack is implemented, which starts above basic JSON data encoding and decoding
 and adds on top various features:
 
-* Manage branches of substructures - **jsondata.JSONData**
-* Serialize JSON documents - **jsondata.JSONDataSerializer**
-* Access pointer paths and values - **jsondata.JSONPointer**
-* Modify data structures and values - **jsondata.JSONPatch**
+* Manage branches of substructures - **jsondata.jsondata**
+* Serialize JSON documents - **jsondata.jsondataserializer**
+* Access pointer paths and values - **jsondata.jsonpointer**
+* Modify data structures and values - **jsondata.jsonpatch**
 
 With the external packages:
 
@@ -83,7 +83,7 @@ The component 'jsondata' relies on unittest.TestCase class due to it's lower pos
 the software stack.
 In case of large amounts of JSON based data is to be verified consider using the packgae
 'jsondataunit' `[online] <https://pypi.python.org/pypi/jsondataunit/>`_, which
-is derived from this package 'jsondata.JSONDataSerializer'.::
+is derived from this package 'jsondata.jsondataserializer'.::
 
      +---------------------+
      |    JSONDataUnit     |

@@ -48,15 +48,6 @@ the package are:
   The patch task lists could be assembled by modules, modified as required 
   and stored persistently for reuse. 
 
-* **JSONCompute**
-
-  Moved to a seperate package 'jsoncompute'. 
-
-* **Selftest** / **'jsondc --selftest'**
-
-  Last but not least, the selftest feature provides for a quick verification
-  of the package itself.
- 
 The close design to the presented in-memory interface by the packages 'json'
 and 'jsonschema' provides for reliable and fast access based on the standard 
 Python packages, while the 'jsondata' package adds high-level abstractions
@@ -79,7 +70,7 @@ applicable in case of numerous other requirements, a typical application
 for branch data is the persistent storage of GUI models for 
 dynamically loaded and released user elements.
 
-The core module 'jsondata.JSONData' provides hereby the load of a master model from a JSON file, 
+The core module 'jsondata.jsondata' provides hereby the load of a master model from a JSON file, 
 and the incremental addition and removal of branches to the model by loading additional 
 JSON modules into the master model.
 This is accompanied by the additional modules of this package, e.g. for modification in 
@@ -128,11 +119,12 @@ files(A,B,C-schema) depend on the actual implementation of the imported modules.
 The resulting data could be saved for later reuse.
 
 
-.. include:: jsondata_m_data.rst
-.. include:: jsondata_m_serializer.rst
-.. include:: jsondata_m_pointer.rst
-.. include:: jsondata_m_patch.rst
-.. include:: jsondata_m_tree.rst
-.. include:: jsondata_m_exceptions.rst
-.. include:: jsondata_m_selftest.rst
+.. toctree::
+   :maxdepth: 2
+
+   jsondata_init_doc.rst
+   jsondata_jsondata_doc.rst
+   jsondata_jsonserializer_doc.rst
+   jsondata_jsonpointer_doc.rst
+   jsondata_jsonpatch_doc.rst
 

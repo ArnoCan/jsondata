@@ -1,0 +1,15 @@
+{
+	"version": [0,0,1],
+  	"date": [2017,3,13],
+  	"syntax": [0,0,1],
+  	"uuid": "1fb2d94d-8128-4df6-8960-770b2a02d7be",
+  	"branch":{
+  		"name": "name0",
+  		"uuid": "c9bab735-f260-4509-862a-55a6fccd2e95",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "string0"
+  	}
+}

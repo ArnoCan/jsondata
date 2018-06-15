@@ -1,0 +1,210 @@
+
+
+/*
+4TEST:
+
+    margin: 0 0 3em 0; 
+    border-top:1em;
+    padding: 2cm 4cm 3cm 4cm;
+     padding-top:1em;
+    h1, h2, h3, h4 {line-height: 1em;}
+    line-height: 2em;
+    border-top: 0px;
+    border-bottom: 0px;
+    padding-left:1em;
+    padding-right:1em;
+    width: 100%
+    background: #9DCBD6; color: #000000;
+    background: #f5fdf9;
+    background: #E7E7B1;
+    background: #E4EEFA;
+    background: #E5EFF5;
+    background: #E4EFF1;
+    background: #E1EFF1;
+    background: #ffffff;
+    background: red;
+    width: 100%
+    text-decoration: underline;
+    background: yellow;
+    color: black;
+*/
+
+
+div.body {
+    min-width: 650px;
+    max-width: 96%;
+}
+
+
+table th {
+    background: #9DCBD6; color: #000000;
+}
+
+table {
+    margin: 0 0 1em 0; 
+}
+
+div.nonbreaktab table td, div.nonbreaktab table th {
+    white-space:nowrap;
+}
+
+
+/*
+    index
+*/
+
+div.indextab table tr:hover {
+    background: lightgrey;
+    color: black;
+}
+
+div.indextab table td a:hover {
+    background: yellow;
+    color: green;
+/*
+    font-weight: bold;
+*/
+}
+
+div.indextab table td:hover {
+    background: lightyellow;
+    color: green;
+/*
+    font-weight: bold;
+*/
+}
+
+div.indextab table {
+    margin: 1em 0 2em 0; 
+}
+
+div.indextab table th {
+    background: #9DCBD6;
+    color: #000000;
+    border-top: 0px;
+    border-bottom: 0px;
+    padding-left:1em;
+    padding-right:1em;
+}
+
+/*
+    shortcuts
+*/
+div.shortcuttab table tr:hover {
+    background: lightgrey;
+    color: black;
+}
+
+div.shortcuttab table td a:hover {
+/*
+    font-weight: bold;
+    color: green;
+*/
+    color: green;
+    background: yellow;
+}
+
+div.shortcuttab table td:hover {
+/*
+    font-weight: bold;
+*/
+    background: lightyellow;
+}
+
+
+div.shortcuttab table {
+    margin: 1em 0 2em 0; 
+}
+
+div.shortcuttab table th {
+    background: #9DCBD6;
+    color: #000000;
+    border-top: 0px;
+    border-bottom: 0px;
+    padding-left:1em;
+    padding-right:1em;
+}
+
+
+div.codeasmath pre {
+    background: #ffffff;
+    color: #000000;
+    border-top: 0px;
+    border-bottom: 0px;
+    padding-left:1em;
+}
+
+div.codeasmath td.code pre {
+    background: #ffffff; color: #000000;
+    border-top: 1px solid #ac9;
+    border-bottom: 1px solid #ac9;
+}
+
+pre {
+    background: #e9f9f2;
+    color: #000000;
+    border-top: 0px;
+    border-bottom: 0px;
+    padding-left:1em;
+}
+
+body.nicknameinfopage {
+    width: 100%;
+    height: 100%;
+    vertical-align: center;
+}
+
+body.nicknameinfopage div.nicknameinfo table {
+    width: 100%;
+    height: 90%;
+    vertical-align: center;
+}
+
+div.nicknameinfo table {
+    width: 100%;
+    height: 90%;
+    vertical-align: center;
+}
+
+body.nicknameinfopage div.footer {
+    color: #ffffff;
+    width: 100%;
+    height: 3em;
+    padding: 9px 0 9px 0;
+    text-align: center;
+    font-size: 100%;
+}
+
+body.profileinfopage {
+    width: 100%;
+    height: 100%;
+    vertical-align: center;
+}
+
+div.thumbup {
+    color: #ffffff;
+    width: 100%;
+    padding: 9px 0 9px 0;
+    text-align: center;
+    font-size: 100%;
+}
+
+div.thumbdown {
+    color: #ffffff;
+    width: 100%;
+    height: 3em;
+    padding: 9px 0 9px 0;
+    text-align: center;
+    font-size: 100%;
+}
+
+div.thumbup img {
+    height: 1.5em;
+    vertical-align: -0.2em;
+}
+
+div.thumbdown img {
+    height: 1.5em;
+    vertical-align: -0.8em;
+}
+

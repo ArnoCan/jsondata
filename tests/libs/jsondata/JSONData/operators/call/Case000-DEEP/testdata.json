@@ -1,0 +1,10 @@
+{
+  "address":{},
+  "phoneNumber":
+  [
+    {
+      "type":"home",
+      "number":"212 555-1234"
+    }
+  ]
+}

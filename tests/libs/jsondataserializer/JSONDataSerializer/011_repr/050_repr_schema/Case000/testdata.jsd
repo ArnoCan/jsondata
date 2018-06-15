@@ -1,0 +1,23 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"type": "array",
+	"required": true,
+	"items":{
+		"phoneNumber": {
+			"type":"string",
+			"required":true
+		},
+		"city": {
+			"type":"string",
+			"required":true
+		},
+		"streetAddress": {
+			"type":"string",
+			"required":true
+		},
+		"houseNumber": {
+			"type":"number",
+			"required":true
+		}
+	}
+}

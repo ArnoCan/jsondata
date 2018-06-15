@@ -1,0 +1,2 @@
+"""Simple print self.schema.
+"""

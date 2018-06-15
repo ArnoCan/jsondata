@@ -1,0 +1,25 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"type":"object",
+	"required":true,
+	"properties":{
+		"entry": {
+			"required":true,
+			"type":"array",
+			"items":{
+				"number": {
+					"type":"string",
+					"required":false
+				},
+				"datatype": {
+					"type":"string",
+					"required":false
+				},
+				"region": {
+					"type":"string",
+					"required":false
+				}
+			}
+		}
+	}
+}

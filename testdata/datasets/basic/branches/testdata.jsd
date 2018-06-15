@@ -1,0 +1,85 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"type":"object",
+	"required":true,
+	"properties":{
+		"branch": {
+			"type":"object",
+			"required":true,
+			"properties":{
+				"name": {
+					"type":"string",
+					"required":true
+				},
+				"uuid": {
+					"type":"string",
+					"required":true
+				},
+				"level": {
+					"type":"num",
+					"required":true
+				},
+				"A": {
+					"type":"bool",
+					"required":true
+				},
+				"B": {
+					"type":"bool",
+					"required":true
+				},
+				"C": {
+					"type":"num",
+					"required":true
+				},
+				"D": {
+					"type":"string",
+					"required":true
+				},
+				"depth": {
+					"type":"object",
+					"required":false,
+					"$ref": "branch" 
+				}
+			}
+		}
+	}
+	"branch": {
+		"type":"object",
+		"required":true,
+		"properties":{
+			"name": {
+				"type":"string",
+				"required":true
+			},
+			"uuid": {
+				"type":"string",
+				"required":true
+			},
+			"level": {
+				"type":"num",
+				"required":true
+			},
+			"A": {
+				"type":"bool",
+				"required":true
+			},
+			"B": {
+				"type":"bool",
+				"required":true
+			},
+			"C": {
+				"type":"num",
+				"required":true
+			},
+			"D": {
+				"type":"string",
+				"required":true
+			},
+			"depth": {
+				"type":"object",
+				"required":false,
+				"$ref": "branch" 
+			}
+		}
+	}
+}

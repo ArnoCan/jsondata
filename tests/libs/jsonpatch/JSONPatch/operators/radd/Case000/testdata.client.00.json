@@ -1,0 +1,137 @@
+{
+	"client": {
+		"name": "Company-00",
+		"owner": "black"
+	},
+	"address":{
+		"streetAddress": "21 2nd Street",
+		"city":"New York",
+		"houseNumber":12
+	},
+	"phoneNumber":
+    [
+		{
+			"type":"home0",
+			"number":"000"
+		},
+		{
+			"type":"home1",
+			"number":"111"
+		},
+		{
+			"type":"office",
+			"number":"222"
+		},
+		{
+			"type":"holidays",
+			"number":"333"
+		}
+	],
+	"customers": {
+		"domestic": [
+			{
+				"name":"customer0",
+				"industries": "construction",
+				"products": [
+					{
+						"name": "excavator",
+						"quantities": 2,
+						"priority": 0
+					},
+					{
+						"name": "shovel",
+						"quantities": 2000,
+						"priority": 3
+					}
+				]
+			},
+			{
+				"name": "customer1",
+				"industries": "telecommunications",
+				"products": [
+					{
+						"name": "phone",
+						"quantities": 20,
+						"priority": 0
+					},
+					{
+						"name": "smartphone",
+						"quantities": 200,
+						"priority": 0
+					}
+				]
+			},
+			{
+				"name": "customer2",
+				"industries": "informationtechnology",
+				"products": [
+					{
+						"name": "desktoppc",
+						"quantities": 200,
+						"priority": 0
+					},
+					{
+						"name": "keyboard",
+						"quantities": 2000,
+						"priority": 0
+					},
+					{
+						"name": "mouse",
+						"quantities": 2000,
+						"priority": 0
+					}
+				]
+			} 	
+		],
+		"abroad": [
+			{
+				"name": "customer0",
+				"industries": "food",
+				"products": [
+					{
+						"name": "juice",
+						"quantities": 20000,
+						"priority": 3
+					},
+					{
+						"name": "coffee",
+						"quantities": 20000,
+						"priority": 3
+					}
+				]
+			},
+			{
+				"name": "customer1",
+				"industries": "construction",
+				"products": [
+					{
+						"name": "screwdriver",
+						"quantities": 2,
+						"priority": 6
+					},
+					{
+						"name": "screw",
+						"quantities": 20000,
+						"priority": 6
+					}
+				]
+			},
+			{
+				"name": "customer2",
+				"industries": "informationtechnology",
+				"products": [
+					{
+						"name": "pc",
+						"quantities": 2,
+						"priority": 6
+					},
+					{
+						"name": "server",
+						"quantities": 200,
+						"priority": 6
+					}
+				]			
+			} 	
+		]
+	}
+}

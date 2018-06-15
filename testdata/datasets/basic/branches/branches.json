@@ -1,0 +1,218 @@
+{
+	"version": [0,0,1],
+  	"date": [2017,3,13],
+  	"syntax": [0,0,1],
+  	"uuid": "1fb2d94d-8128-4df6-8960-770b2a02d7be",
+  	"branches":[
+  	{
+  		"name": "branch0",
+  		"uuid": "4792368e-98aa-4057-aace-74857377328d",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0"
+  	},
+  	{
+  		"name": "branch0",
+  		"uuid": "571ae2f3-2cc8-49bf-a2c6-a5b5d924feee",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1,
+  			"A": true, 
+  			"B": false, 
+  			"C": 11, 
+			"D": "str11"
+  		}
+  	},
+  	{
+  		"name": "branch0",
+  		"uuid": "ceec5327-788f-4b9d-8d1f-aed934616d8a",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1,
+  			"A": true, 
+  			"B": false, 
+  			"C": 11, 
+			"D": "str11", 
+  			"depth": {  				
+	  			"level": 2, 
+	  			"A": true, 
+	  			"B": false, 
+	  			"C": 22, 
+				"D": "str22"
+  			}
+  		}
+  	},
+  	{
+  		"name": "branch0",
+  		"uuid": "791cf907-3c0f-461b-be0f-4cc2d127bb3a",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1,
+  			"A": true, 
+  			"B": false, 
+  			"C": 11, 
+			"D": "str11", 
+  			"depth": {  				
+	  			"level": 2, 
+	  			"A": true, 
+	  			"B": false, 
+	  			"C": 22, 
+				"D": "str22", 
+	  			"depth": {
+	  	  			"level": 3,
+		  			"A": true, 
+		  			"B": false,
+		  			"C": 33,
+					"D": "str33" 
+	  			}
+  			}
+  		}
+  	},
+  	{
+  		"name": "branch1",
+  		"uuid": "47eaa04d-905d-4ef1-bf1a-728e28c3d840",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1, 
+  			"A": true, 
+  			"B": false, 
+			"C": 11, 
+			"D": "str11", 
+  			"depth": {  				
+	  			"level": 2, 
+	  			"A": true, 
+	  			"B": false, 
+	  			"C": 22, 
+				"D": "str22", 
+	  			"depth": {
+	  	  			"level": 3,
+		  			"A": true, 
+		  			"B": false, 
+		  			"C": 33, 
+					"D": "str33", 
+	  	  			"depth": {
+		  		  		"level": 4, 
+			  			"A": true, 
+			  			"B": false, 
+			  			"C": 44, 
+						"D": "str44"
+	  				}
+	  			}
+  			}
+  		}
+  	},
+  	{
+  		"name": "branch1",
+  		"uuid": "f85d937e-bdf0-4b37-a778-7d13c226025e",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1, 
+  			"A": true, 
+  			"B": false, 
+			"C": 11, 
+			"D": "str11", 
+  			"depth": {  				
+	  			"level": 2, 
+	  			"A": true, 
+	  			"B": false, 
+	  			"C": 22, 
+				"D": "str22", 
+	  			"depth": {
+	  	  			"level": 3,
+		  			"A": true, 
+		  			"B": false, 
+		  			"C": 33, 
+					"D": "str33", 
+	  	  			"depth": {
+		  		  		"level": 4, 
+			  			"A": true, 
+			  			"B": false, 
+			  			"C": 44, 
+						"D": "str44", 
+	  		  			"depth": {  				
+					  		"level": 5, 
+				  			"A": true, 
+				  			"B": false, 
+				  			"C": 55, 
+							"D": "str55"
+			  			}
+	  				}
+	  			}
+  			}
+  		}
+  	},
+  	{
+  		"name": "branch1",
+  		"uuid": "5008184f-1dcd-4d02-8a49-3ea2e7a6cc96",
+  		"level": 0, 
+		"A": true, 
+		"B": false, 
+		"C": 0, 
+		"D": "str0", 
+  		"depth": {
+  			"level": 1, 
+  			"A": true, 
+  			"B": false, 
+			"C": 11, 
+			"D": "str11", 
+  			"depth": {  				
+	  			"level": 2, 
+	  			"A": true, 
+	  			"B": false, 
+	  			"C": 22, 
+				"D": "str22", 
+	  			"depth": {
+	  	  			"level": 3,
+		  			"A": true, 
+		  			"B": false, 
+		  			"C": 33, 
+					"D": "str33", 
+	  	  			"depth": {
+		  		  		"level": 4, 
+			  			"A": true, 
+			  			"B": false, 
+			  			"C": 44, 
+						"D": "str44", 
+	  		  			"depth": {  				
+					  		"level": 5, 
+				  			"A": true, 
+				  			"B": false, 
+				  			"C": 55,
+							"D": "str55", 
+							"depth": {  				
+  								"level": 6,
+					  			"A": true, 
+					  			"B": false,
+					  			"C": 66,
+					  			"D": "str66"
+					  		}
+			  			}
+	  				}
+	  			}
+  			}
+  		}
+  	}	
+  ]
+}
