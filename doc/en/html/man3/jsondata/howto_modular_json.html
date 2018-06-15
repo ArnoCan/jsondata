@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modular JSON &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Howto" href="howto.html" />
+    <link rel="next" title="JSON Patch Management" href="howto_patch_management.html" />
+    <link rel="prev" title="Howto" href="howto.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_patch_management.html" title="JSON Patch Management"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto.html" title="Howto"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" accesskey="U">Howto</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="modular-json">
+<span id="howto-jsonmodular"></span><h1>Modular JSON<a class="headerlink" href="#modular-json" title="Permalink to this headline">¶</a></h1>
+<p>One of the unique features of the package <em>jsondata</em> is it&#8217;s consequent
+adjustment to the management and processing of data structures called <em>branches</em>.
+This enables modular JSON data and easy includes, imports, and exports of sub-trees.</p>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modular JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#json-modules-and-branches">JSON Modules and Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validate-modules-by-one-main-json-schema">Validate Modules by one Main JSON Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validate-modules-by-modular-json-schema">Validate Modules by Modular JSON Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automate-module-processing-with-json-patch">Automate Module Processing with JSON Patch</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="json-modules-and-branches">
+<h2>JSON Modules and Branches<a class="headerlink" href="#json-modules-and-branches" title="Permalink to this headline">¶</a></h2>
+<p>The <em>jsondata</em> handles each structure as a <em>branch</em> - including the whole document,
+which is seen as the master branch.
+Therefore each JSON document - either seiralized, or in-memory - could be imported
+to any JSON data structure.</p>
+<div class="section" id="import-json-modules-as-branches">
+<h3>Import JSON Modules as Branches<a class="headerlink" href="#import-json-modules-as-branches" title="Permalink to this headline">¶</a></h3>
+<p>The import of a module into an existing JSON structure simply requires one call only.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondataserializer</span> <span class="kn">import</span> <span class="n">JSONDataSerializer</span>
+<span class="kn">from</span> <span class="nn">jsondata</span>  <span class="kn">import</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># name of application, used for several filenames as MS_DRAFT4</span>
+<span class="n">appname</span> <span class="o">=</span> <span class="s2">&quot;jsondc&quot;</span>
+
+
+<span class="c1"># JSON data</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;datafile.json&#39;</span><span class="p">)</span>
+
+<span class="c1"># JSON schema</span>
+<span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;schema.jsd&#39;</span><span class="p">)</span>
+
+<span class="c1"># standard call options</span>
+<span class="n">kargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nodefaultpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nosubdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># load JSON file</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONDataSerializer</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="c1">#</span>
+<span class="c1"># *** Modules as branches ***</span>
+<span class="c1">#</span>
+
+<span class="c1"># branches to be added</span>
+<span class="n">branch1_datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;branch1.json&#39;</span><span class="p">)</span>
+
+<span class="n">branch2_datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;branch2.json&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># load branch data into memory</span>
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span><span class="n">branch1_datafile</span><span class="p">)</span>
+
+<span class="c1"># load branch data into memory</span>
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span><span class="n">branch2_datafile</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="export-json-branches-as-modules">
+<h3>Export JSON Branches as Modules<a class="headerlink" href="#export-json-branches-as-modules" title="Permalink to this headline">¶</a></h3>
+<p>The export of branch works similar as the import.
+Just add the following lines to the previous example.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;out_address.json&#39;</span><span class="p">)</span>
+
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_export</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;/address&quot;</span><span class="p">,</span> <span class="n">pretty</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="copy-and-modify-json-modules">
+<h3>Copy and Modify JSON Modules<a class="headerlink" href="#copy-and-modify-json-modules" title="Permalink to this headline">¶</a></h3>
+<p>The JSON modules are treated as <em>branches</em> once they are loaded into the memory.
+For the in-memory operationd the methods and operators are provided by the base
+class of the serializer the class <em>JSONData</em>.</p>
+<p>See <a class="reference internal" href="howto_class_jsondata.html#howto-jsondata"><span class="std std-ref">JSONData - RFC7159 et al.</span></a>.</p>
+</div>
+</div>
+<div class="section" id="validate-modules-by-one-main-json-schema">
+<h2>Validate Modules by one Main JSON Schema<a class="headerlink" href="#validate-modules-by-one-main-json-schema" title="Permalink to this headline">¶</a></h2>
+<p>The simples way of using schemas is to provide one schema for the whole data
+structure - which could raise the complexity by this one schema itself.
+The single schema requires the description of the whole document including
+any expected variant.</p>
+<p>The following example demonstrates the repetitive validation of a JSON structure
+by a single schema loaded once during the initialization of the object
+created by <em>JSONData</em>.
+This is either set by the initialization as default for all import calls,
+of provided as a parameter for each import call individually.
+Add these lines to one of the previous examples.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jsondata</span> <span class="kn">import</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1">#</span>
+<span class="c1"># *** Modules as branches ***</span>
+<span class="c1">#</span>
+
+<span class="c1"># branches to be added</span>
+<span class="n">branch1_datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;branch1.json&#39;</span><span class="p">)</span>
+
+<span class="n">branch2_datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;branch2.json&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># load branch data into memory</span>
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span><span class="n">branch1_datafile</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="s2">&quot;draft4&quot;</span><span class="p">)</span>
+
+<span class="c1"># load branch data into memory</span>
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span><span class="n">branch2_datafile</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">MS_DRAFT4</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="validate-modules-by-modular-json-schema">
+<h2>Validate Modules by Modular JSON Schema<a class="headerlink" href="#validate-modules-by-modular-json-schema" title="Permalink to this headline">¶</a></h2>
+<p>The <em>jsondata</em> provides in addition for the validation call by call,
+where each call could uuse a different schema related to the current
+branch only.</p>
+<div class="section" id="modular-json-schemes">
+<h3>Modular JSON Schemes<a class="headerlink" href="#modular-json-schemes" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="import-a-schema-module">
+<h3>Import a Schema Module<a class="headerlink" href="#import-a-schema-module" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="export-a-schema-module">
+<h3>Export a Schema Module<a class="headerlink" href="#export-a-schema-module" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="automate-module-processing-with-json-patch">
+<h2>Automate Module Processing with JSON Patch<a class="headerlink" href="#automate-module-processing-with-json-patch" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Modular JSON</a><ul>
+<li><a class="reference internal" href="#json-modules-and-branches">JSON Modules and Branches</a><ul>
+<li><a class="reference internal" href="#import-json-modules-as-branches">Import JSON Modules as Branches</a></li>
+<li><a class="reference internal" href="#export-json-branches-as-modules">Export JSON Branches as Modules</a></li>
+<li><a class="reference internal" href="#copy-and-modify-json-modules">Copy and Modify JSON Modules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validate-modules-by-one-main-json-schema">Validate Modules by one Main JSON Schema</a></li>
+<li><a class="reference internal" href="#validate-modules-by-modular-json-schema">Validate Modules by Modular JSON Schema</a><ul>
+<li><a class="reference internal" href="#modular-json-schemes">Modular JSON Schemes</a></li>
+<li><a class="reference internal" href="#import-a-schema-module">Import a Schema Module</a></li>
+<li><a class="reference internal" href="#export-a-schema-module">Export a Schema Module</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#automate-module-processing-with-json-patch">Automate Module Processing with JSON Patch</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto.html"
+                        title="previous chapter">Howto</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_patch_management.html"
+                        title="next chapter">JSON Patch Management</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_modular_json.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_patch_management.html" title="JSON Patch Management"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto.html" title="Howto"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" >Howto</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

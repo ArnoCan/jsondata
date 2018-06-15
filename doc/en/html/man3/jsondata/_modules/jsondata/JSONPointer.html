@@ -1,0 +1,1250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.JSONPointer &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../../index.html" />
+    <link rel="up" title="jsondata" href="../jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" accesskey="U">jsondata</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata.JSONPointer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="sd">&quot;&quot;&quot;Provides classes for the JSONPointer definition in accordance to RFC6901.</span>
+
+<span class="sd">The provided class JSONPointer internally stores and applies pointer data</span>
+<span class="sd">as a list of keys and indexes with the additional cooperative caching of</span>
+<span class="sd">the pointed in-memory node reference for fast access on data provided by</span>
+<span class="sd">the packages &#39;json&#39; and &#39;jsonschema&#39;. Requests for the string representation</span>
+<span class="sd">are transformed into a pointer path in accordance to RFC6901. </span>
+
+<span class="sd">The JSONPointer class combines fast in-memory operations and pointer </span>
+<span class="sd">arithmetics with standards compliant path strings at the API.</span>
+
+<span class="sd">The JSONPointer class by itself is focused on the path pointer itself, though</span>
+<span class="sd">the provided operations do not touch the content value. The pointer provides</span>
+<span class="sd">the hook where the value has to be inserted. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.18&#39;</span>
+<span class="n">__uuid__</span><span class="o">=</span><span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">.</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">version</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;2.6&#39;</span><span class="p">,</span><span class="s1">&#39;2.7&#39;</span><span class="p">,):</span> <span class="c1"># pragma: no cover</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Requires Python-2.6.* or higher&quot;</span><span class="p">)</span>
+<span class="c1"># if version &lt; &#39;2.7&#39;: # pragma: no cover</span>
+<span class="c1">#     raise Exception(&quot;Requires Python-2.7.* or higher&quot;)</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">StringTypes</span><span class="p">,</span><span class="n">NoneType</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib</span> <span class="k">import</span> <span class="n">unquote</span>
+    <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">izip</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span> <span class="c1"># Python 3</span>
+    <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">unquote</span>
+    <span class="n">izip</span> <span class="o">=</span> <span class="nb">zip</span>
+
+
+<span class="c1"># Sets display for inetractive JSON/JSONschema design.</span>
+<span class="n">_interactive</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Notation a the API - in/out.</span>
+<span class="n">NOTATION_JSON</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># this is the default</span>
+<span class="sd">&quot;&quot;&quot;JSON notation in accordance to RFC7159</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NOTATION_HTTP_FRAGMENT</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;JSON notation in accordance to RFC7159 with RFC3986.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">VALID_NODE_TYPE</span> <span class="o">=</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">,)</span>
+<span class="sd">&quot;&quot;&quot;Valid types of in-memory JSON node types.&quot;&quot;&quot;</span>
+
+
+<span class="n">CHARSET_UTF</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd">&quot;&quot;&quot;Unicode.&quot;&quot;&quot;</span>
+
+<span class="n">CHARSET_STR</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;Python string.&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">JSONPointerException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="JSONPointer"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer">[docs]</a><span class="k">class</span> <span class="nc">JSONPointer</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents exactly one JSONPointer in compliance with IETF RFC6901.</span>
+<span class="sd">    This pointer could be processed by extension, reduction, and general modification</span>
+<span class="sd">    with support of provided methods and path arithmetic operators. </span>
+<span class="sd">    </span>
+<span class="sd">    The JSONPointer is provided at the API as a utf(-8) string in accordance </span>
+<span class="sd">    to RFC6901, including RFC3869.</span>
+<span class="sd">    </span>
+<span class="sd">    For enhancement of the processing performance by the underlying packages </span>
+<span class="sd">    &#39;json&#39; and &#39;jsonschema&#39;, the pointer is stored and applied in two variants. </span>
+<span class="sd">    </span>
+<span class="sd">    * self.raw: Raw input of the pointer string for the logical API.</span>
+<span class="sd">    </span>
+<span class="sd">    * self.ptr: Split elements of the pointer path within a list of keys,</span>
+<span class="sd">        for the programming interface.</span>
+<span class="sd">      </span>
+<span class="sd">    The attribute &#39;self.ptr&#39; contains the path elements in a </span>
+<span class="sd">    &#39;list&#39;::</span>
+<span class="sd">       </span>
+<span class="sd">       ptrlist := (&lt;EMPTY&gt;|plist)</span>
+<span class="sd">       &lt;EMPTY&gt; := &quot;empty list, represents the whole document&quot;</span>
+<span class="sd">       plist := pkey [, plist ]</span>
+<span class="sd">       pkey := (&#39;&#39;|int|keyname)</span>
+<span class="sd">       &#39;&#39; := &quot;the empty string is a valid key too&quot;</span>
+<span class="sd">       int := &quot;integer index of an array item, just digits&quot;</span>
+<span class="sd">       keyname := &quot;the valid name of an object/property entry&quot; </span>
+
+<span class="sd">    The JSONPointer::</span>
+<span class="sd">    </span>
+<span class="sd">      &quot;/address/0/streetName&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    is represented as::</span>
+<span class="sd">    </span>
+<span class="sd">      [&#39;address&#39;, 0, &#39;streetName&#39; ]</span>
+
+
+<span class="sd">    The methods and operators are handling the pointer itself, the values</span>
+<span class="sd">    referenced by the pointer are not modified. </span>
+<span class="sd">    </span>
+<span class="sd">    The methods of this class support for multiple input format of </span>
+<span class="sd">    the JSONPointer. The parameter &#39;x&#39; in the operations is defined as a</span>
+<span class="sd">    valid JSONPointer fragment. A pointer fragment is a part of a pointer,</span>
+<span class="sd">    which could be the complete pointer itself - the all-fragment. </span>
+<span class="sd">    </span>
+<span class="sd">    The syntax element could be one of::</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;str&#39;: A string i accordance to RFC6901. Strings are represented </span>
+<span class="sd">            internally as unicode utf-8.</span>
+<span class="sd">            </span>
+<span class="sd">            Here either the input parameter &#39;x&#39; is split into</span>
+<span class="sd">            a list, or in case of combining operations, the self.ptr</span>
+<span class="sd">            attribute is &#39;joined&#39; to be used for the method. </span>
+
+<span class="sd">        &#39;int&#39;: A numeric value in case of an array index. This value </span>
+<span class="sd">            is internally handled for the string representation as a</span>
+<span class="sd">            unicode utf-8, whereas for the addressing of memory </span>
+<span class="sd">            objects the numeric integer value is stored and applied.</span>
+
+<span class="sd">        &#39;JSONPointer&#39;: The attributes of the input object are used </span>
+<span class="sd">            with it&#39;s peers.</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;list&#39;: Expects a path list containing:</span>
+<span class="sd">            - JSON object names</span>
+<span class="sd">                Names of the json objects.</span>
+<span class="sd">            - array indexes</span>
+<span class="sd">                Numeric index for arrays.</span>
+<span class="sd">            - JSONPointer</span>
+<span class="sd">                A JSONPointer object, the path is resolved as a section </span>
+<span class="sd">                of overall path.</span>
+
+<span class="sd">            The self.ptr attribute is applied for operations.</span>
+<span class="sd">    </span>
+<span class="sd">    The node reference is cached by the &#39;get_node&#39; and &#39;get_node_or_value&#39; </span>
+<span class="sd">    method, thus could be accessed by &#39;self.node&#39;, but is not monitored</span>
+<span class="sd">    to be valid. Another call of the method reloads the cache by evaluating</span>
+<span class="sd">    the pointer value on the document again.</span>
+<span class="sd">    </span>
+<span class="sd">    The provided value is internally stored as a raw input value, and a list</span>
+<span class="sd">    of keys and indexes for access to in-memory data as provided by the</span>
+<span class="sd">    packages &#39;json&#39; and &#39;jsonschema&#39;. Requests for the string representation</span>
+<span class="sd">    are transformed into a pointer path in accordance to RFC6901. This provides</span>
+<span class="sd">    for fast access in case of pointer arithmetics, while providing standards</span>
+<span class="sd">    conform path strings at the interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">VALID_INDEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;0|[1-9][0-9]*$&#39;</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Regular expression for valid numerical index.&quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="JSONPointer.__init__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptr</span><span class="p">,</span><span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Converts and stores a JSONPointer as a list.</span>
+
+<span class="sd">        Processes the ABNF of a JSON Pointer from RFC6901.</span>
+<span class="sd">    </span>
+<span class="sd">        Args:</span>
+<span class="sd">            ptr: A JSONPointer to be represented by this object. The</span>
+<span class="sd">                supported formats are:</span>
+<span class="sd">                    &#39;str&#39;: A string i accordance to RFC6901</span>
+<span class="sd">                    JSONPointer: A valid object, will be copied </span>
+<span class="sd">                        into this, see &#39;deep&#39;.</span>
+<span class="sd">                    &#39;list&#39;: expects a path list, where each item</span>
+<span class="sd">                        is processed for escape and unquote.</span>
+<span class="sd">            replace: Replaces masked characters.</span>
+<span class="sd">            **kargs:</span>
+<span class="sd">                deep: Applies for copy operations on structured data</span>
+<span class="sd">                    &#39;deep&#39; when &#39;True&#39;, else &#39;swallow&#39; only, which is </span>
+<span class="sd">                    just a link to the data structure. Flat data types</span>
+<span class="sd">                    are copied by value in any case.</span>
+<span class="sd">                node: Force to set the pointed node in the internal cache. </span>
+<span class="sd">                debug: Enable debugging.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else returns either &#39;False&#39;, or</span>
+<span class="sd">            raises an exception. </span>
+<span class="sd">            Success is the complete addition only, thus one failure returns</span>
+<span class="sd">            False.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># cache for reuse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deep</span> <span class="o">=</span> <span class="n">deep</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;deep&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ptr</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="s1">&#39;#&#39;</span><span class="p">:</span> <span class="c1"># pointer are unicode only</span>
+            <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span> <span class="c1"># pointer are unicode only</span>
+            <span class="n">ptr</span><span class="o">=</span><span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">ptr</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># shortcut for whole document, see RFC6901</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">elif</span> <span class="n">ptr</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span> <span class="c1"># shortcut for empty tag at top-level, see RFC6901</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">ptr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">StringTypes</span><span class="p">):</span> <span class="c1"># string in accordance to RFC6901</span>
+            <span class="k">if</span> <span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>                
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ptr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+                <span class="n">ptr</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">ptr</span> <span class="c1"># any pointer is absolute due to RFC6901, force it silently for smart loops</span>
+
+            <span class="k">if</span> <span class="n">deep</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>    
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">ptr</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span> <span class="c1"># copy a pointer, source has to be valid</span>
+            <span class="k">if</span> <span class="n">deep</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">.</span><span class="n">raw</span><span class="p">[:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ptr</span><span class="o">.</span><span class="n">copy_path</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">.</span><span class="n">raw</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="c1"># list of entries in accordance to RFC6901, and JSONPointer</span>
+            <span class="k">def</span> <span class="nf">presolv</span><span class="p">(</span><span class="n">p0</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span> <span class="c1"># copy constructor</span>
+                    <span class="k">return</span> <span class="n">p0</span><span class="o">.</span><span class="n">ptr</span>
+                <span class="k">elif</span> <span class="n">p0</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">):</span> 
+                    <span class="k">return</span> <span class="n">p0</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span> 
+                    <span class="k">return</span> <span class="n">p0</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span> 
+                    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodepart:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p0</span><span class="p">))</span> 
+                <span class="k">return</span> <span class="n">p0</span>
+            <span class="k">if</span> <span class="n">deep</span><span class="p">:</span>    
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="n">s</span><span class="p">[:],</span><span class="n">ptr</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>    
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">presolv</span><span class="p">,</span><span class="n">ptr</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ptr</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Pointer type not supported:&quot;</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">ptr</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">replace</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">)</span> <span class="ow">and</span> <span class="n">unquote</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;~1&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;~0&#39;</span><span class="p">,</span> <span class="s1">&#39;~&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">p</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># 6901-escaped, generic chars-quote</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[:]</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c1">#FIXME: check wheter the assumption is viable</span>
+        <span class="c1"># SPECIAL: assumes digit only as array index</span>
+        <span class="k">def</span> <span class="nf">checkint</span><span class="p">(</span><span class="n">ix</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">ix</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ix</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">checkint</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="p">[:]</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+   
+<div class="viewcode-block" id="JSONPointer.__add__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Appends a Pointer to self.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid JSONPointer fragment.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new object of JSONPointer</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="s1">&#39;#&#39;</span><span class="p">:</span> <span class="c1"># pointer are unicode only, RFC6901/RFC3829</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># whole document, RFC6901</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Cannot add the whole document&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span> <span class="c1"># empty tag</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">x</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">x</span><span class="o">.</span><span class="n">raw</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">x</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">x</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__call__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates the pointed value from the document.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid JSON document.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The pointed value, or None.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__eq__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+       
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="c1">#return s == unicode(&quot;/&quot;+&#39;/&#39;.join(x))</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__ge__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__ge__">[docs]</a>    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks containment(&gt;=) of another pointer within this.</span>
+
+<span class="sd">        The weight of contained entries is the criteria, though</span>
+<span class="sd">        the shorter is the bigger. This is true only in case of</span>
+<span class="sd">        a containment relation.</span>
+<span class="sd">         </span>
+<span class="sd">        The number of equal path pointer items is compared.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+       
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s2">u&quot;/&quot;</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">px</span><span class="p">:</span> <span class="c1"># the shorter is the bigger</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">px</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span> <span class="c1"># matching part has to be literal</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__gt__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__gt__">[docs]</a>    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks containment(&gt;) of another pointer or object within this.</span>
+
+<span class="sd">        The number of equal items is compared.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+       
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s2">u&quot;/&quot;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="n">px</span><span class="p">:</span> <span class="c1"># the shorter is the bigger, so false in any case</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">px</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span> <span class="c1"># matching part has to be literal</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__iadd__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__iadd__">[docs]</a>    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add in place x to self, appends a path.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            &#39;self&#39; with updated pointer attributes</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">unicode</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">x</span><span class="o">.</span><span class="n">raw</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">raw</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># whole document, RFC6901</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Cannot add the whole document&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span> <span class="c1"># empty tag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="n">x</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">+=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">x</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+        
+<div class="viewcode-block" id="JSONPointer.__le__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__le__">[docs]</a>    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks containment(&lt;=) of this pointer within another.</span>
+
+<span class="sd">        The number of equal items is compared.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+       
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s2">u&quot;/&quot;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="n">px</span><span class="p">:</span> <span class="c1"># the shorter is the bigger</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">px</span><span class="p">)):</span> <span class="c1"># matching part has to be literal</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__lt__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__lt__">[docs]</a>    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks containment(&lt;) of this pointer within another.</span>
+
+<span class="sd">        The number of equal items is compared.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+       
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s2">u&quot;/&quot;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+            <span class="n">px</span> <span class="o">=</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="n">NoneType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">px</span><span class="p">:</span> <span class="c1"># the shorter is the bigger</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">unicode</span><span class="p">(</span><span class="n">px</span><span class="p">)):</span> <span class="c1"># matching part has to be literal</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__ne__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eq__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__radd__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__radd__">[docs]</a>    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds itself as the right-side-argument to the left.</span>
+<span class="sd">        </span>
+<span class="sd">        This method appends &#39;self&#39; to a path fragment on the left.</span>
+<span class="sd">        Therefore it adds the path separator on it&#39;s left side only.</span>
+<span class="sd">        The left side path fragment has to maintain to be in </span>
+<span class="sd">        accordance to RFC6901 by itself.</span>
+
+<span class="sd">        Once &#39;self&#39; is added to the left side, it terminates it&#39;s</span>
+<span class="sd">        life cycle. Thus another simultaneous add operation is </span>
+<span class="sd">        handled by the resulting other element.</span>
+<span class="sd">         </span>
+<span class="sd">        Args:</span>
+<span class="sd">            x: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The updated input of type &#39;x&#39; as &#39;x+S(x)&#39;</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># whole document, RFC6901</span>
+            <span class="k">return</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">u&#39;/&#39;</span><span class="p">:</span> <span class="c1"># empty tag</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">unicode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">+</span><span class="s1">u&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__repr__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the attribute self.raw, which is the raw input JSONPointer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">super</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="JSONPointer.__str__"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the string for the processed path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pointer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ret</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&#39;&#39;&quot;</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+    <span class="c1">#</span>
+    <span class="c1"># ---</span>
+    <span class="c1">#</span>
+
+<div class="viewcode-block" id="JSONPointer.check_node_or_value"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.check_node_or_value">[docs]</a>    <span class="k">def</span> <span class="nf">check_node_or_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks the existance of the corresponding node within the JSON document.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+<span class="sd">            parent: Return the parent node of the pointed value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="n">jsondata</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="n">jsondata</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_NODE_TYPE</span><span class="p">:</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">jsondata</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">:</span>
+                <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">jsondata</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_NODE_TYPE</span><span class="p">:</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPointer.copy_path_list"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.copy_path_list">[docs]</a>    <span class="k">def</span> <span class="nf">copy_path_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a deep copy of the objects pointer path list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parent: The parent node of the pointer path.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A copy of the path list.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="n">s</span><span class="p">[:],</span><span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="n">s</span><span class="p">[:],</span><span class="bp">self</span><span class="p">[:])</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_node"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the corresponding node reference for a JSON container type.</span>
+<span class="sd">        </span>
+<span class="sd">        This method gets nodes of container types. Container </span>
+<span class="sd">        types of JSON are &#39;array&#39; a.k.a. in Python &#39;list&#39;, </span>
+<span class="sd">        and &#39;objects&#39; a.k.a. in Python &#39;dict&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Due to the special case of RFC6902 &#39;append&#39; by the array </span>
+<span class="sd">        index &#39;-&#39; in combination of the add rules a special </span>
+<span class="sd">        exception-treatment is required, for details refer to RFC6902.</span>
+<span class="sd">        </span>
+<span class="sd">        The &#39;get_node&#39; method therefore returns only an existing </span>
+<span class="sd">        node of a of valid non-ambiguous path pointer. This </span>
+<span class="sd">        excludes pointers containing the symbolic index &#39;-&#39; for </span>
+<span class="sd">        an array component.</span>
+<span class="sd">        </span>
+<span class="sd">        See also related methods:</span>
+<span class="sd">        </span>
+<span class="sd">            get_node_and_child: For Python access to a child node </span>
+<span class="sd">                within a container by the container itself, and the</span>
+<span class="sd">                item key.</span>
+<span class="sd">            get_node_exist: For the application of partial valid </span>
+<span class="sd">                pointer paths of new branches.</span>
+<span class="sd">            get_node_or_value: For any type of pointed item, either </span>
+<span class="sd">                a node, or a value. </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+<span class="sd">            parent: Return the parent node of the pointed value.</span>
+<span class="sd">                When parent is selected, the pointed child node</span>
+<span class="sd">                is not verified. </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The node reference.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="n">jsondata</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="n">jsondata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Requires existing Node(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;):&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> 
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span>
+        <span class="k">return</span> <span class="n">jsondata</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_node_and_child"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_node_and_child">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_and_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a tuple containing the parent node and the child.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The the tuple:</span>
+<span class="sd">            (n,c):  n: Node reference to parent container.</span>
+<span class="sd">                    c: Key for the child entry, either an </span>
+<span class="sd">                       index &#39;int&#39;, or a key (&#39;str&#39;, &#39;unicode&#39;). </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">jsondata</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+    
+<div class="viewcode-block" id="JSONPointer.get_node_or_value"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_node_or_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_or_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">,</span><span class="n">valtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the corresponding node reference or the JSON value of a leaf.</span>
+
+<span class="sd">        Relies on the standard package &#39;json&#39; by &#39;Bob Ippolito &lt;bob@redivi.com&gt;&#39;.</span>
+<span class="sd">        This package supports in the current version the following types:</span>
+<span class="sd">        </span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | JSON          | Python            |</span>
+<span class="sd">            +===============+===================+</span>
+<span class="sd">            | object        | dict              |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | array         | list              |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | string        | unicode           |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | number (int)  | int, long         |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | number (real) | float             |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | true          | True              |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | false         | False             |</span>
+<span class="sd">            +---------------+-------------------+</span>
+<span class="sd">            | null          | None              |</span>
+<span class="sd">            +---------------+-------------------+</span>
+
+<span class="sd">            It also understands ``NaN``, ``Infinity``, and</span>
+<span class="sd">            ``-Infinity`` as their corresponding ``float`` </span>
+<span class="sd">            values, which is outside the JSON spec.</span>
+
+
+<span class="sd">        The supported standard value types for Python </span>
+<span class="sd">        of get_node_or_value() are mapped automatically </span>
+<span class="sd">        as depicted in the following table. Additional</span>
+<span class="sd">        bindings may be implemented by sub-classing.</span>
+<span class="sd">        </span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | JSONPointer(jsondata)  | Python-valtype    |</span>
+<span class="sd">            +========================+===================+</span>
+<span class="sd">            | object (dict)          | dict              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | array  (list)          | list              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | array  (tuple)         | list              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | string                 | unicode           |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (int)           | int               |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (long)          | long              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (float)         | float             |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | *number (double)       | float             |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (octal)         | int               |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (hex)           | int               |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (binary)        | int               |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | number (complex)       | - (custom)        |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | true                   | True              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | false                  | False             |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+<span class="sd">            | null                   | None              |</span>
+<span class="sd">            +------------------------+-------------------+</span>
+
+<span class="sd">        The mappings in detail are:</span>
+
+<span class="sd">        * object(dict) =&gt; dict:</span>
+<span class="sd">            {a:b} - native Python dictionary</span>
+<span class="sd">        </span>
+<span class="sd">        * array(list) =&gt; list:</span>
+<span class="sd">            [a,b] - native Python list</span>
+<span class="sd">        </span>
+<span class="sd">        * (*)array(tuple) =&gt; list:</span>
+<span class="sd">            (a,b) - native Python list</span>
+<span class="sd">        </span>
+<span class="sd">        * string(str) =&gt; unicode&quot;</span>
+<span class="sd">            &quot;abc&quot; - native Python unicode string UTF-8</span>
+<span class="sd">        </span>
+<span class="sd">        * number(int) =&gt; int:</span>
+<span class="sd">            1234, −24, 0 - Integers (unlimited precision)</span>
+
+<span class="sd">        * number(long) =&gt; int:</span>
+<span class="sd">            1234, −24, 0 - Integers (unlimited precision)</span>
+<span class="sd">        </span>
+<span class="sd">        * number(float) =&gt; float:</span>
+<span class="sd">            1.23, 3.14e-10, 4E210, 4.0e+210, 1., .1 - </span>
+<span class="sd">            Floating-point (normally implemented as C doubles in CPython)</span>
+<span class="sd">        </span>
+<span class="sd">        * (*)number(double) =&gt; float:</span>
+<span class="sd">            1.23, 3.14e-10, 4E210, 4.0e+210, 1., .1 - </span>
+<span class="sd">            Floating-point (normally implemented as C doubles in CPython)</span>
+<span class="sd">        </span>
+<span class="sd">        * number(octal) =&gt; int:</span>
+<span class="sd">            0o177 - </span>
+<span class="sd">            Octal, hex, and binary literals for integers2</span>
+<span class="sd">        </span>
+<span class="sd">        * number(hex) =&gt; int:</span>
+<span class="sd">            0x9ff - Octal, hex, and binary literals for integers2</span>
+<span class="sd">        </span>
+<span class="sd">        * number(binary) =&gt; int:</span>
+<span class="sd">            0b1111 - Octal, hex, and binary literals for integers2</span>
+<span class="sd">        </span>
+<span class="sd">        * number(complex) =&gt; &lt;not-supported&gt;(requires custom):</span>
+<span class="sd">            3+4j, 3.0+4.0j, 3J - Complex numbers</span>
+<span class="sd">        </span>
+<span class="sd">        * true(True) =&gt; boolean(True):</span>
+<span class="sd">            True - native Python boolean</span>
+<span class="sd">        </span>
+<span class="sd">        * false(False) =&gt; boolean(False):</span>
+<span class="sd">            False - native Python boolean</span>
+<span class="sd">        </span>
+<span class="sd">        * null(None) =&gt; NoneType(None):</span>
+<span class="sd">            False - native Python NoneType</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+<span class="sd">            valtype: Type of requested value.</span>
+<span class="sd">            parent: Return the parent node of the pointed value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The node reference.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span> <span class="c1">#  == [] : special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="n">jsondata</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="n">jsondata</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_NODE_TYPE</span><span class="p">:</span> <span class="c1"># requires an object or an array as input</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span> <span class="c1"># request for container</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Node(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;):&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> 
+        <span class="k">if</span> <span class="n">valtype</span><span class="p">:</span> <span class="c1"># requested value type</span>
+            <span class="c1"># fix type ambiguity for numeric</span>
+            <span class="k">if</span> <span class="n">valtype</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                    <span class="n">jsondata</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">valtype</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span>
+                <span class="c1">#FIXME:</span>
+                <span class="k">if</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                    <span class="n">jsondata</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">is</span> <span class="n">valtype</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path value type:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">valtype</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot; != &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># in general valid value types - RFC4729,RFC7951</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_NODE_TYPE</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span>
+        <span class="k">return</span> <span class="n">jsondata</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_node_exist"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_node_exist">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the node for valid part of the pointer, and the remaining part.</span>
+<span class="sd">        </span>
+<span class="sd">        This method works similar to the &#39;get_node&#39; method, whereas it</span>
+<span class="sd">        handles partial valid path pointers, which may also include </span>
+<span class="sd">        a &#39;-&#39; in accordance to RFC6902.</span>
+<span class="sd">        </span>
+<span class="sd">        Therefore the non-ambiguous part of the pointer is resolved, </span>
+<span class="sd">        and returned with the remaining part for a newly create.</span>
+<span class="sd">        Thus this method is in particular foreseen to support the </span>
+<span class="sd">        creation of new sub data structures.</span>
+<span class="sd">        </span>
+<span class="sd">        The &#39;get_node&#39; method therefore returns a list of two elements,</span>
+<span class="sd">        the first is the node reference, the second the list of the </span>
+<span class="sd">        remaining path pointer components. The latter may be empty in</span>
+<span class="sd">        case of a fully valid pointer.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+<span class="sd">            parent: Return the parent node of the pointed value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The node reference, and the remaining part.</span>
+<span class="sd">            ret:=[ node, [&lt;remaining-path-components-list&gt;] ]</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="n">jsondata</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="n">jsondata</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="n">x</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="n">x</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">remaining</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">remaining</span><span class="p">):]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># concrete info for debugging for type mismatch</span>
+            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">jsondata</span><span class="p">,</span> <span class="n">remaining</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_path_list"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_path_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_path_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets for the corresponding path list of the object pointer for in-memory access on the data of the &#39;json&#39; package.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The path list.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_path_list_and_key"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_path_list_and_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_path_list_and_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets for the corresponding path list of the object pointer for in-memory access on the data of the &#39;json&#39; package.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The path list.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[],</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[],</span><span class="kc">None</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_pointer"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_pointer">[docs]</a>    <span class="k">def</span> <span class="nf">get_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">forcenotation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the objects pointer in compliance to RFC6901.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            forcenotation: Force the output notation to:</span>
+<span class="sd">                None := NOTATION_JSON,</span>
+<span class="sd">                NOTATION_JSON = 0,</span>
+<span class="sd">                NOTATION_HTTP_FRAGMENT = 1</span>
+<span class="sd">                </span>
+<span class="sd">            parent: Get parent of selected node.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The pointer in accordance to RFC6901.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span> <span class="c1"># ==[] : special RFC6901, whole document</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">return</span> <span class="s1">&#39;/&#39;</span>
+
+        <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unicode</span><span class="p">,</span><span class="bp">self</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="JSONPointer.get_raw"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.get_raw">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the objects raw 6901-pointer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The raw path.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span></div>
+
+<div class="viewcode-block" id="JSONPointer.iter_path"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.iter_path">[docs]</a>    <span class="k">def</span> <span class="nf">iter_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">rev</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterator for the elements of the path pointer itself.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: If provided a valid JSON data node, the</span>
+<span class="sd">                path components are successively verified on</span>
+<span class="sd">                the provided document. If None the path pointer</span>
+<span class="sd">                components are just iterated.</span>
+<span class="sd">            parent: Uses the path pointer to parent node.</span>
+<span class="sd">            rev: Reverse the order, start with last.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Yields the iterator for the current path pointer</span>
+<span class="sd">            component.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">yield</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">yield</span> <span class="s1">&#39;/&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">jsondata</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># concrete info for debugging for type mismatch</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+    
+            <span class="k">if</span> <span class="n">rev</span><span class="p">:</span> <span class="c1"># reverse</span>
+                <span class="k">if</span> <span class="n">parent</span><span class="p">:</span> <span class="c1"># for parent</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># full path</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">parent</span><span class="p">:</span> <span class="c1"># for parent</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># full path</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span>
+    
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">ptrpath</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ptrpath</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">jsondata</span><span class="p">:</span>
+                        <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+                        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="c1"># concrete info for debugging for type mismatch</span>
+                            <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+                    <span class="k">yield</span> <span class="n">x</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Node(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ptrpath</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;):&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span></div>
+
+<div class="viewcode-block" id="JSONPointer.iter_path_nodes"><a class="viewcode-back" href="../../jsondata_m_pointer.html#jsondata.JSONPointer.JSONPointer.iter_path_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">iter_path_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">jsondata</span><span class="p">,</span><span class="n">parent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">rev</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterator for the elements the path pointer points to.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jsondata: A valid JSON data node.</span>
+<span class="sd">            parent: Uses the path pointer to parent node.</span>
+<span class="sd">            rev: Reverse the order, start with last.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Yields the iterator of the current node reference.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerException:</span>
+<span class="sd">            forwarded from json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span> <span class="o">==</span> <span class="p">[]:</span> <span class="c1"># special RFC6901, whole document</span>
+            <span class="k">yield</span> <span class="n">jsondata</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span> <span class="c1"># special RFC6901, &#39;/&#39; empty top-tag</span>
+            <span class="k">yield</span> <span class="n">jsondata</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># concrete info for debugging for type mismatch</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid nodetype parameter:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+    
+            <span class="k">if</span> <span class="n">rev</span><span class="p">:</span> <span class="c1"># reverse</span>
+                <span class="k">if</span> <span class="n">parent</span><span class="p">:</span> <span class="c1"># for parent</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># full path</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">parent</span><span class="p">:</span> <span class="c1"># for parent</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># full path</span>
+                    <span class="n">ptrpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptr</span>
+    
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">ptrpath</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ptrpath</span><span class="p">:</span>
+                    <span class="n">jsondata</span><span class="o">=</span><span class="n">jsondata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="c1"># want the exception, the keys within the process has to match</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="c1"># concrete info for debugging for type mismatch</span>
+                        <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Invalid path nodetype:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)))</span>
+                    <span class="k">yield</span> <span class="n">jsondata</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONPointerException</span><span class="p">(</span><span class="s2">&quot;Node(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ptrpath</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;):&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptr</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">jsondata</span> <span class="c1"># cache for reuse</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" >jsondata</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

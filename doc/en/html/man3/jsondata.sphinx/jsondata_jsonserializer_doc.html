@@ -1,0 +1,580 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.jsondataserializer’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="next" title="‘jsondata.jsonpointer’ - Module" href="jsondata_jsonpointer_doc.html" />
+    <link rel="prev" title="‘jsondata.jsondata’ - Module" href="jsondata_jsondata_doc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpointer_doc.html" title="‘jsondata.jsonpointer’ - Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsondata_doc.html" title="‘jsondata.jsondata’ - Module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" accesskey="U">&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-jsondataserializer-module">
+<h1>&#8216;jsondata.jsondataserializer&#8217; - Module<a class="headerlink" href="#jsondata-jsondataserializer-module" title="Permalink to this headline">¶</a></h1>
+<p>Core features for serialization of structured JSON based in-memory data.
+This comprises the load of a model from a JSON file, and the
+incremental addition and removal of branches by loading additional
+JSON modules.
+The resulting data could be saved for later reuse, either as a complete
+tree, or by modular parts as branches.
+The implementation is based on the standard packages <em>json</em> and <em>jsonschema</em>.</p>
+<p>This module uses either preloaded JSON data, or loads
+the data from  files.</p>
+<p>Additional modification of the data is supported the modules <a class="reference external" href="jsondata_jsondata_doc.html">jsondata</a>
+and <a class="reference external" href="jsondata_jsonpatch_doc.html">jsonpatch</a>,
+analysis and comparison by the module <a class="reference external" href="jsondata_jsondiff_doc.html">jsondatadiff</a>.</p>
+<div class="section" id="module-jsondata.jsondataserializer">
+<span id="module"></span><h2>Module<a class="headerlink" href="#module-jsondata.jsondataserializer" title="Permalink to this headline">¶</a></h2>
+<p>Basic features for the persistence of JSON based in-memory data.</p>
+<ul class="simple">
+<li>import and export of JSON data from/into files</li>
+<li>modular import and export of JSON branches from/into files</li>
+<li>validation by JSON schema</li>
+</ul>
+</div>
+<div class="section" id="jsondataserializer">
+<h2>JSONDataSerializer<a class="headerlink" href="#jsondataserializer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer">
+<em class="property">class </em><code class="descclassname">jsondata.jsondataserializer.</code><code class="descname">JSONDataSerializer</code><span class="sig-paren">(</span><em>jdata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persistency for <em>JSONData</em>.</p>
+</dd></dl>
+
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><em>JSONDataSerializer.data</em></p>
+<p>In-memory JSON data, see <em>JSONData.data</em>.</p>
+</li>
+<li><p class="first"><em>JSONDataSerializer.schema</em></p>
+<p>In-memory JSON schema, see <em>JSONData.schema</em>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.__init__">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>jdata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a serializable instance of <em>JSONData</em>, optionally loads
+and validates a JSON definition.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jdata</strong>:</dt>
+<dd>The initial data of current instance, see <em>JSONData</em></dd>
+<dt>kargs:</dt>
+<dd><p class="first">Keywords are also passed to <em>JSONData</em>.</p>
+<dl class="last docutils">
+<dt><strong>datafile</strong>:</dt>
+<dd>Filepathname of JSON data file, when provided a further
+search by pathlist, filelist, and filepathlist is suppressed.
+Therefore it has to be a valid filepathname.</dd>
+<dt><strong>mode</strong>:</dt>
+<dd><p class="first">The mode of JSON processing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">MJ_RFC4627</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7493</span>  <span class="c1"># currently not supported, mapped to RFC7159</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7159</span>
+   <span class="o">|</span> <span class="n">MJ_RFC8259</span>
+   <span class="o">|</span> <span class="n">MJ_ECMA404</span>  <span class="c1"># same as RFC8259</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := MJ_RFC7159</p>
+</dd>
+<dt><strong>schemafile</strong>:</dt>
+<dd>Filepathname of JSONschema file.</dd>
+<dt><strong>schema</strong>:</dt>
+<dd>Could be used instead of <em>schemafile</em>, see <em>JSONData</em>.</dd>
+<dt><strong>validator</strong>:</dt>
+<dd>See <em>JSONData</em>.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Results in an initialized object.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">NameError</p>
+<p>JSONDataSourceFileError</p>
+<p>JSONDataAmbiguityError</p>
+<p>JSONDataValueError</p>
+<p>jsonschema.ValidationError</p>
+<p class="last">jsonschema.SchemaError</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="json-export">
+<h4>json_export<a class="headerlink" href="#json-export" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.json_export">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">json_export</code><span class="sig-paren">(</span><em>datafile</em>, <em>sourcenode=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.json_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.json_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports current data into a file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>datafile</strong>:</dt>
+<dd>File name for the exported data.</dd>
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Base of sub-tree for export.
+None for complete JSON document.</p>
+<p class="last">default := <em>self.data</em></p>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>force</strong>:</dt>
+<dd>Forces the overwrite of existing files.</dd>
+<dt><strong>pretty</strong>:</dt>
+<dd><p class="first">Defines the syntax format of the data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pretty</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>     <span class="c1"># tree view</span>
+   <span class="o">|</span> <span class="kc">False</span>    <span class="c1"># all in one line</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>When set, the value is fetched from
+<em>self.indent</em>.</p>
+<p class="last">default := <em>True</em></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either &#8216;False&#8217;,
+or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataTargetFileError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="json-import">
+<h4>json_import<a class="headerlink" href="#json-import" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.json_import">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">json_import</code><span class="sig-paren">(</span><em>datafile</em>, <em>targetnode=None</em>, <em>key=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.json_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.json_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports and validates data from a file.</p>
+<p>The schema and validator for the imported data could be set
+independent from the schema of the main data.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>datafile</strong>:</dt>
+<dd><p class="first">JSON data file name containing the subtree for the target branch.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">datafile</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">filepathname</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Target container for the inclusion of the loaded branch.</p>
+<pre class="literal-block">
+targetnode := (
+    JSONPointer                  # <a class="reference internal" href="references.html#rfc6901" id="id1">[RFC6901]</a> or <a class="reference internal" href="references.html#relpointer" id="id2">[RELPOINTER]</a>
+    | &lt;rfc6901-string&gt;           # <a class="reference internal" href="references.html#rfc6901" id="id3">[RFC6901]</a>
+    | &lt;relative-pointer-string&gt;  # <a class="reference internal" href="references.html#relpointer" id="id4">[RELPOINTER]</a>
+    | &lt;pointer-items-list&gt;       # non-URI-fragment pointer path items of <a class="reference internal" href="references.html#rfc6901" id="id5">[RFC6901]</a>
+    )
+</pre>
+<p class="last">default := <em>self.data</em></p>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd><p class="first">The optional index/key-hook within the <em>targetnode</em>,</p>
+<p class="last">default:= None</p>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>mechanic</strong>:</dt>
+<dd><p class="first">The import mechanic. Selects either the RFC6902 conform
+<em>branch_add</em>, or the flexible mapping by <em>branch_superpose</em>.
+The latter is more suitable for the application of modular 
+templates.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">mechanic</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">B_ADD</span>  <span class="o">|</span>  <span class="s1">&#39;add&#39;</span>   <span class="c1"># branch_add</span>
+   <span class="o">|</span> <span class="n">B_AND</span>  <span class="o">|</span>  <span class="s1">&#39;and&#39;</span>   <span class="c1"># branch_superpose(map=B_AND)</span>
+   <span class="o">|</span> <span class="n">B_OR</span>   <span class="o">|</span>  <span class="s1">&#39;or&#39;</span>    <span class="c1"># branch_superpose(map=B_OR)</span>
+   <span class="o">|</span> <span class="n">B_XOR</span>  <span class="o">|</span>  <span class="s1">&#39;xor&#39;</span>   <span class="c1"># branch_superpose(map=B_XOR)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>matchcondition</strong>:</dt>
+<dd>Defines the criteria for comparison of present child nodes
+in the target container. The value is a list of criteria
+combined by logical AND. The criteria may vary due to
+the requirement and the type of applied container.</dd>
+<dt><strong>schema</strong>:</dt>
+<dd><p class="first">JSON-Schema for validation of the subtree/branch.</p>
+<p class="last">default := <em>self.schema</em>  # the pre-loaded schema</p>
+</dd>
+<dt><strong>schemafile</strong>:</dt>
+<dd><p class="first">JSON-Schema filename for validation of the subtree/branch.</p>
+<p class="last">default := <em>self.schema</em>  # the pre-loaded schema</p>
+</dd>
+<dt><strong>subpointer</strong>:</dt>
+<dd><p class="first">The path of the sub-tree of the serialized document
+to be imported.</p>
+<p class="last">default := &#8216;&#8217;  # whole serialized document</p>
+</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Sets schema validator for the data file.
+Current release relies on <em>jsonschema</em>, which
+supports at the time of writing draft-03 and
+draft-04.</p>
+<p>The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">validator</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">MS_DRAFT3</span>           <span class="o">|</span> <span class="s1">&#39;draft3&#39;</span>
+    <span class="o">|</span> <span class="n">MS_DRAFT4</span>           <span class="o">|</span> <span class="s1">&#39;draft4&#39;</span>
+    <span class="o">|</span> <span class="n">MS_ON</span>               <span class="o">|</span> <span class="s1">&#39;on&#39;</span>
+    <span class="o">|</span> <span class="n">MS_OFF</span>              <span class="o">|</span> <span class="s1">&#39;off&#39;</span>
+    <span class="o">|</span> <span class="n">MODE_SCHEMA_DEFAULT</span> <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default:= MS_OFF</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either &#8216;False&#8217;, or
+raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataError</p>
+<p>JSONDataValueError</p>
+<p class="last">JSONDataSourceFileError:</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="dump-data">
+<h4>dump_data<a class="headerlink" href="#dump-data" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.dump_data">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">dump_data</code><span class="sig-paren">(</span><em>pretty=True</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.dump_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.dump_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps structured data by calling <em>json.dumps()</em>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>pretty</strong>:</dt>
+<dd>Activates pretty printer for treeview, else flat.</dd>
+<dt>kargs:</dt>
+<dd><p class="first">The remaining keyword arguments are passed 
+through to <em>json.dumps()</em>.</p>
+<dl class="last docutils">
+<dt><strong>ensure_ascii</strong>:</dt>
+<dd><p class="first">See <em>json_dumps</em>.</p>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>indent</strong>:</dt>
+<dd>Sets indent when <em>pretty</em> is <em>True</em>.</dd>
+<dt><strong>sort_keys</strong>:</dt>
+<dd><p class="first">Sorts keys.</p>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>sourcefile</strong>:</dt>
+<dd><p class="first">Loads data from &#8216;sourcefile&#8217; into &#8216;source&#8217;.</p>
+<p class="last">default := None</p>
+</dd>
+<dt><strong>source</strong>:</dt>
+<dd><p class="first">Prints data within &#8216;source&#8217;.</p>
+<p class="last">default := self.data</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns the dump string, else either &#8216;None&#8217;, 
+or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataAmbiguityError:</p>
+<p class="last">forwarded from &#8216;json&#8217;</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="dump-schema">
+<h4>dump_schema<a class="headerlink" href="#dump-schema" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.dump_schema">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">dump_schema</code><span class="sig-paren">(</span><em>pretty=True</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.dump_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.dump_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps structured schema by calling <em>json.dumps()</em>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>pretty</strong>:</dt>
+<dd>Activates pretty printer for treeview, else flat.</dd>
+<dt>kargs:</dt>
+<dd><p class="first">The remaining keyword arguments are passed 
+through to <em>json.dumps()</em>.</p>
+<dl class="last docutils">
+<dt><strong>ensure_ascii</strong>:</dt>
+<dd><p class="first">See <em>json_dumps</em>.</p>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>indent</strong>:</dt>
+<dd>Sets indent when <em>pretty</em> is <em>True</em>.</dd>
+<dt><strong>sort_keys</strong>:</dt>
+<dd><p class="first">Sorts keys.</p>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>sourcefile</strong>:</dt>
+<dd><p class="first">Loads schema from &#8216;sourcefile&#8217; into &#8216;source&#8217;.</p>
+<p class="last">default := None</p>
+</dd>
+<dt><strong>source</strong>:</dt>
+<dd><p class="first">Prints schema within &#8216;source&#8217;.</p>
+<p class="last">default := self.schema</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns the dump string, else either &#8216;None&#8217;,
+or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataAmbiguityError:</p>
+<p class="last">forwarded from &#8216;json&#8217;</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="set-schema">
+<h4>set_schema<a class="headerlink" href="#set-schema" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondataserializer.JSONDataSerializer.set_schema">
+<code class="descclassname">JSONDataSerializer.</code><code class="descname">set_schema</code><span class="sig-paren">(</span><em>schemafile=None</em>, <em>targetnode=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.set_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondataserializer.JSONDataSerializer.set_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets schema or inserts a new branch into the current schema.
+The main schema(targetnode==None) is the schema of the current
+instance. Additional branches could be added by importing the
+specific schema definitions. These could either kept volatile
+as a temporary runtime extension, or stored persistently.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>schemafile</strong>:</dt>
+<dd>JSON-Schema filename for validation of the
+subtree/branch, see also <em>kargs[&#8216;schema&#8217;]</em>.</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd>Target container hook for the inclusion of
+the loaded branch.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>schema</strong>:</dt>
+<dd><p class="first">In-memory JSON-Schema as an alternative
+to schemafile, when provided the &#8216;schemafile&#8217;
+is ignored.</p>
+<p class="last">default:=None</p>
+</dd>
+<dt><strong>persistent</strong>:</dt>
+<dd><p class="first">Stores the &#8216;schema&#8217; persistently into &#8216;schemafile&#8217;
+after the completion of update, requires a
+valid &#8216;schemafile&#8217;.</p>
+<p class="last">default:=False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either &#8216;False&#8217;, or
+raises an exception.</dd>
+</dl>
+<p>Raises:</p>
+<blockquote>
+<div><p>JSONDataError</p>
+<p>JSONDataSourceFileError</p>
+<p>JSONDataValueError</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="jsondata.JSONDataAmbiguityError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataAmbiguityError</code><span class="sig-paren">(</span><em>requested</em>, <em>*sources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataAmbiguityError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataAmbiguityError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error ambiguity of provided parameters.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>base Exception.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataModeError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataModeError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataModeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataModeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type error of source file content.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataParameterError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataParameterError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataParameterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataParameterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erroneous parameters.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataSourceFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataSourceFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataSourceFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataSourceFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on read of a source file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataTargetFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataTargetFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataTargetFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataTargetFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on writing a file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataValueError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataValueError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on a value.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.jsondataserializer&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#module-jsondata.jsondataserializer">Module</a></li>
+<li><a class="reference internal" href="#jsondataserializer">JSONDataSerializer</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#json-export">json_export</a></li>
+<li><a class="reference internal" href="#json-import">json_import</a></li>
+<li><a class="reference internal" href="#dump-data">dump_data</a></li>
+<li><a class="reference internal" href="#dump-schema">dump_schema</a></li>
+<li><a class="reference internal" href="#set-schema">set_schema</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsondata_jsondata_doc.html"
+                        title="previous chapter">&#8216;jsondata.jsondata&#8217; - Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsondata_jsonpointer_doc.html"
+                        title="next chapter">&#8216;jsondata.jsonpointer&#8217; - Module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_jsonserializer_doc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpointer_doc.html" title="‘jsondata.jsonpointer’ - Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsondata_doc.html" title="‘jsondata.jsondata’ - Module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" >&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

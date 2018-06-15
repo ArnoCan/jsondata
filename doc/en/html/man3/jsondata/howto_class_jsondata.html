@@ -1,0 +1,2380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JSONData - RFC7159 et al. &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Howto" href="howto.html" />
+    <link rel="next" title="JSON Schema - Validate JSON" href="howto_validate_json.html" />
+    <link rel="prev" title="JSON Patch Management" href="howto_patch_management.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_validate_json.html" title="JSON Schema - Validate JSON"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto_patch_management.html" title="JSON Patch Management"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" accesskey="U">Howto</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-rfc7159-et-al">
+<span id="howto-jsondata"></span><h1>JSONData - RFC7159 et al.<a class="headerlink" href="#jsondata-rfc7159-et-al" title="Permalink to this headline">¶</a></h1>
+<p>This howto focussed on applied code examples.</p>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">JSONData - RFC7159 et al.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#branch-operations">Branch Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branch-algebra">Branch Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rfc7159-examples">RFC7159 Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#json-schema-validation">JSON Schema Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conversions">Conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-operators">Comparison Operators</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="branch-operations">
+<h2>Branch Operations<a class="headerlink" href="#branch-operations" title="Permalink to this headline">¶</a></h2>
+<p>The branch operations provide for the operations of higher level
+of structured data.
+These are also the technical base for the standards conformant
+operations in accordance to RFC6902 and RFC6901,
+see <a class="reference external" href="howto_class_jsonpatch.html">JSONPatch - RFC6902</a>
+and
+see <a class="reference external" href="howto_class_jsonpointer.html">JSONPointer - RFC6901</a>
+.</p>
+<div class="section" id="create-branch">
+<h3>Create Branch<a class="headerlink" href="#create-branch" title="Permalink to this headline">¶</a></h3>
+<p>Create a JSON document consisting of a new branch
+<a class="reference external" href="jsondata_jsondata_doc.html#init">JSONData</a>.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+
+<span class="c1"># JSON in-memory document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="c1"># print structure</span>
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result by <em>str</em>:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>or by <em>repr</em>:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>{&#39;a&#39;: {&#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: 3}}}
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="add-branch">
+<h3>Add Branch<a class="headerlink" href="#add-branch" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="object-with-key">
+<h4>Object with Key<a class="headerlink" href="#object-with-key" title="Permalink to this headline">¶</a></h4>
+<p>Create a JSON document and add a branch,
+see also <span class="xref std std-ref">OP_IADD</span></p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}})</span>
+<span class="n">source</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}</span>
+
+<span class="c1"># JSON branch with array</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1"># print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="object-without-key">
+<h4>Object without Key<a class="headerlink" href="#object-without-key" title="Permalink to this headline">¶</a></h4>
+<p>Create a JSON document and add a branch,
+see also <span class="xref std std-ref">OP_IADD</span></p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}})</span>
+<span class="n">source</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}}</span>
+
+<span class="c1"># JSON branch with array</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1"># print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="move">
+<h3>Move<a class="headerlink" href="#move" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="object-attribute">
+<h4>Object Attribute<a class="headerlink" href="#object-attribute" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="call-with-key">
+<h5>Call with key<a class="headerlink" href="#call-with-key" title="Permalink to this headline">¶</a></h5>
+<p>Move an attribute branch within a JSON document.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_move</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="s1">&#39;new&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="nt">&quot;new&quot;</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="call-without-key">
+<h5>Call without key<a class="headerlink" href="#call-without-key" title="Permalink to this headline">¶</a></h5>
+<p>Move an attribute branch within a JSON document.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_move</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="nt">&quot;new&quot;</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="array-element">
+<h4>Array Element<a class="headerlink" href="#array-element" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id1">
+<h5>Call with key<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<p>Move an array element within a JSON document.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx&#39;</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/0&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_move</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id2">
+<h5>Call without key<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<p>Move an array element within a JSON document.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/-&#39;</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/0&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_move</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+<div class="section" id="remove-branch">
+<h3>Remove Branch<a class="headerlink" href="#remove-branch" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="from-object">
+<h4>From Object<a class="headerlink" href="#from-object" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id3">
+<h5>Call with key<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<p>Remove a branch or item within a container by it&#8217;s key,
+convenient for loops.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_remove</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id4">
+<h5>Call without key<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<p>Remove a branch or item by it&#8217;s path only.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="from-array">
+<h4>From Array<a class="headerlink" href="#from-array" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id5">
+<h5>Call with key<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<p>Remove a branch or item within a container by it&#8217;s key,
+convenient for loops.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_remove</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id6">
+<h5>Call without key<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<p>Remove a branch or item by it&#8217;s path only.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/1&#39;</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="c1">#print(repr(D))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Similar calls with reverse index:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/-1&#39;</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/-2&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>and special index rfc6901:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/-&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+<div class="section" id="replace">
+<h3>Replace<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h4>Object Attribute<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<p>Replace an attribute branch within a JSON document.</p>
+<p>Replace a branch.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+
+<span class="c1"># does not verify childnode, when &#39;parent=True&#39; &lt;=&gt; &#39;new&#39; does no longer exist</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_path_list</span><span class="p">()</span>
+
+<span class="c1"># new item</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alternate&#39;</span><span class="p">:</span> <span class="mi">4711</span> <span class="p">}</span>
+
+<span class="c1"># replace old by new item</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># verify new item</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/c/alternate&#39;</span><span class="p">)</span>  <span class="c1"># see JSONData.__call__</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">4711</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;alternate&quot;</span><span class="p">:</span> <span class="mi">4711</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="id8">
+<h4>Array Element<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>Move an array element within a JSON document.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}},</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]}})</span>
+
+
+<span class="c1"># does not verify childnode, when &#39;parent=True&#39; &lt;=&gt; &#39;new&#39; does no longer exist</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/e/lx/0&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_path_list</span><span class="p">()</span>
+
+<span class="c1"># new item</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alternate&#39;</span><span class="p">:</span> <span class="mi">4711</span> <span class="p">}</span>
+
+<span class="c1"># replace old by new item</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># verify new item</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/e/lx/0/alternate&#39;</span><span class="p">)</span>  <span class="c1"># see JSONData.__call__</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">4711</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;alternate&quot;</span><span class="p">:</span> <span class="mi">4711</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+<div class="section" id="branch-algebra">
+<h2>Branch Algebra<a class="headerlink" href="#branch-algebra" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="rfc7159-examples">
+<h2>RFC7159 Examples<a class="headerlink" href="#rfc7159-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-objects">
+<h3>Create Objects<a class="headerlink" href="#create-objects" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>See section &#8220;13. Examples&#8221; <a class="reference internal" href="references.html#rfc7159" id="id9">[RFC7159]</a>:</p>
+<div class="last highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;Image&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Width&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
+      <span class="nt">&quot;Height&quot;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+      <span class="nt">&quot;Title&quot;</span><span class="p">:</span> <span class="s2">&quot;View from 15th Floor&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Thumbnail&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;Url&quot;</span><span class="p">:</span>
+         <span class="s2">&quot;http://www.example.com/image/481989943&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;Height&quot;</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span>
+         <span class="nt">&quot;Width&quot;</span><span class="p">:</span> <span class="mi">100</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;Animated&quot;</span> <span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="nt">&quot;IDs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">116</span><span class="p">,</span> <span class="mi">943</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">38793</span><span class="p">]</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<p>The application with <em>JSONData</em> and <em>JSONPointer</em>, which e.g. sets the
+flag &#8216;/Image/Animated&#8217; to &#8216;true&#8217; / <em>True</em>.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span>
+           <span class="s2">&quot;Image&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
+              <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+              <span class="s2">&quot;Title&quot;</span><span class="p">:</span> <span class="s2">&quot;View from 15th Floor&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Thumbnail&quot;</span><span class="p">:</span> <span class="p">{</span>
+                 <span class="s2">&quot;Url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.example.com/image/481989943&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span>
+                 <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="mi">100</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;Animated&quot;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="c1"># false,</span>
+              <span class="s2">&quot;IDs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">116</span><span class="p">,</span> <span class="mi">943</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">38793</span><span class="p">]</span>
+           <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># does not verify childnode, when &#39;parent=True&#39; &lt;=&gt; &#39;new&#39; does no longer exist</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/Image/Animated&#39;</span><span class="p">)</span>
+
+<span class="c1"># new item</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># replace old by new item</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># verify new item</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/Image/Animated&#39;</span><span class="p">)</span>  <span class="c1"># see JSONData.__call__</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># print uses JSON decoder, thus &#39;True&#39; =&gt; &#39;true&#39;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span>{
+    &quot;Image&quot;: {
+        &quot;Width&quot;: 800,
+        &quot;Height&quot;: 600,
+        &quot;Title&quot;: &quot;View from 15th Floor&quot;,
+        &quot;Thumbnail&quot;: {
+            &quot;Url&quot;: &quot;http://www.example.com/image/481989943&quot;,
+            &quot;Height&quot;: 125,
+            &quot;Width&quot;: 100
+        },
+        &quot;Animated&quot;: true,
+        &quot;IDs&quot;: [
+            116,
+            943,
+            234,
+            38793
+        ]
+    }
+}
+</pre></div>
+</td></tr></table></div>
+<p>The JSON keyword &#8216;true&#8217; is correctly transformed from the Python representation <em>True</em>
+by the print method, same for the import/export parsers.</p>
+</div>
+<div class="section" id="create-arrays">
+<h3>Create Arrays<a class="headerlink" href="#create-arrays" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>See section &#8220;13. Examples&#8221; <a class="reference internal" href="references.html#rfc7159" id="id10">[RFC7159]</a>:</p>
+<div class="last highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span>
+      <span class="nt">&quot;precision&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Latitude&quot;</span><span class="p">:</span> <span class="mf">37.7668</span><span class="p">,</span>
+      <span class="nt">&quot;Longitude&quot;</span><span class="p">:</span> <span class="mf">-122.3959</span><span class="p">,</span>
+      <span class="nt">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;City&quot;</span><span class="p">:</span> <span class="s2">&quot;SAN FRANCISCO&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;State&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Zip&quot;</span><span class="p">:</span> <span class="s2">&quot;94107&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Country&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span>
+   <span class="p">},</span>
+   <span class="p">{</span>
+      <span class="nt">&quot;precision&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Latitude&quot;</span><span class="p">:</span> <span class="mf">37.371991</span><span class="p">,</span>
+      <span class="nt">&quot;Longitude&quot;</span><span class="p">:</span> <span class="mf">-122.026020</span><span class="p">,</span>
+      <span class="nt">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;City&quot;</span><span class="p">:</span> <span class="s2">&quot;SUNNYVALE&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;State&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Zip&quot;</span><span class="p">:</span> <span class="s2">&quot;94085&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Country&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span>
+   <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<p>The application with <em>JSONData</em> and <em>JSONPointer</em>, which e.g. sets the
+flag &#8216;/Image/Animated&#8217; to &#8216;true&#8217; / <em>True</em>.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">[</span>
+           <span class="p">{</span>
+              <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Latitude&quot;</span><span class="p">:</span> <span class="mf">37.7668</span><span class="p">,</span>
+              <span class="s2">&quot;Longitude&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">122.3959</span><span class="p">,</span>
+              <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;City&quot;</span><span class="p">:</span> <span class="s2">&quot;SAN FRANCISCO&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;State&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Zip&quot;</span><span class="p">:</span> <span class="s2">&quot;94107&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Country&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span>
+           <span class="p">},</span>
+           <span class="p">{</span>
+              <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Latitude&quot;</span><span class="p">:</span> <span class="mf">37.371991</span><span class="p">,</span>
+              <span class="s2">&quot;Longitude&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">122.026020</span><span class="p">,</span>
+              <span class="s2">&quot;Address&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;City&quot;</span><span class="p">:</span> <span class="s2">&quot;SUNNYVALE&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;State&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Zip&quot;</span><span class="p">:</span> <span class="s2">&quot;94085&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;Country&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span>
+           <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+<span class="c1"># modify</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/0/Address&#39;</span><span class="p">)</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="s2">&quot;office&quot;</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/1/Address&#39;</span><span class="p">)</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="s2">&quot;soho&quot;</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># verify</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/0/Address&#39;</span><span class="p">)</span>  <span class="c1"># see JSONData.__call__</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;office&quot;</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/1/Address&#39;</span><span class="p">)</span>  <span class="c1"># see JSONData.__call__</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;soho&quot;</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>  <span class="c1"># print uses JSON decoder, thus &#39;True&#39; =&gt; &#39;true&#39;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span>[
+    {
+        &quot;precision&quot;: &quot;zip&quot;,
+        &quot;Latitude&quot;: 37.7668,
+        &quot;Longitude&quot;: -122.3959,
+        &quot;Address&quot;: &quot;office&quot;,
+        &quot;City&quot;: &quot;SAN FRANCISCO&quot;,
+        &quot;State&quot;: &quot;CA&quot;,
+        &quot;Zip&quot;: &quot;94107&quot;,
+        &quot;Country&quot;: &quot;US&quot;
+    },
+    {
+        &quot;precision&quot;: &quot;zip&quot;,
+        &quot;Latitude&quot;: 37.371991,
+        &quot;Longitude&quot;: -122.02602,
+        &quot;Address&quot;: &quot;soho&quot;,
+        &quot;City&quot;: &quot;SUNNYVALE&quot;,
+        &quot;State&quot;: &quot;CA&quot;,
+        &quot;Zip&quot;: &quot;94085&quot;,
+        &quot;Country&quot;: &quot;US&quot;
+    }
+]
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="json-schema-validation">
+<h2>JSON Schema Validation<a class="headerlink" href="#json-schema-validation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id11">
+<h3>JSONData()<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>The schema validation is an optional part of the class <em>JSONData</em>.</p>
+<p>The JSON data</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;address&quot;</span><span class="p">:{</span>
+    <span class="nt">&quot;streetAddress&quot;</span><span class="p">:</span> <span class="s2">&quot;21 2nd Street&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;houseNumber&quot;</span><span class="p">:</span><span class="mi">12</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;phoneNumber&quot;</span><span class="p">:</span>
+    <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;home&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;212 555-1234&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;office&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;313 444-555&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;mobile&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;777 666-555&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>is validated by the JSON schema</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-03/schema&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;_comment&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a comment to be dropped by the initial scan:object(0)&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;_doc&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a doc string to be inserted when the language supports it.:object(0)&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;_doc&quot;</span><span class="p">:</span> <span class="s2">&quot;Concatenated for the same instance.:object(0)&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+   <span class="nt">&quot;properties&quot;</span><span class="p">:{</span>
+      <span class="nt">&quot;address&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;_comment&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a comment(0):address&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+         <span class="nt">&quot;properties&quot;</span><span class="p">:{</span>
+            <span class="nt">&quot;city&quot;</span><span class="p">:</span> <span class="p">{</span>
+               <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">true</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;houseNumber&quot;</span><span class="p">:</span> <span class="p">{</span>
+               <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;number&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;streetAddress&quot;</span><span class="p">:</span> <span class="p">{</span>
+               <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+               <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">true</span>
+            <span class="p">}</span>
+         <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nt">&quot;phoneNumber&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;_comment&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a comment(1):array&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;array&quot;</span><span class="p">,</span>
+         <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+         <span class="nt">&quot;items&quot;</span><span class="p">:</span>
+         <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+            <span class="nt">&quot;properties&quot;</span><span class="p">:{</span>
+               <span class="nt">&quot;number&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span>
+               <span class="p">},</span>
+               <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="kc">false</span>
+               <span class="p">}</span>
+            <span class="p">}</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The processing code is:</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">jsonschema</span>
+
+<span class="c1"># import &#39;jsondata&#39;</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsondataserializer</span> <span class="kn">import</span> <span class="n">JSONDataSerializer</span> <span class="k">as</span> <span class="n">ConfigData</span>
+<span class="kn">from</span> <span class="nn">jsondata</span>  <span class="kn">import</span> <span class="n">MS_DRAFT4</span>
+<span class="kn">from</span> <span class="nn">jsondata</span> <span class="kn">import</span> <span class="n">JSONDataKeyError</span><span class="p">,</span> <span class="n">JSONDataNodeTypeError</span>
+
+<span class="c1"># name of application, used for several filenames as MS_DRAFT4</span>
+<span class="n">_APPNAME</span> <span class="o">=</span> <span class="s2">&quot;jsondc&quot;</span>
+<span class="n">appname</span> <span class="o">=</span> <span class="n">_APPNAME</span>
+
+
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span> \
+    <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;datafile.json&#39;</span><span class="p">)</span>
+<span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span> \
+    <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;schema.jsd&#39;</span><span class="p">)</span>
+
+<span class="n">kargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nodefaultpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nosubdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>
+
+<span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+
+<span class="n">resx</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;streetAddress&#39;</span><span class="p">:</span> <span class="s1">&#39;21 2nd Street&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">&#39;New York&#39;</span><span class="p">,</span> <span class="s1">&#39;houseNumber&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+        <span class="s1">&#39;phoneNumber&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="s1">&#39;212 555-1234&#39;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;office&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="s1">&#39;313 444-555&#39;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;mobile&#39;</span><span class="p">,</span> <span class="s1">&#39;number&#39;</span><span class="p">:</span> <span class="s1">&#39;777 666-555&#39;</span><span class="p">}]}</span>
+
+<span class="k">assert</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">resx</span>
+<span class="k">pass</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="jsondata-validate">
+<h3>JSONData.validate()<a class="headerlink" href="#jsondata-validate" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="conversions">
+<h2>Conversions<a class="headerlink" href="#conversions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="json-to-jsondata">
+<h3><em>json</em> to <em>jsondata</em><a class="headerlink" href="#json-to-jsondata" title="Permalink to this headline">¶</a></h3>
+<p>The package <em>jsondata</em> relies on the standard package <em>json</em> or <em>ujson</em>,
+therefore the conversion requires a call only.
+The data is not actually converted, but just included by refrence into
+a control, administration, and arithmetic branch operations object.
+The data is still accessible native by the stored reference <em>JSONData.data</em>.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>{
+    &quot;a&quot;: {
+        &quot;b&quot;: {
+            &quot;c&quot;: 2,
+            &quot;d&quot;: 3
+        }
+    }
+}
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="pointer-from-node">
+<h3>Pointer from Node<a class="headerlink" href="#pointer-from-node" title="Permalink to this headline">¶</a></h3>
+<p>The JSONPointer for a provided python reference to a node within a JSON data tree.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">jdata</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="s1">&#39;b&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="n">path_list</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="n">jdata</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">path_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; -&gt; [&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>[[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]] -&gt; [&quot;/a/b/c&quot;]
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="node-from-pointer">
+<h3>Node from Pointer<a class="headerlink" href="#node-from-pointer" title="Permalink to this headline">¶</a></h3>
+<p>The JSONPointer for a provided python reference to a node within a JSON data tree.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">targetpointer</span> <span class="o">=</span> <span class="s1">&#39;/a/b/c&#39;</span>
+
+<span class="n">jsonpointer</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">targetpointer</span><span class="p">)</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">jsonpointer</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; -&gt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">targetnode</span><span class="p">))</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;/a/b/c&quot; -&gt; 2
+</pre></div>
+</td></tr></table></div>
+<p>The same for a list with index &#8216;2&#8217;.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">targetpointer</span> <span class="o">=</span> <span class="s1">&#39;/a/b/c/2&#39;</span>
+
+<span class="n">jsonpointer</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">targetpointer</span><span class="p">)</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">jsonpointer</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; -&gt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">targetnode</span><span class="p">))</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;/a/b/c/-&quot; -&gt; 3
+</pre></div>
+</td></tr></table></div>
+<p>The same for a list with special index &#8216;-&#8216; <a class="reference internal" href="references.html#rfc6901" id="id12">[RFC6901]</a>.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">targetpointer</span> <span class="o">=</span> <span class="s1">&#39;/a/b/c/-&#39;</span>
+
+<span class="n">jsonpointer</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">targetpointer</span><span class="p">)</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">jsonpointer</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; -&gt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">targetnode</span><span class="p">))</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;/a/b/c/-&quot; -&gt; 3
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="parent-node-from-pointer">
+<h3>Parent Node from Pointer<a class="headerlink" href="#parent-node-from-pointer" title="Permalink to this headline">¶</a></h3>
+<p>The JSONPointer for the parent of a provided python pointer.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">targetpointer</span> <span class="o">=</span> <span class="s1">&#39;/a/b/c/2&#39;</span>
+
+<span class="n">jsonpointer</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">targetpointer</span><span class="p">)</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+<span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">jsonpointer</span><span class="o">.</span><span class="n">get_node_and_child</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; -&gt; parent-node = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; child-node = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">child</span><span class="p">))</span>
+
+<span class="n">parent_pointer</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">child_pointer</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonpointer</span><span class="p">)</span>
+      <span class="o">+</span> <span class="s1">&#39;&quot; -&gt; parent-pointer = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="n">parent_pointer</span><span class="p">))</span>
+      <span class="o">+</span> <span class="s1">&#39; child-pointer = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="n">child_pointer</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;/a/b/c/2&quot; -&gt; parent-node = [1, 2, 3] child-node = 3
+&quot;/a/b/c/2&quot; -&gt; parent-pointer = /a/b/c child-pointer = /a/b/c/2
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="parent-node-for-node">
+<h3>Parent Node for Node<a class="headerlink" href="#parent-node-for-node" title="Permalink to this headline">¶</a></h3>
+<p>The parent node for a provided node.</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+<span class="n">jsonnode</span> <span class="o">=</span> <span class="n">jsondata</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="s1">&#39;b&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>  <span class="c1">#pylint: disable=unsubscriptable-object</span>
+
+<span class="n">node_path</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">jsonnode</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">jsonpointer</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">node_path</span><span class="p">)</span>
+
+<span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">jsonpointer</span><span class="o">.</span><span class="n">get_node_and_child</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;jsondata = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsondata</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;json-node = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">jsonnode</span><span class="p">))</span>
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39; -&gt; parent-json-node = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
+
+<span class="n">parent_pointer</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">child_pointer</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39; -&gt; parent-pointer = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="n">parent_pointer</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39; -&gt; child-pointer = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="n">child_pointer</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>Results in:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span>jsondata = {
+    &quot;a&quot;: {
+        &quot;b&quot;: {
+            &quot;c&quot;: [
+                1,
+                2,
+                3
+            ],
+            &quot;d&quot;: 3
+        }
+    }
+}
+json-node = 3
+
+ -&gt; parent-json-node = [1, 2, 3]
+ -&gt; parent-pointer = /a/b/c
+ -&gt; child-pointer = /a/b/c/2
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="comparison-operators">
+<h2>Comparison Operators<a class="headerlink" href="#comparison-operators" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="s-x">
+<span id="op-eq"></span><h3>S == x<a class="headerlink" href="#s-x" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">S</span> <span class="o">==</span> <span class="n">x</span>
+<span class="k">assert</span> <span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">S</span> <span class="o">==</span> <span class="n">X</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="op-ne">
+<span id="id13"></span><h3>S != x<a class="headerlink" href="#op-ne" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">S</span> <span class="o">!=</span> <span class="n">x</span>
+<span class="k">assert</span> <span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">!=</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">S</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">data</span> <span class="o">!=</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JSONData - RFC7159 et al.</a><ul>
+<li><a class="reference internal" href="#branch-operations">Branch Operations</a><ul>
+<li><a class="reference internal" href="#create-branch">Create Branch</a></li>
+<li><a class="reference internal" href="#add-branch">Add Branch</a><ul>
+<li><a class="reference internal" href="#object-with-key">Object with Key</a></li>
+<li><a class="reference internal" href="#object-without-key">Object without Key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#move">Move</a><ul>
+<li><a class="reference internal" href="#object-attribute">Object Attribute</a><ul>
+<li><a class="reference internal" href="#call-with-key">Call with key</a></li>
+<li><a class="reference internal" href="#call-without-key">Call without key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#array-element">Array Element</a><ul>
+<li><a class="reference internal" href="#id1">Call with key</a></li>
+<li><a class="reference internal" href="#id2">Call without key</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#remove-branch">Remove Branch</a><ul>
+<li><a class="reference internal" href="#from-object">From Object</a><ul>
+<li><a class="reference internal" href="#id3">Call with key</a></li>
+<li><a class="reference internal" href="#id4">Call without key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#from-array">From Array</a><ul>
+<li><a class="reference internal" href="#id5">Call with key</a></li>
+<li><a class="reference internal" href="#id6">Call without key</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#replace">Replace</a><ul>
+<li><a class="reference internal" href="#id7">Object Attribute</a></li>
+<li><a class="reference internal" href="#id8">Array Element</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#branch-algebra">Branch Algebra</a></li>
+<li><a class="reference internal" href="#rfc7159-examples">RFC7159 Examples</a><ul>
+<li><a class="reference internal" href="#create-objects">Create Objects</a></li>
+<li><a class="reference internal" href="#create-arrays">Create Arrays</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json-schema-validation">JSON Schema Validation</a><ul>
+<li><a class="reference internal" href="#id11">JSONData()</a></li>
+<li><a class="reference internal" href="#jsondata-validate">JSONData.validate()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conversions">Conversions</a><ul>
+<li><a class="reference internal" href="#json-to-jsondata"><em>json</em> to <em>jsondata</em></a></li>
+<li><a class="reference internal" href="#pointer-from-node">Pointer from Node</a></li>
+<li><a class="reference internal" href="#node-from-pointer">Node from Pointer</a></li>
+<li><a class="reference internal" href="#parent-node-from-pointer">Parent Node from Pointer</a></li>
+<li><a class="reference internal" href="#parent-node-for-node">Parent Node for Node</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparison-operators">Comparison Operators</a><ul>
+<li><a class="reference internal" href="#s-x">S == x</a></li>
+<li><a class="reference internal" href="#op-ne">S != x</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto_patch_management.html"
+                        title="previous chapter">JSON Patch Management</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_validate_json.html"
+                        title="next chapter">JSON Schema - Validate JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_class_jsondata.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_validate_json.html" title="JSON Schema - Validate JSON"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto_patch_management.html" title="JSON Patch Management"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" >Howto</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

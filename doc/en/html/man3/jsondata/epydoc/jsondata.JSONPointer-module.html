@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.JSONPointer</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        Module&nbsp;JSONPointer
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.JSONPointer-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module JSONPointer</h1><p class="nomargin-top"><span class="codelink"><a href="jsondata.JSONPointer-pysrc.html">source&nbsp;code</a></span></p>
+<p>Provides classes for the JSONPointer definition in accordance to 
+  RFC6901.</p>
+  <p>The provided class JSONPointer internally stores and applies pointer 
+  data as a list of keys and indexes with the additional cooperative 
+  caching of the pointed in-memory node reference for fast access on data 
+  provided by the packages 'json' and 'jsonschema'. Requests for the string
+  representation are transformed into a pointer path in accordance to 
+  RFC6901.</p>
+  <p>The JSONPointer class combines fast in-memory operations and pointer 
+  arithmetics with standards compliant path strings at the API.</p>
+  <p>The JSONPointer class by itself is focused on the path pointer itself,
+  though the provided operations do not touch the content value. The 
+  pointer provides the hook where the value has to be inserted.</p>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        0.2.18
+      </p>
+      <p><strong>Author:</strong>
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>Copyright:</strong>
+        Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero 
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>License:</strong>
+        Artistic-License-2.0 + Forced-Fairplay-Constraints
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPointer.JSONPointerException-class.html" class="summary-name">JSONPointerException</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPointer.JSONPointer-class.html" class="summary-name">JSONPointer</a><br />
+      Represents exactly one JSONPointer in compliance with IETF RFC6901.
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__maintainer__"></a><span class="summary-name">__maintainer__</span> = <code title="'Arno-Can Uestuensoez'"><code class="variable-quote">'</code><code class="variable-string">Arno-Can Uestuensoez</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__uuid__"></a><span class="summary-name">__uuid__</span> = <code title="'63b597d6-4ada-4880-9f99-f5e0961351fb'"><code class="variable-quote">'</code><code class="variable-string">63b597d6-4ada-4880-9f99-f5e0961351fb</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'2.7'"><code class="variable-quote">'</code><code class="variable-string">2.7</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_interactive"></a><span class="summary-name">_interactive</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_JSON"></a><span class="summary-name">NOTATION_JSON</span> = <code title="0">0</code><br />
+      JSON notation in accordance to RFC7159
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_HTTP_FRAGMENT"></a><span class="summary-name">NOTATION_HTTP_FRAGMENT</span> = <code title="1">1</code><br />
+      JSON notation in accordance to RFC7159 with RFC3986.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPointer-module.html#VALID_NODE_TYPE" class="summary-name">VALID_NODE_TYPE</a> = <code title="(&lt;type 'dict'&gt;,
+ &lt;type 'list'&gt;,
+ &lt;type 'str'&gt;,
+ &lt;type 'unicode'&gt;,
+ &lt;type 'int'&gt;,
+ &lt;type 'float'&gt;,
+ &lt;type 'bool'&gt;,
+ &lt;type 'NoneType'&gt;)"><code class="variable-group">(</code>&lt;type 'dict'&gt;<code class="variable-op">, </code>&lt;type 'list'&gt;<code class="variable-op">, </code>&lt;type 'str'&gt;<code class="variable-op">,</code><code class="variable-ellipsis">...</code></code><br />
+      Valid types of in-memory JSON node types.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="CHARSET_UTF"></a><span class="summary-name">CHARSET_UTF</span> = <code title="0">0</code><br />
+      Unicode.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="CHARSET_STR"></a><span class="summary-name">CHARSET_STR</span> = <code title="1">1</code><br />
+      Python string.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'jsondata'"><code class="variable-quote">'</code><code class="variable-string">jsondata</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="VALID_NODE_TYPE"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">VALID_NODE_TYPE</h3>
+  <p>Valid types of in-memory JSON node types.</p>
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">(</code>&lt;type 'dict'&gt;<code class="variable-op">,</code>
+ &lt;type 'list'&gt;<code class="variable-op">,</code>
+ &lt;type 'str'&gt;<code class="variable-op">,</code>
+ &lt;type 'unicode'&gt;<code class="variable-op">,</code>
+ &lt;type 'int'&gt;<code class="variable-op">,</code>
+ &lt;type 'float'&gt;<code class="variable-op">,</code>
+ &lt;type 'bool'&gt;<code class="variable-op">,</code>
+ &lt;type 'NoneType'&gt;<code class="variable-group">)</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:23 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

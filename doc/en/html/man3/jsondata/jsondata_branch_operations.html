@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Process branch data by ‘JSONData’ &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="process-branch-data-by-jsondata">
+<h1>Process branch data by &#8216;JSONData&#8217;<a class="headerlink" href="#process-branch-data-by-jsondata" title="Permalink to this headline">¶</a></h1>
+<p>The class JSONData provides operations on data structures.
+The class hierarchy is hereby reduced to a top-node representation
+<em>JSONDATA</em> of <em>JSONDataSerializer</em>,
+while the branches are allocated and processed as native Python
+data elements.
+Thus the perfomance impact of <em>JSONData</em> is kept minimal,
+basically negligible.</p>
+<p>Provided syntax elements are:</p>
+<ul>
+<li><p class="first"><strong>native access attributes</strong>:</p>
+<blockquote>
+<div><p>The node addresses for the native access to
+the JSON in-memory representation. The data format is compatible to the
+packages &#8216;json&#8217; and &#8216;jsonschema&#8217;, e.g. also to &#8216;ujson&#8217;. Thus provides
+native Python access performance.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>branch operations</strong>:</p>
+<blockquote>
+<div><p>Handle complete sub structures as logical branches
+of a main JSON document. The interface is designed in accordance to RFC6902
+with extension for Python specifics.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>tree utilities</strong>:</p>
+<blockquote>
+<div><p>Generic tree functions for the provided in-memory
+representation by &#8216;json&#8217; and &#8216;jsonschema&#8217; are available
+as <em>jsondatadiff</em> <a class="reference internal" href="references.html#jsondatadiff" id="id1">[jsondatadiff]</a> and <em>jsondatafind</em> <a class="reference internal" href="references.html#jsondatafind" id="id2">[jsondatafind]</a>.</p>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="syntax-elements">
+<h2>Syntax Elements<a class="headerlink" href="#syntax-elements" title="Permalink to this headline">¶</a></h2>
+<p>The current release provides for branches the class &#8216;JSONData&#8217;
+with basic set operations for branches,</p>
+<div class="section" id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<p>Native JSON representation access attributes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">attr</span> <span class="p">:</span><span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">schema</span>
+</pre></div>
+</div>
+<p>This package supports in the current version the following data types:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="58%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">JSON</th>
+<th class="head">Python</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>object</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>array</td>
+<td>list</td>
+</tr>
+<tr class="row-even"><td>string</td>
+<td>unicode</td>
+</tr>
+<tr class="row-odd"><td>number (int)</td>
+<td>int, long</td>
+</tr>
+<tr class="row-even"><td>number (real)</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>true</td>
+<td>True</td>
+</tr>
+<tr class="row-even"><td>false</td>
+<td>False</td>
+</tr>
+<tr class="row-odd"><td>null</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>It also understands <code class="docutils literal"><span class="pre">NaN</span></code>, <code class="docutils literal"><span class="pre">Infinity</span></code>, and
+<code class="docutils literal"><span class="pre">-Infinity</span></code> as their corresponding <code class="docutils literal"><span class="pre">float</span></code>
+values, which is outside the JSON spec.</p>
+<p>The supported standard value types for Python
+of get_node_value() are mapped automatically
+as depicted in the following table. Additional
+bindings may be implemented by sub-classing.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="59%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">JSONPointer(jsondata)</th>
+<th class="head">Python-valtype</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>object (dict)</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>array  (list)</td>
+<td>list</td>
+</tr>
+<tr class="row-even"><td>array  (tuple)</td>
+<td>list</td>
+</tr>
+<tr class="row-odd"><td>string</td>
+<td>unicode</td>
+</tr>
+<tr class="row-even"><td>number (int)</td>
+<td>int</td>
+</tr>
+<tr class="row-odd"><td>number (long)</td>
+<td>long</td>
+</tr>
+<tr class="row-even"><td>number (float)</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td><a href="#id3"><span class="problematic" id="id4">*</span></a>number (double)</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>number (octal)</td>
+<td>int</td>
+</tr>
+<tr class="row-odd"><td>number (hex)</td>
+<td>int</td>
+</tr>
+<tr class="row-even"><td>number (binary)</td>
+<td>int</td>
+</tr>
+<tr class="row-odd"><td>number (complex)</td>
+<td>&#8211; (custom)</td>
+</tr>
+<tr class="row-even"><td>true</td>
+<td>True</td>
+</tr>
+<tr class="row-odd"><td>false</td>
+<td>False</td>
+</tr>
+<tr class="row-even"><td>null</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>The mappings in detail are:</p>
+<ul>
+<li><p class="first">object(dict) =&gt; dict:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>{a:b} - native Python dictionary
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">array(list) =&gt; list:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>[a,b] - native Python list
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">(*)array(tuple) =&gt; list:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>(a,b) - native Python list
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">string(str) =&gt; unicode&#8221;</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;abc&quot; - native Python unicode string UTF-8
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(int) =&gt; int:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>1234, −24, 0 - Integers (unlimited precision)
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(long) =&gt; int:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>1234, −24, 0 - Integers (unlimited precision)
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(float) =&gt; float:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>1.23, 3.14e-10, 4E210, 4.0e+210, 1., .1 - Floating-point
+</pre></div>
+</td></tr></table></div>
+<p>Normally implemented as C doubles in CPython.</p>
+</li>
+<li><p class="first">(*)number(double) =&gt; float:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>1.23, 3.14e-10, 4E210, 4.0e+210, 1., .1 - Floating-point
+</pre></div>
+</td></tr></table></div>
+<p>Normally implemented as C doubles in CPython.</p>
+</li>
+<li><p class="first">number(octal) =&gt; int:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>0o177 - Octal, hex, and binary literals for integers
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(hex) =&gt; int:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>0x9ff - Octal, hex, and binary literals for integers
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(binary) =&gt; int:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>0b1111 - Octal, hex, and binary literals for integers
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">number(complex) =&gt; &lt;not-supported&gt;(requires custom):</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>3+4j, 3.0+4.0j, 3J - Complex numbers
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">true(True) =&gt; boolean(True):</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>True - native Python boolean
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">false(False) =&gt; boolean(False):</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>False - native Python boolean
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">null(None) =&gt; None(None):</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>False - native Python None
+</pre></div>
+</td></tr></table></div>
+</li>
+</ul>
+<p>The specification <em>RFC4627</em> <a class="reference internal" href="references.html#rfc4627" id="id5">[RFC4627]</a> and the updated <em>RFC7159</em> <a class="reference internal" href="references.html#rfc7159" id="id6">[RFC7159]</a>
+define different valid top-level nodes.</p>
+<ul class="simple">
+<li>RFC4627: top-level must be object or array</li>
+<li>RFC7159: any valid node type is permitted as top-level, including <em>null</em></li>
+</ul>
+<p>This behaviour is provided by the <em>jsondata</em> package by setting the <em>mode</em>
+parameter appropriately.</p>
+<p><a class="reference internal" href="_images/jsondata-evaluation.png"><img alt="jsondataevaluation" src="_images/jsondata-evaluation.png" style="width: 550px;" /></a>
+<a class="reference external" href="_static/jsondata-evaluation.png"><img alt="zoom" src="_images/zoom.png" style="width: 16px;" /></a></p>
+</div>
+<div class="section" id="administrative-operations">
+<h3>Administrative Operations<a class="headerlink" href="#administrative-operations" title="Permalink to this headline">¶</a></h3>
+<p>Branch operations(branch_&lt;ops&gt;), see RFC6902:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">branch_add</span> <span class="o">|</span> <span class="n">branch_copy</span> <span class="o">|</span> <span class="n">branch_create</span> <span class="o">|</span> <span class="n">branch_div</span>
+       <span class="o">|</span> <span class="n">branch_move</span> <span class="o">|</span> <span class="n">branch_remove</span> <span class="o">|</span> <span class="n">branch_replace</span>
+       <span class="o">|</span> <span class="n">branch_superpose</span> <span class="o">|</span> <span class="n">branch_test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparison-operators">
+<h3>Comparison Operators<a class="headerlink" href="#comparison-operators" title="Permalink to this headline">¶</a></h3>
+<p>Pointer comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;==&#39;</span> <span class="o">|</span> <span class="s1">&#39;!=&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="logic-operators">
+<h3>Logic Operators<a class="headerlink" href="#logic-operators" title="Permalink to this headline">¶</a></h3>
+<p>The logic operators provide basic set operations.
+The scope of the operations is the top level keys of the branch,
+deep level operations are supported by the interfaces of type
+<em>branch_*</em>.</p>
+<p>Operators for the set calculation of branches</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;&amp;&#39;</span> <span class="o">|</span> <span class="s1">&#39;|&#39;</span> <span class="o">|</span> <span class="s1">&#39;^&#39;</span> <span class="c1">#</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="behavior-operators">
+<h3>Behavior Operators<a class="headerlink" href="#behavior-operators" title="Permalink to this headline">¶</a></h3>
+<p>Value evaluation operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;[]&#39;</span> <span class="o">|</span> <span class="s1">&#39;()&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<p>Generic operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">iter_</span> <span class="o">|</span> <span class="n">fetch_pointerpath</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="selection-operations">
+<h3>Selection Operations<a class="headerlink" href="#selection-operations" title="Permalink to this headline">¶</a></h3>
+<p>Selection operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">fetch_pointerpath</span>
+       <span class="o">|</span> <span class="n">get</span> <span class="o">|</span> <span class="n">get_data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="schema-support">
+<h3>Schema Support<a class="headerlink" href="#schema-support" title="Permalink to this headline">¶</a></h3>
+<p>Selection operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">get_schema</span> <span class="o">|</span> <span class="n">set_schema</span> <span class="o">|</span> <span class="n">validate</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Process branch data by &#8216;JSONData&#8217;</a><ul>
+<li><a class="reference internal" href="#syntax-elements">Syntax Elements</a><ul>
+<li><a class="reference internal" href="#data">Data</a></li>
+<li><a class="reference internal" href="#administrative-operations">Administrative Operations</a></li>
+<li><a class="reference internal" href="#comparison-operators">Comparison Operators</a></li>
+<li><a class="reference internal" href="#logic-operators">Logic Operators</a></li>
+<li><a class="reference internal" href="#behavior-operators">Behavior Operators</a></li>
+<li><a class="reference internal" href="#iterators">Iterators</a></li>
+<li><a class="reference internal" href="#selection-operations">Selection Operations</a></li>
+<li><a class="reference internal" href="#schema-support">Schema Support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_branch_operations.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

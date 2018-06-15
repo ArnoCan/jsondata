@@ -1,0 +1,1603 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.jsonpointer’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="next" title="‘jsondata.jsonpatch’ - Module" href="jsondata_jsonpatch_doc.html" />
+    <link rel="prev" title="‘jsondata.jsondataserializer’ - Module" href="jsondata_jsonserializer_doc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpatch_doc.html" title="‘jsondata.jsonpatch’ - Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonserializer_doc.html" title="‘jsondata.jsondataserializer’ - Module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" accesskey="U">&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-jsondata.jsonpointer">
+<span id="jsondata-jsonpointer-module"></span><h1>&#8216;jsondata.jsonpointer&#8217; - Module<a class="headerlink" href="#module-jsondata.jsonpointer" title="Permalink to this headline">¶</a></h1>
+<p>Provides classes for the JSONPointer definition in
+accordance to RFC6901 and relative pointers draft-1/2018.</p>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="json-notation">
+<span id="index-0"></span><h3>JSON Notation<a class="headerlink" href="#json-notation" title="Permalink to this headline">¶</a></h3>
+<p>Notation of the API - in/out, see <a class="reference internal" href="jsondata_init_doc.html#commonconstsjsonnotation"><span class="std std-ref">jsodnata.__init__</span></a> .</p>
+</div>
+<div class="section" id="node-types">
+<span id="index-1"></span><h3>Node Types<a class="headerlink" href="#node-types" title="Permalink to this headline">¶</a></h3>
+<p>Valid node types represented by Python
+types.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">VALID_NODE_TYPE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="nb">dict</span><span class="p">,</span>
+    <span class="nb">list</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">,</span>
+    <span class="n">unicode</span><span class="p">,</span>  <span class="c1"># Python2, mapped in Python3 to str</span>
+    <span class="nb">int</span><span class="p">,</span>
+    <span class="nb">float</span><span class="p">,</span>
+    <span class="nb">bool</span><span class="p">,</span>
+    <span class="kc">None</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="character-set">
+<span id="index-2"></span><h3>Character Set<a class="headerlink" href="#character-set" title="Permalink to this headline">¶</a></h3>
+<p>For Python3 these are identical to UTF-8.</p>
+<ul class="simple">
+<li><em>CHARSET_UTF(0)</em> Unicode.</li>
+<li><em>CHARSET_STR(1)</em> - Python string.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsonpointer">
+<h2>JSONPointer<a class="headerlink" href="#jsonpointer" title="Permalink to this headline">¶</a></h2>
+<p>Represents exactly one JSONPointer in compliance with IETF and ECMA standards
+<a class="reference internal" href="references.html#rfc6901" id="id1">[RFC6901]</a>, <a class="reference internal" href="references.html#relpointer" id="id2">[RELPOINTER]</a>, and <a class="reference internal" href="references.html#ecma404" id="id3">[ECMA404]</a>.
+The JSONPointer is provided at the API as a utf(-8) string,
+while the processed represenation is a list vector.</p>
+<ul>
+<li><p class="first">self.raw:</p>
+<p>Raw input of the pointer string for the logical API.</p>
+</li>
+<li><p class="first">self:</p>
+<p>Split elements of the pointer path as a list of keys
+and idexes.</p>
+</li>
+</ul>
+<p>The class <em>JSONPointer</em> is derived from the <em>list</em> class and manages
+the path elements as items:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ptrlist</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">EMPTY</span><span class="o">&gt;|</span><span class="n">plist</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="n">EMPTY</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;empty list, represents the whole document relative to it&#39;s root&quot;</span>
+
+<span class="n">plist</span> <span class="p">:</span><span class="o">=</span> <span class="n">pkey</span> <span class="p">[,</span> <span class="n">plist</span> <span class="p">]</span>
+
+<span class="n">pkey</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">|</span><span class="nb">int</span><span class="o">|</span><span class="n">keyname</span><span class="p">)</span>
+
+<span class="s1">&#39;&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;the empty string is a valid key [RFC6901]_ and [RELPOINTER]_&quot;</span>
+<span class="nb">int</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;integer index of an array item, just digits&quot;</span>
+<span class="n">keyname</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;the valid name of an object/property entry&quot;</span>
+</pre></div>
+</div>
+<p>The empty quotation within a string has context specific semantics.</p>
+<ul>
+<li><p class="first">pointer == &#8216;&#8217; == &#8216;&#8221;&#8220;&#8217;</p>
+<p>The whole document.</p>
+</li>
+<li><p class="first">pointer == &#8216;/&#8221;&#8220;&#8217; == &#8216;/&#8217;</p>
+<p>The top object node with an empty string as a key.</p>
+</li>
+<li><p class="first">pointer == &#8216;/any/path/&#8221;&#8220;/and/more&#8217;</p>
+<p>Any node path entry with an empty string as a key.</p>
+</li>
+</ul>
+<p>The JSONPointer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;/address/0/streetName&quot;</span>
+</pre></div>
+</div>
+<p>is represented as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;streetName&#39;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>The following special cases are handled:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;</span>      <span class="o">&lt;=&gt;</span> <span class="p">[]</span>                 <span class="c1"># the whole document</span>
+<span class="s2">&quot;/&quot;</span>     <span class="o">&lt;=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>               <span class="c1"># the top of current document, or sub-document</span>
+<span class="s2">&quot;///&quot;</span>   <span class="o">&lt;=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>       <span class="c1"># a pointer path with empty keys</span>
+<span class="s2">&quot;#&quot;</span>     <span class="o">&lt;=&gt;</span> <span class="p">[]</span>                 <span class="c1"># the whole document defined as URI fragment</span>
+<span class="s2">&quot;#/&quot;</span>    <span class="o">&lt;=&gt;</span> <span class="p">[]</span>                 <span class="c1"># the top of current document referenced by a URI fragment</span>
+<span class="s2">&quot;#///&quot;</span>  <span class="o">&lt;=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>       <span class="c1"># a fragment pointer path with empty keys</span>
+</pre></div>
+</div>
+<p>The relative pointer adds the syntax:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;0&lt;rfc6901-path&gt;&quot;</span>              <span class="c1"># document node relative to offset anchor</span>
+<span class="s2">&quot;[1-9][0-9]*&lt;rfc6901-path&gt;&quot;</span>    <span class="c1"># document node relative to offset anchor</span>
+
+<span class="s2">&quot;0#&quot;</span>                           <span class="c1"># the actual document node key/index of the offset anchor</span>
+<span class="s2">&quot;[1-9][0-9]#&quot;</span>                  <span class="c1"># the key/index at the resulting document node</span>
+</pre></div>
+</div>
+<p>The implemented interpretation of the following cases is similar to the common
+handling of filesystem functions when a directory above the root directory
+is selected. E.g. in case of Linux with</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>[acue@somewhere dirXY]$ cd /
+[acue@somewhere /]$ pwd
+/
+[acue@somewhere /]$ cd ../../../../
+[acue@somewhere /]$ pwd
+/
+[acue@somewhere /]$
+</pre></div>
+</div>
+<p>Due to the lack of definition within the current standards, the similar behavior is defined
+for the <em>jsondata</em> package.
+The offset-pointer defines the starting position
+within the JSON document <a class="reference internal" href="references.html#relpointer" id="id4">[RELPOINTER]</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rel</span><span class="o">-</span><span class="n">pointer</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">-</span><span class="n">pointer</span><span class="o">=</span><span class="s2">&quot;&quot;</span>      <span class="o">=&gt;</span>  <span class="s2">&quot;&quot;</span>  <span class="c1"># the whole document</span>
+<span class="n">rel</span><span class="o">-</span><span class="n">pointer</span> <span class="o">=</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">-</span><span class="n">pointer</span><span class="o">=</span><span class="s2">&quot;&quot;</span>      <span class="o">=&gt;</span>  <span class="s2">&quot;&quot;</span>  <span class="c1"># still the whole document</span>
+<span class="n">rel</span><span class="o">-</span><span class="n">pointer</span> <span class="o">=</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">-</span><span class="n">pointer</span><span class="o">=</span><span class="s2">&quot;/a/b&quot;</span>  <span class="o">=&gt;</span>  <span class="s2">&quot;&quot;</span>  <span class="c1"># again the whole document</span>
+</pre></div>
+</div>
+<p>The JSON pointer is by definition in any case actually a relative pointer.</p>
+<ul class="simple">
+<li>rfc6901 - relative to the top of the document</li>
+<li>relative pointer - relative to an offset pointer within the document</li>
+</ul>
+<p>The introduction of a relative pointer <a class="reference internal" href="references.html#relpointer" id="id5">[RELPOINTER]</a> keeps and reuses the
+previous definitions and adds some syntax extensions:</p>
+<ul class="simple">
+<li>Notation for the reference of upper nodes within the hierarchy of the current
+JSON document.</li>
+<li>Addition of an offset pointer within the current JSON document as the anchor
+for the relative pointer.</li>
+<li>A notation for the get-request of the key or index of the containing element
+of the resulting node pointed to.</li>
+</ul>
+<p>The methods and operators of <em>JSONPointer</em> implement the previous standards for
+the pointer.
+These handle by definition the pointer data itself, which is used
+to address the data within a specific JSON document.
+The methods of this class support in most cases multiple input formats of
+the JSONPointer.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;str&#8217;:</dt>
+<dd>A string in accordance to RFC6901 or relative pointer/Draft-1/2018.</dd>
+<dt>&#8216;int&#8217;:</dt>
+<dd>A numeric value in case of an array index.</dd>
+<dt>&#8216;JSONPointer&#8217;:</dt>
+<dd>Another instance of the class.</dd>
+<dt>&#8216;list&#8217;:</dt>
+<dd>Expects a path list containing the elements of a JSON pointer.</dd>
+</dl>
+</div></blockquote>
+<p>The JSONPointer class by itself is focused on the path pointer itself, though
+the provided operations do not alter the content of the refrenced JSON document.
+The pointer provides the hook into the JSON document.</p>
+<dl class="class">
+<dt id="jsondata.jsonpointer.JSONPointer">
+<em class="property">class </em><code class="descclassname">jsondata.jsonpointer.</code><code class="descname">JSONPointer</code><span class="sig-paren">(</span><em>ptr</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents exactly one JSONPointer in compliance with
+IETF RFC6901 and relative-pointer/draft-1/2018</p>
+</dd></dl>
+
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><em>JSONPointer.isfragment</em></p>
+<p><em>True</em> for a URI fragment <a class="reference internal" href="references.html#rfc6901" id="id6">[RFC6901]</a>.
+Valid if <em>isrel</em> is <em>False</em>.</p>
+<p>This attribute is read-only.</p>
+</li>
+<li><p class="first"><em>JSONPointer.isrel</em></p>
+<ul class="simple">
+<li><em>True</em> for a relative pointer <a class="reference internal" href="references.html#relpointer" id="id7">[RELPOINTER]</a></li>
+<li><em>False</em> for a standard JSON pointer or a JSON URI fragment <a class="reference internal" href="references.html#rfc6901" id="id8">[RFC6901]</a>.</li>
+</ul>
+<p>This attribute is read-only.</p>
+</li>
+<li><p class="first"><em>JSONPointer.isrelpathrequest</em></p>
+<p>Valid only if <em>isrel</em> is <em>True</em>, defines the type of a relative pointer.</p>
+<ul>
+<li><p class="first"><em>True</em> when a relative pointer, e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;3/a/b/c&quot;</span>
+<span class="s2">&quot;3&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>False</em> for a key or index get-request, e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;3#&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This attribute is read-only.</p>
+</li>
+<li><p class="first"><em>JSONPointer.raw</em></p>
+<p>Raw input string for JSONPointer for internal use.</p>
+</li>
+<li><p class="first"><em>JSONPointer.start</em></p>
+<p>The resulting start offset after processing of <em>JSONPointer.startrel</em>
+and the integer index of the relative JSONPointer.</p>
+<p>This is pre-processed in any case for each modification of the <em>startrel</em> attribute,
+independent of the value provided by the attribute <em>strict</em>.</p>
+<p>This attribute is read-only.</p>
+</li>
+<li><p class="first"><em>JSONPointer.startrel</em></p>
+<p>The raw pointer offset to the sub node within the JSON document
+as the start node for the application of the
+relative pointer. Referenced as the &#8220;starting&#8221; node in <a class="reference internal" href="references.html#relpointer" id="id9">[RELPOINTER]</a>.</p>
+<p>This attribute is read-only.</p>
+</li>
+<li><p class="first"><em>JSONPointer.strict</em></p>
+<p>Controls two charcteristics of the behaviour of relative pointers:</p>
+<ul>
+<li><p class="first">Example document from <a class="reference internal" href="references.html#relpointer" id="id10">[RELPOINTER]</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jsondata</span> <span class="o">=</span>    <span class="p">{</span>
+   <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
+   <span class="s2">&quot;highly&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;nested&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s2">&quot;objects&quot;</span><span class="p">:</span> <span class="n">true</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>integer prefix overflow</em></p>
+<p>The integer prefix of a relative pointer may lead to a starting point
+exceeding the top of the document. For example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">startrel</span>   <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">relpointer</span> <span class="o">=</span> <span class="s2">&quot;4/&quot;</span>
+</pre></div>
+</div>
+<p>The result is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">:</span>  <span class="n">raises</span> <span class="n">an</span> <span class="n">exception</span>
+<span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">:</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">whole</span> <span class="n">document</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>JSONPointer.startrel</em></p>
+<p>Controls the behavior of the <em>JSONPointer.startrel</em> offset.
+This is due to the circumstance, that the application of the integer
+prefix on a non-existent node could result in a valid node.
+When strict is <em>True</em> teh existens mandatory and is checked before
+the application of the integer prefix, when <em>False</em> the integer prefix
+is applied without verification of the <em>startrel</em>.</p>
+<p>The following relative pointers</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">startrel</span>    <span class="o">=</span> <span class="s2">&quot;/foo/2&quot;</span>
+<span class="n">relpointer0</span> <span class="o">=</span> <span class="s2">&quot;2/highly/nested/objects&quot;</span>
+<span class="n">relpointer1</span> <span class="o">=</span> <span class="s2">&quot;4/highly/nested/objects&quot;</span>
+</pre></div>
+</div>
+<p>result in</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">:</span>  <span class="n">raises</span> <span class="n">an</span> <span class="n">exception</span>
+<span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>The case <em>strict=False</em> covers here two variants,</p>
+<ul>
+<li><p class="first"><em>relpointer0</em></p>
+<p>The relative start position defined by the integer index &#8216;2&#8217;
+is valid, while the <em>startrel</em> position is not.</p>
+</li>
+<li><p class="first"><em>relpointer1</em></p>
+<p>The relative start position defined by the integer index &#8216;4&#8217;
+lead to an document overflow and  is handled as defined
+by the previous rule.
+Thus the non-valid <em>startrel</em> position leads to a valid
+node when the integer prefix is applied, the whole document.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>This attribute is read-only.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="fetch-pointerpath">
+<h4>fetch_pointerpath<a class="headerlink" href="#fetch-pointerpath" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="jsondata.jsonpointer.fetch_pointerpath">
+<code class="descclassname">jsondata.jsonpointer.</code><code class="descname">fetch_pointerpath</code><span class="sig-paren">(</span><em>node</em>, <em>base</em>, <em>restype=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#fetch_pointerpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.fetch_pointerpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the address of <em>node</em> within the data structure
+<em>base</em> into a corresponding pointer path.
+The current implementation is search based, thus
+may cause performance issues when frequently applied,
+or processing very large structures.</p>
+<p>For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nodex</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;pattern&#39;</span><span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">nodex</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;x&#39;</span><span class="p">:[</span><span class="n">nodex</span><span class="p">}]]}</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">nodex</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="p">[</span>
+   <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>node</strong>:</dt>
+<dd>Address of Node to be searched for.</dd>
+<dt><strong>base</strong>:</dt>
+<dd>A tree top node to search the subtree for node.</dd>
+<dt><strong>restype</strong>:</dt>
+<dd><p class="first">Type of search.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">M_FIRST</span><span class="p">:</span> <span class="n">The</span> <span class="n">first</span> <span class="n">match</span> <span class="n">only</span><span class="o">.</span>
+<span class="n">M_LAST</span><span class="p">:</span> <span class="n">The</span> <span class="n">first</span> <span class="n">match</span> <span class="n">only</span><span class="o">.</span>
+<span class="n">M_ALL</span><span class="p">:</span> <span class="n">All</span> <span class="n">matches</span><span class="o">.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p>Returns a list of lists, where the contained
+lists are pointer pathlists for matched elements.</p>
+<ul class="simple">
+<li>restype:=M_FIRST: &#8216;[[&lt;first-match&gt;]]&#8217;,</li>
+<li>restype:=M_LAST: &#8216;[[&lt;last-match&gt;]]&#8217;,</li>
+<li>restype:=M_ALL: &#8216;[[&lt;first-match&gt;],[&lt;second-match&gt;],...]&#8217;</li>
+</ul>
+</div></blockquote>
+<p>Raises:</p>
+<blockquote>
+<div>JSONDataError</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__init__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>ptr</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes and stores a JSONPointer. The internal
+representation depends on the type.</p>
+<ul>
+<li><p class="first">absolute path:</p>
+<p>A list of ordered items representing
+the path items.</p>
+</li>
+<li><p class="first">relative path:</p>
+<p>Relative paths in addition provide
+a positive numeric offset of outer
+containers <a class="reference internal" href="references.html#relpointer" id="id11">[RELPOINTER]</a>.</p>
+</li>
+</ul>
+<p>Processes the ABNF of a JSON Pointer from RFC6901
+and/or a relative JSON Pointer(draft 2018).</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><p class="first">For details see manuals.</p>
+<ul class="last simple">
+<li><em>isfragment</em></li>
+<li><em>isrel</em></li>
+<li><em>raw</em></li>
+<li><em>start</em></li>
+<li><em>startrel</em></li>
+</ul>
+</dd>
+<dt>Args:</dt>
+<dd><dl class="first docutils">
+<dt><strong>ptr</strong>:</dt>
+<dd><p class="first">A JSONPointer to be represented by this object. The
+supported formats are:</p>
+<pre class="literal-block">
+ptr := (
+    JSONPointer                  # <a class="reference internal" href="references.html#rfc6901" id="id12">[RFC6901]</a> or <a class="reference internal" href="references.html#relpointer" id="id13">[RELPOINTER]</a>
+    | &lt;rfc6901-string&gt;           # <a class="reference internal" href="references.html#rfc6901" id="id14">[RFC6901]</a>
+    | &lt;relative-pointer-string&gt;  # <a class="reference internal" href="references.html#relpointer" id="id15">[RELPOINTER]</a>
+    | &lt;pointer-items-list&gt;       # non-URI-fragment pointer path items of <a class="reference internal" href="references.html#rfc6901" id="id16">[RFC6901]</a>
+    )
+</pre>
+<dl class="docutils">
+<dt>JSONPointer:</dt>
+<dd>A valid object, is copied into this object,
+see &#8216;deep&#8217;. Supports <em>rfc6901</em> <a class="reference internal" href="references.html#rfc6901" id="id17">[RFC6901]</a>
+and <em>relative</em> pointers <a class="reference internal" href="references.html#relpointer" id="id18">[RELPOINTER]</a>.</dd>
+<dt><em>rfc6901-string</em>:</dt>
+<dd>A string i accordance to RFC6901 <a class="reference internal" href="references.html#rfc6901" id="id19">[RFC6901]</a>.</dd>
+<dt><em>relative-pointer-string</em>:</dt>
+<dd>Draft standard, currently
+experimental <a class="reference internal" href="references.html#relpointer" id="id20">[RELPOINTER]</a>.</dd>
+<dt><em>pointer-items-list</em>:</dt>
+<dd>Expects a path list, where each item
+is processed for escape and unquote.
+Supports <em>rfc6901</em> pointers <a class="reference internal" href="references.html#rfc6901" id="id21">[RFC6901]</a>.</dd>
+</dl>
+<p>Containing:</p>
+<ul class="last simple">
+<li>absolute JSON Pointer</li>
+<li>relative JSON Pointer, requires the
+keyword argument <em>startrel</em></li>
+</ul>
+</dd>
+</dl>
+<p>kargs:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt><strong>debug</strong>:</dt>
+<dd>Enable debugging.</dd>
+<dt><strong>deep</strong>:</dt>
+<dd>Applies for copy operations on structured data
+&#8216;deep&#8217; when &#8216;True&#8217;, else &#8216;shallow&#8217; only.
+Flat data types are copied by value in any case.</dd>
+<dt><strong>node</strong>:</dt>
+<dd>Force to set the pointed node in the internal cache.</dd>
+<dt><strong>replace</strong>:</dt>
+<dd><p class="first">Replace masked characters, is applied onto the <em>ptr</em>
+parameter only. For the replacement of <em>startrel</em>
+create and pass an object <em>JSONPointer</em>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">replace</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>    <span class="c1"># replaces rfc6901 escape sequences: ~0 and ~1</span>
+   <span class="o">|</span> <span class="kc">False</span>   <span class="c1"># omit unescaping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Match operations on address strings are proceeded literally,
+thus the escaped characters should be consistent,
+see rfc6901, Section 3.</p>
+</div>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>startrel</strong>:</dt>
+<dd><p class="first">Start node for relative JSON Pointers. Is evaluated
+only in combination with a relative path, else
+ignored.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">startrel</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">JSONPointer</span>           <span class="c1"># supports [RFC6901]_ and [RELPOINTER]_</span>
+   <span class="o">|</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span>      <span class="c1"># supports [RFC6901]_</span>
+   <span class="o">|</span> <span class="o">&lt;</span><span class="n">rel</span><span class="o">-</span><span class="n">pointer</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span>  <span class="c1"># supports only relative to whole-document &#39;0/...&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := &#8220;&#8221;  # whole document</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns either <em>False</em>, or
+raises an exception.
+Success is the complete addition only, thus one failure returns
+<em>False</em>.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="repr">
+<h4>__repr__<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__repr__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the attribute self.__raw, which is the raw input JSONPointer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None</dd>
+<dt>Attributes:</dt>
+<dd>Evaluates <em>self.__isrel</em></dd>
+<dt>Returns:</dt>
+<dd><dl class="first docutils">
+<dt>For relative paths: ::</dt>
+<dd><p class="first">(&lt;start-offset&gt;, &lt;pointer&gt;)</p>
+<p class="last">start-offset := [&lt;self.startrel&gt;]
+pointer := [&lt;self&gt;]</p>
+</dd>
+</dl>
+<p>For RFC6901 paths:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">pointer</span><span class="o">&gt;</span>
+
+<span class="n">pointer</span> <span class="p">:</span><span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>pass-through</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="str">
+<h4>__str__<a class="headerlink" href="#str" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__str__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the string for the processed path.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None</dd>
+<dt>Attributes:</dt>
+<dd>Evaluates <em>self.__isrel</em></dd>
+<dt>Returns:</dt>
+<dd><dl class="first docutils">
+<dt>For relative paths: ::</dt>
+<dd><p class="first">(&lt;start-offset&gt;, &lt;pointer&gt;)</p>
+<p class="last">start-offset := [&lt;self.startrel&gt;]
+pointer := [&lt;self&gt;]</p>
+</dd>
+</dl>
+<p>For RFC6901 paths:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">pointer</span><span class="o">&gt;</span>
+
+<span class="n">pointer</span> <span class="p">:</span><span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>pass-through</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="check-node-or-value">
+<h4>check_node_or_value<a class="headerlink" href="#check-node-or-value" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.check_node_or_value">
+<code class="descclassname">JSONPointer.</code><code class="descname">check_node_or_value</code><span class="sig-paren">(</span><em>jsondata</em>, <em>parent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.check_node_or_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.check_node_or_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the existence of the corresponding node
+within the JSON document.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>If <em>True</em> returns the parent node of the pointed value.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONPointerError:</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="copy-path-list">
+<h4>copy_path_list<a class="headerlink" href="#copy-path-list" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.copy_path_list">
+<code class="descclassname">JSONPointer.</code><code class="descname">copy_path_list</code><span class="sig-paren">(</span><em>parent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.copy_path_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.copy_path_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a deep copy of the objects pointer path list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>parent</strong>:</dt>
+<dd>The parent node of the pointer path.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A copy of the path list.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="evaluate">
+<h4>evaluate<a class="headerlink" href="#evaluate" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.evaluate">
+<code class="descclassname">JSONPointer.</code><code class="descname">evaluate</code><span class="sig-paren">(</span><em>jsondata</em>, <em>parent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the value resulting from the current pointer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd><p class="first">A JSON data node.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">jsondata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+    <span class="n">JSONData</span>
+    <span class="o">|</span> <span class="nb">list</span>
+    <span class="o">|</span> <span class="nb">dict</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>Return the parent node of the pointed value.
+When parent is selected, the pointed child node
+is not verified.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The referenced value.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONPointerError:</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-node-and-child">
+<h4>get_node_and_child<a class="headerlink" href="#get-node-and-child" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_node_and_child">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_node_and_child</code><span class="sig-paren">(</span><em>jsondata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_and_child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_node_and_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple containing the parent node and self as the child.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">The the tuple:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+   <span class="n">p</span><span class="p">:</span> <span class="n">Node</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">parent</span> <span class="n">container</span><span class="o">.</span>
+   <span class="n">c</span><span class="p">:</span> <span class="n">Node</span> <span class="n">reference</span> <span class="n">to</span> <span class="bp">self</span> <span class="k">as</span> <span class="n">the</span> <span class="n">child</span><span class="o">.</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONPointerError:</p>
+<p class="last">pass=through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-node-and-key">
+<h4>get_node_and_key<a class="headerlink" href="#get-node-and-key" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_node_and_key">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_node_and_key</code><span class="sig-paren">(</span><em>jsondata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_and_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_node_and_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple containing the parent node and the key of current.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">The the tuple:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+   <span class="n">n</span><span class="p">:</span> <span class="n">Node</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">parent</span> <span class="n">container</span><span class="o">.</span>
+   <span class="n">k</span><span class="p">:</span> <span class="n">Key</span> <span class="k">for</span> <span class="bp">self</span> <span class="k">as</span> <span class="n">the</span> <span class="n">child</span> <span class="n">entry</span><span class="p">:</span>
+
+      <span class="n">k</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+           <span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="o">&gt;</span>
+         <span class="o">|</span> <span class="o">&lt;</span><span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span>
+         <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span>
+
+      <span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span>
+      <span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="p">:</span> <span class="s1">&#39;UTF-8&#39;</span>
+      <span class="kc">None</span><span class="p">:</span> <span class="s2">&quot;for root-node&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONPointerError:</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-node-exist">
+<h4>get_node_exist<a class="headerlink" href="#get-node-exist" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_node_exist">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_node_exist</code><span class="sig-paren">(</span><em>jsondata</em>, <em>parent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_exist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_node_exist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns two parts, the exisitng node for valid part of
+the pointer, and the remaining part of the pointer for
+the non-existing sub-path.</p>
+<p>This method works similar to the &#8216;evaluate&#8217; method, whereas it
+handles partial valid path pointers, which may also include
+a &#8216;-&#8216; in accordance to RFC6902.</p>
+<p>Therefore the non-ambiguous part of the pointer is resolved,
+and returned with the remaining part for a newly create.
+Thus this method is in particular foreseen to support the
+creation of new sub data structures.</p>
+<p>The &#8216;evaluate&#8217; method therefore returns a list of two elements,
+the first is the node reference, the second the list of the
+remaining path pointer components. The latter may be empty in
+case of a fully valid pointer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>Return the parent node of the pointed value.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The node reference, and the remaining part.
+ret:=(node, [&lt;remaining-path-components-list&gt;])</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:
+forwarded from json</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-node-value">
+<h4>get_node_value<a class="headerlink" href="#get-node-value" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_node_value">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_node_value</code><span class="sig-paren">(</span><em>jsondata</em>, <em>cp=2</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_node_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the copy of the corresponding node.
+Relies on the standard package &#8216;json&#8217;.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+<dt><strong>cp</strong>:</dt>
+<dd><p class="first">Type of returned copy.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">C_DEEP</span>
+   <span class="o">|</span> <span class="n">C_REF</span>
+   <span class="o">|</span> <span class="n">C_SHALLOW</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>valtype</strong>:</dt>
+<dd>Type of requested value.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The copy of the node, see option <em>copy</em>.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONPointerError</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-path-list">
+<h4>get_path_list<a class="headerlink" href="#get-path-list" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_path_list">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_path_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_path_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_path_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets for the corresponding path list of the object pointer for
+in-memory access on the data of the &#8216;json&#8217; package.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>none</dd>
+<dt>Returns:</dt>
+<dd>The path list.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-path-list-and-key">
+<h4>get_path_list_and_key<a class="headerlink" href="#get-path-list-and-key" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_path_list_and_key">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_path_list_and_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_path_list_and_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_path_list_and_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets for the corresponding path list of the object pointer for in-memory access on the data of the &#8216;json&#8217; package.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>none</dd>
+<dt>Returns:</dt>
+<dd>The path list.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-pointer">
+<h4>get_pointer<a class="headerlink" href="#get-pointer" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_pointer">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_pointer</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_pointer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_pointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object pointer in compliance to RFC6901
+or relative pointer/draft-01/2018.</p>
+<p>The result is by default the assigned pointer itself without
+verification. Similar in case of a relative pointer the start
+offset is ignored by default and no verification is performed.</p>
+<p>The following options modify this behaviour:</p>
+<ul class="simple">
+<li>superpose - superposes the <em>startrel</em> offset with the pointer</li>
+<li>verify - verifies the actual existence of the nodes and/or
+intermediate nodes</li>
+</ul>
+<p>The options could be applied combined.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>returntype</strong>:</dt>
+<dd><p class="first">Defines the return type.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">returntype</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">RT_DEFAULT</span>     <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+   <span class="o">|</span> <span class="n">RT_LST</span>         <span class="o">|</span> <span class="s1">&#39;list&#39;</span>      <span class="o">|</span> <span class="nb">list</span>
+   <span class="o">|</span> <span class="n">RT_JSONPOINTER</span> <span class="o">|</span> <span class="s1">&#39;jpointer&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>superpose</strong>:</dt>
+<dd><p class="first">Is only relevant for relative paths. Superposes the offset
+<em>startrel</em> with the pointer into the resulting final pointer.
+By default nodes are not verified, see <em>verify</em> parameter.</p>
+<p class="last">default := True</p>
+</dd>
+<dt><strong>verify</strong>:</dt>
+<dd><p class="first">Verifies the &#8220;road&#8221; of the superposed pointers.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">verify</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">V_DEFAULT</span> <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+   <span class="o">|</span> <span class="n">V_NONE</span>    <span class="o">|</span> <span class="s1">&#39;none&#39;</span>    <span class="o">|</span> <span class="kc">None</span>    <span class="c1"># no checks at all</span>
+   <span class="o">|</span> <span class="n">V_FINAL</span>   <span class="o">|</span> <span class="s1">&#39;final&#39;</span>             <span class="c1"># checks final result only</span>
+   <span class="o">|</span> <span class="n">V_STEPS</span>   <span class="o">|</span> <span class="s1">&#39;steps&#39;</span>             <span class="c1"># checks each intermediate directory</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := None</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The new pointer in a choosen format, see <em>returntype</em>.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-pointer-and-key">
+<h4>get_pointer_and_key<a class="headerlink" href="#get-pointer-and-key" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_pointer_and_key">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_pointer_and_key</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_pointer_and_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_pointer_and_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the resulting pointer and key from the processing of
+the pointer and the optional starting node <em>stratrel</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-pointer-str">
+<h4>get_pointer_str<a class="headerlink" href="#get-pointer-str" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_pointer_str">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_pointer_str</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_pointer_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_pointer_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the objects pointer string in compliance to RFC6901
+or relative pointer/draft-01/2018.</p>
+<p>The result is by default the assigned pointer itself without
+verification. Similar in case of a relative pointer the start
+offset is ignored by default and no verification is performed.</p>
+<p>The following options modify this behaviour:</p>
+<ul class="simple">
+<li>superpose - superposes the <em>startrel</em> offset with the pointer</li>
+<li>verify - verifies the actual existence of the nodes and/or
+intermediate nodes</li>
+</ul>
+<p>The options could be applied combined.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>forcenotation</strong>:</dt>
+<dd><p class="first">Force the output notation for string representation to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">forcenotation</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">NOTATION_NATIVE</span>           <span class="c1"># original format with unescape</span>
+   <span class="o">|</span> <span class="n">NOTATION_JSON</span>             <span class="c1"># transform to resulting pointer</span>
+   <span class="o">|</span> <span class="n">NOTATION_HTTP_FRAGMENT</span>    <span class="c1"># return a fragment with encoding</span>
+   <span class="o">|</span> <span class="n">NOTATION_JSON_REL</span>         <span class="c1"># resulting relative pointer</span>
+   <span class="o">|</span> <span class="n">NOTATION_RAW</span>              <span class="c1"># raw input</span>
+<span class="p">)</span>
+
+<span class="n">default</span> <span class="p">:</span><span class="o">=</span> <span class="n">NOTATION_NATIVE</span>
+</pre></div>
+</div>
+<p class="last"><strong>REMINDER</strong>: Applicable for return type string only.</p>
+</dd>
+<dt><strong>superpose</strong>:</dt>
+<dd>Is only relevant for relative paths. Superposes the offset
+<em>startrel</em> with the pointer into the resulting final pointer.
+By default nodes are not verified, see <em>verify</em> parameter.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The new pointer in a choosen format, see <em>returntype</em>.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-raw">
+<h4>get_raw<a class="headerlink" href="#get-raw" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_raw">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_raw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the objects raw 6901-pointer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>none</dd>
+<dt>Returns:</dt>
+<dd>The raw path.</dd>
+<dt>Raises:</dt>
+<dd>none</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-relupidx">
+<h4>get_relupidx<a class="headerlink" href="#get-relupidx" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_relupidx">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_relupidx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_relupidx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_relupidx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the resulting integer prefix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-start">
+<h4>get_start<a class="headerlink" href="#get-start" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_start">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the resulting start pointer after the
+application of the integer prefix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-startrel">
+<h4>get_startrel<a class="headerlink" href="#get-startrel" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.get_startrel">
+<code class="descclassname">JSONPointer.</code><code class="descname">get_startrel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_startrel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.get_startrel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the raw start pointer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="isfragment">
+<h4>isfragment<a class="headerlink" href="#isfragment" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.isfragment">
+<code class="descclassname">JSONPointer.</code><code class="descname">isfragment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.isfragment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.isfragment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a http fragment.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="isrelpathrequest">
+<h4>isrelpathrequest<a class="headerlink" href="#isrelpathrequest" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.isrelpathrequest">
+<code class="descclassname">JSONPointer.</code><code class="descname">isrelpathrequest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.isrelpathrequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.isrelpathrequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a path request.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="isrel">
+<h4>isrel<a class="headerlink" href="#isrel" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.isrel">
+<code class="descclassname">JSONPointer.</code><code class="descname">isrel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.isrel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.isrel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a relative pointer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="isvalid-nodetype">
+<h4>isvalid_nodetype<a class="headerlink" href="#isvalid-nodetype" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.isvalid_nodetype">
+<code class="descclassname">JSONPointer.</code><code class="descname">isvalid_nodetype</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.isvalid_nodetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.isvalid_nodetype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks valid node types of in-memory JSON data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="isvalrequest">
+<h4>isvalrequest<a class="headerlink" href="#isvalrequest" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.isvalrequest">
+<code class="descclassname">JSONPointer.</code><code class="descname">isvalrequest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.isvalrequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.isvalrequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a value request.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h3>
+<p>The syntax displayed for provided operators is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">:</span> <span class="bp">self</span>
+<span class="n">x</span><span class="p">:</span> <span class="n">parameter</span>
+<span class="n">n</span><span class="p">:</span> <span class="n">numerical</span> <span class="n">parameter</span> <span class="k">for</span> <span class="n">shift</span> <span class="n">operators</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Thus the position of the opreator and parameteres is defined as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">x</span><span class="p">:</span> <span class="n">LHS</span><span class="p">:</span> <span class="n">__add__</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">S</span><span class="p">:</span> <span class="n">RHS</span><span class="p">:</span> <span class="n">__radd__</span>
+<span class="n">S</span> <span class="o">+=</span> <span class="n">x</span><span class="p">:</span>    <span class="n">LHS</span><span class="p">:</span> <span class="n">__iadd__</span>
+</pre></div>
+</div>
+<div class="section" id="s-x">
+<h4>&#8216;S+x&#8217;<a class="headerlink" href="#s-x" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__add__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__add__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a Pointer to self.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd><p class="first">A valid JSONPointer of type:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+   <span class="n">JSONPointer</span> <span class="o">-</span> <span class="n">fragment</span>
+   <span class="o">|</span> <span class="n">JSONPointer</span> <span class="o">-</span> <span class="n">relative</span><span class="o">-</span><span class="n">pointer</span>
+   <span class="o">|</span> <span class="n">relative</span> <span class="n">pointer</span>
+   <span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A new object of JSONPointer</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id22">
+<h4>&#8216;S(x)&#8217;<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__call__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>x</em>, <em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the pointer value on the document.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid JSON document.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The resulting pointer value.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id23">
+<h4>&#8216;S==x&#8217;<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__eq__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__eq__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A JSONPointer object.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id24">
+<h4>&#8216;S&gt;=x&#8217;<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__ge__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__ge__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__ge__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__ge__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks containment(&gt;=) of another pointer within this.</p>
+<p>The weight of contained entries is the criteria, though
+the shorter is the bigger. This is true only in case of
+a containment relation.</p>
+<p>The number of equal path pointer items is compared.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id25">
+<h4>&#8216;S&gt;x&#8217;<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__gt__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__gt__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__gt__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__gt__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks containment(&gt;) of another pointer or object within this.</p>
+<p>The number of equal items is compared.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id26">
+<h4>&#8216;S+=x&#8217;<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__iadd__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__iadd__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__iadd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add in place x to self, appends a path.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>&#8216;self&#8217; with updated pointer attributes</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id27">
+<h4>&#8216;S&lt;x&#8217;<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__le__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__le__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__le__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__le__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks containment(&lt;=) of this pointer within another.</p>
+<p>The number of equal items is compared.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id28">
+<h4>&#8216;S&lt;x&#8217;<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__lt__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__lt__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__lt__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__lt__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks containment(&lt;) of this pointer within another.</p>
+<p>The number of equal items is compared.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id29">
+<h4>&#8216;S!=x&#8217;<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__ne__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__ne__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="x-s">
+<h4>&#8216;x+S&#8217;<a class="headerlink" href="#x-s" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.__radd__">
+<code class="descclassname">JSONPointer.</code><code class="descname">__radd__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.__radd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.__radd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds itself as the right-side-argument to the left.</p>
+<p>This method appends &#8216;self&#8217; to a path fragment on the left.
+Therefore it adds the path separator on it&#8217;s left side only.
+The left side path fragment has to maintain to be in
+accordance to RFC6901 by itself.</p>
+<p>Once &#8216;self&#8217; is added to the left side, it terminates it&#8217;s
+life cycle. Thus another simultaneous add operation is
+handled by the resulting other element.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The updated input of type &#8216;x&#8217; as &#8216;x+S(x)&#8217;</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="iter-path">
+<h4>iter_path<a class="headerlink" href="#iter-path" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.iter_path">
+<code class="descclassname">JSONPointer.</code><code class="descname">iter_path</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.iter_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator for the elements of the path pointer itself.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>If provided a valid JSON data node, the
+path components are successively verified on
+the provided document.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>parent</strong>:</dt>
+<dd>Uses the path pointer to parent node.</dd>
+<dt><strong>rev</strong>:</dt>
+<dd>Reverse the order, start with last.</dd>
+<dt><strong>superpose</strong>:</dt>
+<dd><p class="first">Is only relevant for relative paths, for <em>rfc6901</em> defined
+paths the parameter is ignored. When <em>True</em> superposes
+the offset <em>startrel</em> with the pointer into the resulting
+final pointer. By default nodes are not verified,
+see <em>verify</em> parameter.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">superpose</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>   <span class="c1"># iterates resulting paths from *startrel*</span>
+   <span class="o">|</span> <span class="kc">False</span>  <span class="c1"># iterates the path only</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := True</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Yields the iterator for the current path pointer
+components.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:
+forwarded from json</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="iter-path-nodes">
+<h4>iter_path_nodes<a class="headerlink" href="#iter-path-nodes" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.iter_path_nodes">
+<code class="descclassname">JSONPointer.</code><code class="descname">iter_path_nodes</code><span class="sig-paren">(</span><em>jsondata</em>, <em>parent=False</em>, <em>rev=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.iter_path_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator for the elements the path pointer points to.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>A valid JSON data node.</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>Uses the path pointer to parent node.</dd>
+<dt><strong>rev</strong>:</dt>
+<dd>Reverse the order, start with last.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Yields the iterator of the current node reference.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:
+forwarded from json</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="iter-path-subpathdata">
+<h4>iter_path_subpathdata<a class="headerlink" href="#iter-path-subpathdata" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.iter_path_subpathdata">
+<code class="descclassname">JSONPointer.</code><code class="descname">iter_path_subpathdata</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>parent=False</em>, <em>rev=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_subpathdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.iter_path_subpathdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Successive iterator for the resulting sub-paths and the
+corresponding nodes.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>If provided a valid JSON data node, the
+path components are successively verified on
+the provided document.</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>Uses the path pointer to parent node.</dd>
+<dt><strong>rev</strong>:</dt>
+<dd>Reverse the order, start with last.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">Yields the iterator for the tuple of the current
+slice of the path pointer and the reference of the
+corresponding node.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">&lt;</span><span class="n">path</span><span class="o">-</span><span class="n">item</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">sub</span><span class="o">-</span><span class="n">path</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span><span class="p">)</span>
+
+<span class="n">path</span><span class="o">-</span><span class="n">item</span><span class="p">:</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">item</span>
+<span class="n">sub</span><span class="o">-</span><span class="n">path</span><span class="p">:</span>  <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">subpath</span>
+<span class="n">node</span><span class="p">:</span>      <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">corresponding</span> <span class="n">node</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:
+forwarded from json</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="iter-path-subpaths">
+<h4>iter_path_subpaths<a class="headerlink" href="#iter-path-subpaths" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpointer.JSONPointer.iter_path_subpaths">
+<code class="descclassname">JSONPointer.</code><code class="descname">iter_path_subpaths</code><span class="sig-paren">(</span><em>jsondata=None</em>, <em>parent=False</em>, <em>rev=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_subpaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpointer.JSONPointer.iter_path_subpaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Successive iterator for the resulting sub-paths the
+path pointer itself.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>If provided a valid JSON data node, the
+path components are successively verified on
+the provided document.</dd>
+<dt><strong>parent</strong>:</dt>
+<dd>Uses the path pointer to parent node.</dd>
+<dt><strong>rev</strong>:</dt>
+<dd>Reverse the order, start with last.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Yields the iterator for the copy of the current
+slice of the path pointer.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:
+forwarded from json</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="jsondata.JSONPointerError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONPointerError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONPointerError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONPointerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer error.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONPointerTypeError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONPointerTypeError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONPointerTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONPointerTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer type error, the JSON pointer syntax does not represent a valid pointer.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.jsonpointer&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+<li><a class="reference internal" href="#json-notation">JSON Notation</a></li>
+<li><a class="reference internal" href="#node-types">Node Types</a></li>
+<li><a class="reference internal" href="#character-set">Character Set</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpointer">JSONPointer</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#fetch-pointerpath">fetch_pointerpath</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#repr">__repr__</a></li>
+<li><a class="reference internal" href="#str">__str__</a></li>
+<li><a class="reference internal" href="#check-node-or-value">check_node_or_value</a></li>
+<li><a class="reference internal" href="#copy-path-list">copy_path_list</a></li>
+<li><a class="reference internal" href="#evaluate">evaluate</a></li>
+<li><a class="reference internal" href="#get-node-and-child">get_node_and_child</a></li>
+<li><a class="reference internal" href="#get-node-and-key">get_node_and_key</a></li>
+<li><a class="reference internal" href="#get-node-exist">get_node_exist</a></li>
+<li><a class="reference internal" href="#get-node-value">get_node_value</a></li>
+<li><a class="reference internal" href="#get-path-list">get_path_list</a></li>
+<li><a class="reference internal" href="#get-path-list-and-key">get_path_list_and_key</a></li>
+<li><a class="reference internal" href="#get-pointer">get_pointer</a></li>
+<li><a class="reference internal" href="#get-pointer-and-key">get_pointer_and_key</a></li>
+<li><a class="reference internal" href="#get-pointer-str">get_pointer_str</a></li>
+<li><a class="reference internal" href="#get-raw">get_raw</a></li>
+<li><a class="reference internal" href="#get-relupidx">get_relupidx</a></li>
+<li><a class="reference internal" href="#get-start">get_start</a></li>
+<li><a class="reference internal" href="#get-startrel">get_startrel</a></li>
+<li><a class="reference internal" href="#isfragment">isfragment</a></li>
+<li><a class="reference internal" href="#isrelpathrequest">isrelpathrequest</a></li>
+<li><a class="reference internal" href="#isrel">isrel</a></li>
+<li><a class="reference internal" href="#isvalid-nodetype">isvalid_nodetype</a></li>
+<li><a class="reference internal" href="#isvalrequest">isvalrequest</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#s-x">&#8216;S+x&#8217;</a></li>
+<li><a class="reference internal" href="#id22">&#8216;S(x)&#8217;</a></li>
+<li><a class="reference internal" href="#id23">&#8216;S==x&#8217;</a></li>
+<li><a class="reference internal" href="#id24">&#8216;S&gt;=x&#8217;</a></li>
+<li><a class="reference internal" href="#id25">&#8216;S&gt;x&#8217;</a></li>
+<li><a class="reference internal" href="#id26">&#8216;S+=x&#8217;</a></li>
+<li><a class="reference internal" href="#id27">&#8216;S&lt;x&#8217;</a></li>
+<li><a class="reference internal" href="#id28">&#8216;S&lt;x&#8217;</a></li>
+<li><a class="reference internal" href="#id29">&#8216;S!=x&#8217;</a></li>
+<li><a class="reference internal" href="#x-s">&#8216;x+S&#8217;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iterators">Iterators</a><ul>
+<li><a class="reference internal" href="#iter-path">iter_path</a></li>
+<li><a class="reference internal" href="#iter-path-nodes">iter_path_nodes</a></li>
+<li><a class="reference internal" href="#iter-path-subpathdata">iter_path_subpathdata</a></li>
+<li><a class="reference internal" href="#iter-path-subpaths">iter_path_subpaths</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsondata_jsonserializer_doc.html"
+                        title="previous chapter">&#8216;jsondata.jsondataserializer&#8217; - Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsondata_jsonpatch_doc.html"
+                        title="next chapter">&#8216;jsondata.jsonpatch&#8217; - Module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_jsonpointer_doc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpatch_doc.html" title="‘jsondata.jsonpatch’ - Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonserializer_doc.html" title="‘jsondata.jsondataserializer’ - Module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" >&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

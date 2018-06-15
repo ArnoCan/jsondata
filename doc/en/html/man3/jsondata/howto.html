@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Howto &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="next" title="Modular JSON" href="howto_modular_json.html" />
+    <link rel="prev" title="‘testdata’ - package" href="index_testdata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_modular_json.html" title="Modular JSON"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index_testdata.html" title="‘testdata’ - package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto">
+<h1>Howto<a class="headerlink" href="#howto" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Howto</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#themes">Themes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis">APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-python">Install Python</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="themes">
+<h2>Themes<a class="headerlink" href="#themes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modular-json">
+<h3>Modular JSON<a class="headerlink" href="#modular-json" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_modular_json.html">Modular JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_modular_json.html#json-modules-and-branches">JSON Modules and Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_modular_json.html#validate-modules-by-one-main-json-schema">Validate Modules by one Main JSON Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_modular_json.html#validate-modules-by-modular-json-schema">Validate Modules by Modular JSON Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_modular_json.html#automate-module-processing-with-json-patch">Automate Module Processing with JSON Patch</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="json-patch-management">
+<h3>JSON Patch Management<a class="headerlink" href="#json-patch-management" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_patch_management.html">JSON Patch Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_patch_management.html#basic-patch-rfc6902">Basic Patch - RFC6902</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_patch_management.html#dynamic-patch-lists">Dynamic Patch Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_patch_management.html#persistent-patch-lists">Persistent Patch Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_patch_management.html#reuse-patch-lists">Reuse Patch Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_patch_management.html#patch-templates">Patch Templates</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="apis">
+<h2>APIs<a class="headerlink" href="#apis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jsondata-rfc7159-et-al">
+<h3>JSONData - RFC7159 et al.<a class="headerlink" href="#jsondata-rfc7159-et-al" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_class_jsondata.html">JSONData - RFC7159 et al.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#branch-operations">Branch Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#branch-algebra">Branch Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#rfc7159-examples">RFC7159 Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#json-schema-validation">JSON Schema Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#conversions">Conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondata.html#comparison-operators">Comparison Operators</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsondata-validate-json">
+<h3>JSONData - Validate JSON<a class="headerlink" href="#jsondata-validate-json" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_validate_json.html">JSON Schema - Validate JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_validate_json.html#jsonschema">jsonschema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_validate_json.html#in-memory-jsonschema">in-memory jsonschema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_validate_json.html#stored-jsonschema">stored jsonschema</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsondataserializer-json-persistency">
+<h3>JSONDataSerializer - JSON Persistency<a class="headerlink" href="#jsondataserializer-json-persistency" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_class_jsondataserializer.html">JSONDataSerializer - JSON Persistency</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondataserializer.html#load">Load</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondataserializer.html#save">Save</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondataserializer.html#import-and-export-branches">Import and Export Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsondataserializer.html#validation-of-branches-by-json-schemes">Validation of Branches By JSON Schemes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsonpatch-rfc6902">
+<h3>JSONPatch - RFC6902<a class="headerlink" href="#jsonpatch-rfc6902" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_class_jsonpatch.html">JSONPatch - RFC6902</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpatch.html#standards-operations">Standards Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpatch.html#patch-set-algebra">Patch-Set Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpatch.html#rfc6902-examples">RFC6902 Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsonpointer-rfc6901">
+<h3>JSONPointer - RFC6901<a class="headerlink" href="#jsonpointer-rfc6901" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_class_jsonpointer.html">HowTo JSONPointer - RFC6901</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer.html#pointer-syntax">Pointer Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer.html#json-string-representation">JSON String Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer.html#uri-fragment-identifier-representation">URI Fragment Identifier Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer.html#evaluate-nodes-keys-and-values">Evaluate Nodes, Keys, and Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer.html#iterate-paths">Iterate Paths</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsonpointer-relative">
+<h3>JSONPointer - Relative<a class="headerlink" href="#jsonpointer-relative" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto_class_jsonpointer_relative.html">Relative JSONPointer - draft-handrews-relative-json-pointer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer_relative.html#pointer-syntax">Pointer Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer_relative.html#json-string-representation">JSON String Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_class_jsonpointer_relative.html#uri-fragment-identifier-representation">URI Fragment Identifier Representation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="install-python">
+<h2>Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="howto_install-python.html">CPython</a></li>
+<li><a class="reference external" href="howto_install-pypy.html">PyPy</a></li>
+<li><a class="reference external" href="howto_install-stackless.html">stackless</a></li>
+<li><a class="reference external" href="howto_install-ironpython.html">IronPython</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Howto</a><ul>
+<li><a class="reference internal" href="#themes">Themes</a><ul>
+<li><a class="reference internal" href="#modular-json">Modular JSON</a></li>
+<li><a class="reference internal" href="#json-patch-management">JSON Patch Management</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apis">APIs</a><ul>
+<li><a class="reference internal" href="#jsondata-rfc7159-et-al">JSONData - RFC7159 et al.</a></li>
+<li><a class="reference internal" href="#jsondata-validate-json">JSONData - Validate JSON</a></li>
+<li><a class="reference internal" href="#jsondataserializer-json-persistency">JSONDataSerializer - JSON Persistency</a></li>
+<li><a class="reference internal" href="#jsonpatch-rfc6902">JSONPatch - RFC6902</a></li>
+<li><a class="reference internal" href="#jsonpointer-rfc6901">JSONPointer - RFC6901</a></li>
+<li><a class="reference internal" href="#jsonpointer-relative">JSONPointer - Relative</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install-python">Install Python</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index_testdata.html"
+                        title="previous chapter">&#8216;testdata&#8217; - package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_modular_json.html"
+                        title="next chapter">Modular JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_modular_json.html" title="Modular JSON"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index_testdata.html" title="‘testdata’ - package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

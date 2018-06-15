@@ -1,0 +1,18 @@
+**Project Data**
+
+* PROJECT=jsondata
+
+* MISSION=Provide a JSON toolset for computing - RFC7159, RFC6901, RFC6902, ...
+
+* AUTHOR=Arno-Can Uestuensoez
+
+* COPYRIGHT=Copyright (C) 2017 Arno-Can Uestuensoez @Ingenieurbuero Arno-Can Uestuensoez
+
+* LICENSE=Artistic-License-2.0 + Forced-Fairplay-Constraints
+
+* VERSION=0.2.22
+
+* RELEASE=0.2.22
+
+* STATUS=alpha
+

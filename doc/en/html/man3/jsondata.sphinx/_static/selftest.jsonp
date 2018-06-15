@@ -1,0 +1,33 @@
+[
+	{ "op": "test", "path": "/address/streetAddress", "value": "21 2nd Street" },
+	{ "op": "test", "path": "/address/city", "value": "New York" },
+	{ "op": "test", "path": "/address/houseNumber", "value": 12 },
+	{ "op": "test", "path": "/phoneNumber/type", "value": 12 },
+
+	{ "op": "remove", "path": "/a/b/c" },
+	{ "op": "add", "path": "/a/b/c", "value": [ "foo", "bar" ] },
+	{ "op":	 "replace", "path": "/a/b/c", "value": 42 },
+	{ "op": "move", "from": "/a/b/c", "path": "/a/b/d" },
+	{ "op": "copy", "from": "/a/b/d", "path": "/a/b/e" }
+]
+
+	"":
+    [
+		{
+			"type":"home0",
+			"number":"000"
+		},
+		{
+			"type":"home1",
+			"number":"111"
+		},
+		{
+			"type":"office",
+			"number":"222"
+		},
+		{
+			"type":"holidays",
+			"number":"333"
+		}
+	],
+

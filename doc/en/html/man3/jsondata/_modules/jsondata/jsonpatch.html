@@ -1,0 +1,1386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.jsonpatch &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../../index.html" />
+    <link rel="up" title="jsondata" href="../jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" accesskey="U">jsondata</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata.jsonpatch</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="sd">&quot;&quot;&quot;The JSONPatch module provides for the alteration of JSON data compliant to RFC6902.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="c1"># pylint: disable-msg=F0401</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">myjson</span>  <span class="c1"># @UnusedImport</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ujson&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">myjson</span>  <span class="c1"># @UnusedImport @Reimport @UnresolvedImport</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">myjson</span>  <span class="c1"># @Reimport</span>
+<span class="c1"># pylint: enable-msg=F0401</span>
+
+<span class="c1"># for now the only one supported</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="k">import</span> <span class="n">JSONPointer</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsondataserializer</span> <span class="k">import</span> <span class="n">JSONDataSerializer</span><span class="p">,</span> <span class="n">MS_OFF</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="k">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata</span> <span class="k">import</span> <span class="n">V3K</span><span class="p">,</span> <span class="n">JSONDataPatchError</span><span class="p">,</span> <span class="n">JSONDataPatchItemError</span><span class="p">,</span> \
+    <span class="n">C_SHALLOW</span><span class="p">,</span> <span class="n">C_DEEP</span><span class="p">,</span> <span class="n">C_REF</span><span class="p">,</span> \
+    <span class="n">SD_INPUT</span><span class="p">,</span> <span class="n">SD_OUTPUT</span>
+
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez&quot;</span> \
+                <span class="s2">&quot; @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.21&#39;</span>
+<span class="n">__uuid__</span> <span class="o">=</span> <span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+<span class="k">if</span> <span class="n">V3K</span><span class="p">:</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+
+<span class="c1"># Sets display for inetractive JSON/JSONschema design.</span>
+<span class="n">_interactive</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#</span>
+<span class="c1"># Operations in accordance to RFC6902</span>
+<span class="n">RFC6902_ADD</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">RFC6902_COPY</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">RFC6902_MOVE</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">RFC6902_REMOVE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">RFC6902_REPLACE</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">RFC6902_TEST</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="c1">#</span>
+<span class="c1"># Mapping for reverse transformation</span>
+<span class="n">op2str</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">RFC6902_ADD</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span>
+    <span class="n">RFC6902_COPY</span><span class="p">:</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span>
+    <span class="n">RFC6902_MOVE</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span>
+    <span class="n">RFC6902_REMOVE</span><span class="p">:</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span>
+    <span class="n">RFC6902_REPLACE</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+    <span class="n">RFC6902_TEST</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span>
+<span class="p">}</span>
+
+<span class="c1">#</span>
+<span class="c1"># Mapping for reverse transformation</span>
+<span class="n">str2op</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;add&quot;</span><span class="p">:</span> <span class="n">RFC6902_ADD</span><span class="p">,</span>
+    <span class="s2">&quot;copy&quot;</span><span class="p">:</span> <span class="n">RFC6902_COPY</span><span class="p">,</span>
+    <span class="s2">&quot;move&quot;</span><span class="p">:</span> <span class="n">RFC6902_MOVE</span><span class="p">,</span>
+    <span class="s2">&quot;remove&quot;</span><span class="p">:</span> <span class="n">RFC6902_REMOVE</span><span class="p">,</span>
+    <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span>
+    <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">RFC6902_TEST</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="getOp"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.getOp">[docs]</a><span class="k">def</span> <span class="nf">getOp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts input into corresponding enumeration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">,</span>
+            <span class="nb">float</span><span class="p">,</span> <span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="p">(</span>
+            <span class="nb">str</span><span class="p">,</span>
+            <span class="n">unicode</span><span class="p">,</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">str2op</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONPatchItem"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem">[docs]</a><span class="k">class</span> <span class="nc">JSONPatchItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Record entry for list of patch tasks.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        **op**:</span>
+<span class="sd">            operations: ::</span>
+
+<span class="sd">               add, copy, move, remove, replace, test</span>
+
+<span class="sd">        **target**:</span>
+<span class="sd">            JSONPointer for the modification target, see RFC6902.</span>
+
+<span class="sd">        **value**:</span>
+<span class="sd">            Value, either a branch, or a leaf of the JSON data structure.</span>
+
+<span class="sd">        **src**:</span>
+<span class="sd">            JSONPointer for the modification source, see RFC6902.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONPatchItem.__init__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an entry for the patch list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **op**:</span>
+<span class="sd">                Operation: ::</span>
+
+<span class="sd">                   add, copy, move, remove, replace, test</span>
+
+<span class="sd">            **target**:</span>
+<span class="sd">                Target node. ::</span>
+
+<span class="sd">                   target := (</span>
+<span class="sd">                       &lt;rfc6901-string&gt;</span>
+<span class="sd">                       | JSONPointer</span>
+<span class="sd">                       | &lt;path-items-list&gt;</span>
+<span class="sd">                       )</span>
+
+<span class="sd">            **param**:</span>
+<span class="sd">                Specific parameter for the operation.</span>
+
+<span class="sd">                +-------+--------------------+</span>
+<span class="sd">                | type  | operation          |</span>
+<span class="sd">                +=======+====================+</span>
+<span class="sd">                | value | add, replace, test |</span>
+<span class="sd">                +-------+--------------------+</span>
+<span class="sd">                | src   | copy, move         |</span>
+<span class="sd">                +-------+--------------------+</span>
+<span class="sd">                | param | None for &#39;remove&#39;  |</span>
+<span class="sd">                +-------+--------------------+</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **replace**:</span>
+<span class="sd">                    Replace masked characters in *target* specification. ::</span>
+
+<span class="sd">                       replace := (</span>
+<span class="sd">                            True    # replaces rfc6901 escape sequences: ~0 and ~1</span>
+<span class="sd">                          | False   # omit unescaping</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    .. note::</span>
+<span class="sd">                    </span>
+<span class="sd">                       Match operations are proceeded literally, thus the</span>
+<span class="sd">                       escaped characters should be consistent,</span>
+<span class="sd">                       see rfc6901, Section 3.</span>
+
+<span class="sd">                    default := False</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else returns either &#39;False&#39;, or</span>
+<span class="sd">            raises an exception.</span>
+<span class="sd">            Success is the complete addition only, thus one failure returns</span>
+<span class="sd">            False.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchItemError</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replace</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">=</span> <span class="n">getOp</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">replace</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">param</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">param</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchItemError</span><span class="p">(</span><span class="s2">&quot;Unknown operation.&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Missing patch entry/patch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatchItem</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Unknown input&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<div class="viewcode-block" id="JSONPatchItem.__call__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates the related task for the provided data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **jdata**:</span>
+<span class="sd">                JSON data the task has to be </span>
+<span class="sd">                applied on.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns a tuple of: ::</span>
+
+<span class="sd">               (n,lerr): </span>
+
+<span class="sd">               n:    number of present active entries</span>
+<span class="sd">               lerr: list of failed entries</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.__eq__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            *True* or *False*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_ADD</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="n">RFC6902_ADD</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">RFC6902_REMOVE</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_REPLACE</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_MOVE</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_COPY</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="n">RFC6902_COPY</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">RFC6902_TEST</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.__getitem__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Support of various mappings.</span>
+
+<span class="sd">            #. self[key]</span>
+
+<span class="sd">            #. self[i:j:k]</span>
+
+<span class="sd">            #. x in self</span>
+
+<span class="sd">            #. for x in self</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;op&#39;</span><span class="p">,</span> <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;param&#39;</span><span class="p">,</span> <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s1">&#39;from&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.__ne__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**: A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            *True* or *False*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eq__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Missing patch entry/patch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatchItem</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Unknown input&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<div class="viewcode-block" id="JSONPatchItem.__repr__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the patch string in accordance to RFC6901.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s1">&#39;{&quot;op&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="n">op2str</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">op</span><span class="p">])</span> <span class="o">+</span> \
+            <span class="s1">&#39;&quot;, &quot;path&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;from&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;}&quot;</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.__str__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the patch string in accordance to RFC6901.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s1">&#39;{&quot;op&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">op2str</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">op</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="s1">&#39;&quot;, &quot;target&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;&quot;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; }&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;&quot;, &quot;value&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; }&#39;</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;&quot; }&#39;</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;&quot;, &quot;src&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; }&#39;</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.apply"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the present patch list on the provided JSON document.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **jsondata**:</span>
+<span class="sd">                Document to be patched.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **replace**:</span>
+<span class="sd">                    Replace masked characters in *target* specification. ::</span>
+
+<span class="sd">                       replace := (</span>
+<span class="sd">                            True    # replaces rfc6901 escape sequences: ~0 and ~1</span>
+<span class="sd">                          | False   # omit unescaping</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    .. note::</span>
+<span class="sd">                    </span>
+<span class="sd">                       Match operations are proceeded literally, thus the</span>
+<span class="sd">                       escaped characters should be consistent,</span>
+<span class="sd">                       see rfc6901, Section 3.</span>
+
+<span class="sd">                       If already decoded e.g. by the constructor, than should be</span>
+<span class="sd">                       *FALSE*, is not idempotent.</span>
+
+<span class="sd">                    default := False</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else raises an exception.</span>
+<span class="sd">            Or returns a tuple: ::</span>
+
+<span class="sd">               (n,lerr): </span>
+
+<span class="sd">               n:    number of present active entries</span>
+<span class="sd">               lerr: list of failed entries</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">replace</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replace</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_ADD</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">jsondata</span><span class="p">,</span> <span class="n">JSONDataSerializer</span><span class="p">):</span>
+            <span class="n">jsondata</span> <span class="o">=</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REPLACE</span><span class="p">:</span>
+            <span class="n">n</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">n</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_TEST</span><span class="p">:</span>
+            <span class="n">n</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+<span class="c1">#             if type(self.value) is str:</span>
+<span class="c1">#                 self.value = unicode(self.value)</span>
+<span class="c1">#             if type(n) is list:</span>
+<span class="c1">#                 return n[b] == self.value</span>
+<span class="c1">#             return n[unicode(b)] == self.value</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">n</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">n</span><span class="p">[</span><span class="n">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">)]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_COPY</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span><span class="o">.</span><span class="n">get_node_value</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">tn</span><span class="p">,</span> <span class="n">tc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">tn</span><span class="p">[</span><span class="n">tc</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_MOVE</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span><span class="o">.</span><span class="n">get_node_value</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">sn</span><span class="p">,</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">sn</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+            <span class="n">tn</span><span class="p">,</span> <span class="n">tc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">tn</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tn</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tc</span><span class="p">:</span>
+                    <span class="n">tn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tn</span><span class="p">[</span><span class="n">tc</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tn</span><span class="p">[</span><span class="n">tc</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="n">n</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">get_node_and_key</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.repr_export"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.repr_export">[docs]</a>    <span class="k">def</span> <span class="nf">repr_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the patch string for export in accordance to RFC6901.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s1">&#39;{&quot;op&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">op2str</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">op</span><span class="p">])</span> <span class="o">+</span> \
+            <span class="s1">&#39;&quot;, &quot;path&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: null&#39;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: false&#39;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: true&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;from&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatchItem.str_export"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.str_export">[docs]</a>    <span class="k">def</span> <span class="nf">str_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pretty prints the patch string for export in accordance to RFC6901.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s1">&#39;{&quot;op&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">op2str</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">op</span><span class="p">])</span> <span class="o">+</span> \
+            <span class="s1">&#39;&quot;, &quot;path&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: null&#39;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: false&#39;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: true&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;value&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;, &quot;from&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s1">&#39;}&#39;</span>
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+
+<div class="viewcode-block" id="JSONPatchItemRaw"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItemRaw">[docs]</a><span class="k">class</span> <span class="nc">JSONPatchItemRaw</span><span class="p">(</span><span class="n">JSONPatchItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds native patch strings or an unsorted dict for RFC6902.</span>
+<span class="sd">    </span>
+<span class="sd">    Calls parent *JSONPatchItem*.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONPatchItemRaw.__init__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItemRaw.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patchstring</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse a raw patch string in accordance to RFC6902.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replace</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">patchstring</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="nb">str</span><span class="p">,</span>
+                <span class="n">unicode</span><span class="p">,</span> <span class="p">):</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">patchstring</span><span class="p">)</span>
+            <span class="n">sx</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sx</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">patchstring</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="n">JSONDataPatchItemError</span><span class="p">(</span>
+                    <span class="s2">&quot;Repetition is not compliant to RFC6902:&quot;</span> <span class="o">+</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">patchstring</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">patchstring</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="n">patchstring</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchItemError</span><span class="p">(</span><span class="s2">&quot;Type not supported:&quot;</span> <span class="o">+</span>
+                                         <span class="nb">str</span><span class="p">(</span><span class="n">patchstring</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">getOp</span><span class="p">(</span><span class="n">ps</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,</span> <span class="n">RFC6902_REPLACE</span><span class="p">,</span> <span class="n">RFC6902_TEST</span><span class="p">):</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="ow">is</span> <span class="n">RFC6902_REMOVE</span><span class="p">:</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,</span> <span class="n">RFC6902_MOVE</span><span class="p">):</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchItemError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">JSONPatchItemRaw</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="JSONPatchFilter"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter">[docs]</a><span class="k">class</span> <span class="nc">JSONPatchFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filtering capabilities on the entries of patch lists.</span>
+<span class="sd">    </span>
+<span class="sd">    .. warning::</span>
+<span class="sd">    </span>
+<span class="sd">       Not yet implemented.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONPatchFilter.__init__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            kargs:</span>
+<span class="sd">                Filter parameters:</span>
+
+<span class="sd">                **common**:</span>
+
+<span class="sd">                    contain=(True|False): Contain, else equal.</span>
+
+<span class="sd">                    type=&lt;node-type&gt;: Node is of type.</span>
+
+<span class="sd">                **paths**:</span>
+
+<span class="sd">                    branch=&lt;branch&gt;: </span>
+
+<span class="sd">                    deep=(): Determines the depth of comparison.</span>
+
+<span class="sd">                    prefix=&lt;prefix&gt;: Any node of prefix. If prefix is</span>
+<span class="sd">                        absolute: the only and one, else None.</span>
+<span class="sd">                        relative: any node prefixed by the path fragment.</span>
+
+<span class="sd">                **values**:</span>
+<span class="sd">                    val=&lt;node-value&gt;: Node ha the value.</span>
+
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True or False</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;prefix&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;branch&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">v</span></div>
+
+<div class="viewcode-block" id="JSONPatchFilter.__eq__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="JSONPatchFilter.__ne__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="JSONPatch"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch">[docs]</a><span class="k">class</span> <span class="nc">JSONPatch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Representation of a JSONPatch task list for RFC6902.</span>
+
+<span class="sd">    Contains the defined methods from standards:</span>
+
+<span class="sd">    * add</span>
+<span class="sd">    * remove</span>
+<span class="sd">    * replace</span>
+<span class="sd">    * move</span>
+<span class="sd">    * copy</span>
+<span class="sd">    * test</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        **patch**:</span>
+<span class="sd">            List of patch items.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONPatch.__init__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of patch tasks.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **p**:</span>
+<span class="sd">                Patch list. ::</span>
+
+<span class="sd">                   p := (</span>
+<span class="sd">                        JSONPatch</span>
+<span class="sd">                      | &lt;list-of-patch-items&gt;</span>
+<span class="sd">                   )</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **replace**:</span>
+<span class="sd">                    Replace masked characters in *target* specification. ::</span>
+
+<span class="sd">                       replace := (</span>
+<span class="sd">                            True    # replaces rfc6901 escape sequences: ~0 and ~1</span>
+<span class="sd">                          | False   # omit unescaping</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    .. note::</span>
+<span class="sd">                    </span>
+<span class="sd">                       Match operations are proceeded literally, thus the</span>
+<span class="sd">                       escaped characters should be consistent,</span>
+<span class="sd">                       see rfc6901, Section 3.</span>
+
+<span class="sd">                    default := False</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            pass-through</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="n">p</span> <span class="o">==</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">replace</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deep</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="sd">&quot;&quot;&quot;Defines copy operations, True:=deep, False:=swallow&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__add__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates and adds patch job to the task queue.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                Extension of pathc job, eithe a *JSONPatch*,</span>
+<span class="sd">                or a *JSONPatchItem*.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns a patch job, or raises Exception. </span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Missing patch entry/patch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatchItem</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Unknown input&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__call__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates the related task for the provided index.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**: </span>
+<span class="sd">                Task index.</span>
+
+<span class="sd">            **jdata**: </span>
+<span class="sd">                JSON data the task has to be </span>
+<span class="sd">                applied on.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns a tuple of: ::</span>
+
+<span class="sd">               (n, lerr): </span>
+
+<span class="sd">               n:    number of present active entries</span>
+<span class="sd">               lerr: list of failed entries</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">x</span><span class="p">](</span><span class="n">jdata</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__eq__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            *True* or *False*</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">patch</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;op&#39;</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">&amp;=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> <span class="o">==</span> <span class="n">op2str</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]]</span> 
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">&amp;=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> 
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Type requires JSONPatch or list, got&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__getitem__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Support of slices, for &#39;iterator&#39; refer to self.__iter__.</span>
+
+<span class="sd">            #. self[key]</span>
+
+<span class="sd">            #. self[i:j:k]</span>
+
+<span class="sd">            #. x in self</span>
+
+<span class="sd">            #. for x in self</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__iadd__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__iadd__">[docs]</a>    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds patch jobs to the task queue in place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Missing patch entry/patch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatchItem</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Unknown input&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__isub__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__isub__">[docs]</a>    <span class="k">def</span> <span class="nf">__isub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes the patch job from the task queue in place. </span>
+
+<span class="sd">        Removes one of the following type(x) variants:</span>
+
+<span class="sd">            *int*:</span>
+<span class="sd">                The patch job with given index.</span>
+
+<span class="sd">            *JSONPatchItem*:</span>
+<span class="sd">                The first matching entry from </span>
+<span class="sd">                the task queue. </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                Item to be removed. ::</span>
+<span class="sd">    </span>
+<span class="sd">                   x := (</span>
+<span class="sd">                        int</span>
+<span class="sd">                      | JSONPatchItem</span>
+<span class="sd">                   ) </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns resulting list without x.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__iter__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Provides an iterator foreseen for large amounts of in-memory patches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__len__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of outstanding patches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__ne__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compares this pointer with x.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                A valid Pointer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            *True* or *False*</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONPointerError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eq__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a copy of xto the task queue.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Missing patch entry/patch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatchItem</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSONPatch</span><span class="p">):</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;Unknown input&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<div class="viewcode-block" id="JSONPatch.__repr__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the representation format of a JSON patch list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__str__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the display format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONPatch.__sub__"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes the patch job from the task queue. </span>
+
+<span class="sd">        Removes one of the following type(x) variants:</span>
+
+<span class="sd">            *int*:</span>
+<span class="sd">                The patch job with given index.</span>
+
+<span class="sd">            *JSONPatchItem*:</span>
+<span class="sd">                The first matching entry from </span>
+<span class="sd">                the task queue. </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                Item to be removed. ::</span>
+
+<span class="sd">                   x := (</span>
+<span class="sd">                        int</span>
+<span class="sd">                      | JSONPatchItem</span>
+<span class="sd">                   ) </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns resulting list without x.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deep</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatch.apply"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jsondata</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the JSONPatch task.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **jsondata**:</span>
+<span class="sd">                JSON data the joblist has to be applied on.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Returns a tuple of: ::</span>
+
+<span class="sd">               (n, lerr): </span>
+
+<span class="sd">               n:    number of present active entries</span>
+<span class="sd">               lerr: list of failed entries</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">jsondata</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+                <span class="c1"># should not be called frequently</span>
+                <span class="n">status</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">),</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="JSONPatch.getpatchitem"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.getpatchitem">[docs]</a>    <span class="k">def</span> <span class="nf">getpatchitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the reference to a single patch item.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            **x**:</span>
+<span class="sd">                Requested item. ::</span>
+
+<span class="sd">                   x := (</span>
+<span class="sd">                        int</span>
+<span class="sd">                      | JSONPatchItem</span>
+<span class="sd">                   ) </span>
+
+<span class="sd">                   int:           index of patch item</span>
+<span class="sd">                   JSONPatchItem: the reference to the patch item</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The selected patch item.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="JSONPatch.getpatchitems"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.getpatchitems">[docs]</a>    <span class="k">def</span> <span class="nf">getpatchitems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets a list of references of patch items.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            args:</span>
+<span class="sd">                Requested items. ::</span>
+
+<span class="sd">                   *args := (</span>
+<span class="sd">                      &lt;item&gt;</span>
+<span class="sd">                      | &lt;item-list&gt;</span>
+<span class="sd">                      | None</span>
+<span class="sd">                   )</span>
+<span class="sd">                   item-list := &lt;item&gt;[, &lt;item-list&gt;]</span>
+<span class="sd">                   item := (</span>
+<span class="sd">                        int</span>
+<span class="sd">                      | JSONPatchItem</span>
+<span class="sd">                   )</span>
+<span class="sd">                   None := &quot;all items of the current patch list&quot;</span>
+
+<span class="sd">                   int:           index of patch item</span>
+<span class="sd">                   JSONPatchItem: the reference to the patch item</span>
+<span class="sd">            </span>
+<span class="sd">            kargs:</span>
+<span class="sd">                **idxlist**:</span>
+<span class="sd">                    Print with index: ::</span>
+
+<span class="sd">                       idxlist := (</span>
+<span class="sd">                            True     # format: [{&lt;index&gt;: &lt;JSONPatchItem&gt;}]</span>
+<span class="sd">                          | False    # format: [&lt;JSONPatchItem&gt;]</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                **copydata**:</span>
+<span class="sd">                    Creates a copy of each resulting item. ::</span>
+
+<span class="sd">                       copydata := (C_DEEP | C_SHALLOW | C_REF)</span>
+
+<span class="sd">                    default := C_REF  # no copy</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of the selected patch items.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_copy</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copydata&#39;</span><span class="p">,</span> <span class="n">C_REF</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">_copy</span> <span class="o">==</span> <span class="n">C_SHALLOW</span><span class="p">:</span>
+                <span class="n">_c</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">_c</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">_copy</span> <span class="o">==</span> <span class="n">C_DEEP</span><span class="p">:</span>
+                <span class="n">_c</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">_c</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idxlist&#39;</span><span class="p">):</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">x</span><span class="p">:</span> <span class="n">_c</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_c</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatch.gettree"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.gettree">[docs]</a>    <span class="k">def</span> <span class="nf">gettree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the resulting logical JSON data structure</span>
+<span class="sd">        constructed from the patch items of the current set.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            args:</span>
+<span class="sd">                Requested items. ::</span>
+
+<span class="sd">                   *args := (</span>
+<span class="sd">                      &lt;item&gt;</span>
+<span class="sd">                      | &lt;item-list&gt;</span>
+<span class="sd">                      | None</span>
+<span class="sd">                   )</span>
+<span class="sd">                   item-list := &lt;item&gt;[, &lt;item-list&gt;]</span>
+<span class="sd">                   item := (</span>
+<span class="sd">                        int</span>
+<span class="sd">                      | JSONPatchItem</span>
+<span class="sd">                   )</span>
+<span class="sd">                   None := &quot;all items of the current patch list&quot;</span>
+
+<span class="sd">                   int:           index of patch item</span>
+<span class="sd">                   JSONPatchItem: the reference to the patch item</span>
+<span class="sd">            </span>
+<span class="sd">            kargs:</span>
+<span class="sd">                **data**:</span>
+<span class="sd">                    An optional JSON data structure, when provided</span>
+<span class="sd">                    the actual data as selected by the patch list</span>
+<span class="sd">                    is returned. Else the paths only.</span>
+
+<span class="sd">                    default := None</span>
+
+<span class="sd">                **scope**:</span>
+<span class="sd">                    Defines the source scope of the data structure. ::</span>
+
+<span class="sd">                       scope := (</span>
+<span class="sd">                            &quot;in&quot;   # input data, e.g. source for &quot;copy&quot;</span>
+<span class="sd">                          | &quot;out&quot;  # output data, e.g. target for &quot;copy</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    default := &quot;out&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The combined list of the selected patch items contained</span>
+<span class="sd">            in an object JSONData.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_data</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">_scope</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span><span class="p">,</span> <span class="s1">&#39;out&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_scope</span> <span class="o">==</span> <span class="s1">&#39;in&#39;</span><span class="p">:</span>
+            <span class="n">_scope</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_scope</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">_pl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getpatchitems</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_pl</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_scope</span> <span class="o">==</span> <span class="n">SD_INPUT</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_MOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REMOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REPLACE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_TEST</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+
+            <span class="k">elif</span> <span class="n">_scope</span> <span class="o">==</span> <span class="n">SD_OUTPUT</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_MOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REMOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REPLACE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_TEST</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># both</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_ADD</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_COPY</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">])</span>  
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_MOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">])</span>  
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;move&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REMOVE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_REPLACE</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+                <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">RFC6902_TEST</span><span class="p">,):</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>  
+
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatch.patch_export"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.patch_export">[docs]</a>    <span class="k">def</span> <span class="nf">patch_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patchfile</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exports the current task list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **patchfile**:</span>
+<span class="sd">                JSON patch for export.</span>
+
+<span class="sd">            **schema**:</span>
+<span class="sd">                JSON-Schema for validation of the patch list.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **validator**: [default, draft3, off, ]</span>
+<span class="sd">                    Sets schema validator for the data file.</span>
+<span class="sd">                    The values are: ::</span>
+
+<span class="sd">                       default = validate</span>
+<span class="sd">                       draft3  = Draft3Validator</span>
+<span class="sd">                       off     = None</span>
+
+<span class="sd">                    default:= validate</span>
+
+<span class="sd">                **pretty**:</span>
+<span class="sd">                    If True exports as tree format, </span>
+<span class="sd">                    else all as one line.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pretty</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pretty&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pretty</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">patchfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                    <span class="n">fp</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repr_export</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;open-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s2">&quot;data.dump&quot;</span><span class="p">,</span>
+                                         <span class="nb">str</span><span class="p">(</span><span class="n">patchfile</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">patchfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                    <span class="n">fp</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">str_export</span><span class="p">()))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONDataPatchError</span><span class="p">(</span><span class="s2">&quot;open-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s2">&quot;data.dump&quot;</span><span class="p">,</span>
+                                         <span class="nb">str</span><span class="p">(</span><span class="n">patchfile</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPatch.patch_import"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.patch_import">[docs]</a>    <span class="k">def</span> <span class="nf">patch_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patchfile</span><span class="p">,</span> <span class="n">schemafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Imports a task list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **patchfile**:</span>
+<span class="sd">                JSON patch filename containing the list of patch operations.</span>
+
+<span class="sd">            **schemafile**:</span>
+<span class="sd">                JSON-Schema filename for validation of the patch list.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **replace**:</span>
+<span class="sd">                    Replace masked characters in *target* specification. ::</span>
+
+<span class="sd">                       replace := (</span>
+<span class="sd">                            True    # replaces rfc6901 escape sequences: ~0 and ~1</span>
+<span class="sd">                          | False   # omit unescaping</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    .. note::</span>
+<span class="sd">                    </span>
+<span class="sd">                       Match operations are proceeded literally, thus the</span>
+<span class="sd">                       escaped characters should be consistent,</span>
+<span class="sd">                       see rfc6901, Section 3.</span>
+
+<span class="sd">                    default := False</span>
+
+<span class="sd">                **validator**:</span>
+<span class="sd">                    Sets schema validator for the data file.</span>
+<span class="sd">                    Curren release relies on *jsonschema*, which</span>
+<span class="sd">                    supports at the time of writing draft-03 and</span>
+<span class="sd">                    draft-04.</span>
+
+<span class="sd">                    The values are: ::</span>
+
+<span class="sd">                        validator := (</span>
+<span class="sd">                              MS_DRAFT3           | &#39;draft3&#39;</span>
+<span class="sd">                            | MS_DRAFT4           | &#39;draft4&#39;</span>
+<span class="sd">                            | MS_ON               | &#39;on&#39;</span>
+<span class="sd">                            | MS_OFF              | &#39;off&#39;</span>
+<span class="sd">                            | MODE_SCHEMA_DEFAULT | &#39;default&#39;</span>
+<span class="sd">                        )</span>
+
+<span class="sd">                    default:= MS_OFF</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataPatchError:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">replace</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replace</span><span class="p">)</span> 
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;validator&#39;</span><span class="p">,</span> <span class="n">MS_OFF</span><span class="p">)</span>
+
+        <span class="n">patchdata</span> <span class="o">=</span> <span class="n">JSONDataSerializer</span><span class="p">(</span>
+            <span class="p">[],</span>
+            <span class="n">datafile</span><span class="o">=</span><span class="n">patchfile</span><span class="p">,</span>
+            <span class="n">schemafile</span><span class="o">=</span><span class="n">schemafile</span><span class="p">,</span>
+            <span class="n">validator</span><span class="o">=</span><span class="n">MS_OFF</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="n">patchdata</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">+=</span> <span class="n">JSONPatchItemRaw</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONPatch.repr_export"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.repr_export">[docs]</a>    <span class="k">def</span> <span class="nf">repr_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints the export representation format of a JSON patch list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">repr_export</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">repr_export</span><span class="p">()</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONPatch.str_export"><a class="viewcode-back" href="../../jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.str_export">[docs]</a>    <span class="k">def</span> <span class="nf">str_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pretty prints the export representation format of a JSON patch list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">str_export</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str_export</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" >jsondata</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

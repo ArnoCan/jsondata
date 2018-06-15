@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondatacheck &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondatacheck">
+<h1>jsondatacheck<a class="headerlink" href="#jsondatacheck" title="Permalink to this headline">¶</a></h1>
+<p>The <em>jsondatacheck</em> commandline interface provides access to several
+tasks of the <em>jsondata</em> package, which internally rely on the standard
+packages &#8216;json&#8217; and &#8216;jsonschema&#8217;.
+It offers access to the API of the classes and provides a selftest
+option for the quick verification of the package state.
+The runtime contained selftest class including it&#8217;s test data serve
+as an example in addition to the unit test data.</p>
+<p>The interface provides a callable generic validator(default:=Draft4) for arbitrary
+JSON data files. The validation is performed with a main JSON schema file linking
+additional sub-configuration for an optional set of an arbitrary number of branches.
+It provides the validation of JSON based data/files by their corresponding JSONschemas.
+The call interface is Linux/Unix command line standard - on other supported OS too -
+with a few conventions related to default values of file names and paths.</p>
+<p>The application of this call interface is mainly intended for the purposes:</p>
+<ol class="arabic simple">
+<li>as a developer utility for the development of JSON based data</li>
+<li>as a user tool in order to enumerate the list of actually
+used JSON sources</li>
+<li>as a user tools in order to verify the present JSON data</li>
+<li>as a automation and test tool for various JSON specifications,
+and JSON based applications</li>
+<li>as a selftest and environment verification for the processing
+of complex JSON data.</li>
+</ol>
+<p>Therefore the assembly of data tree models with basic branch functions
+in accordance/complance to RFC6901 and RFC6902 is provided for the
+incremental setup, continous modification, and serialization of JSON data.</p>
+<p>When no explicit filenames are provided the following convention is applied
+as default:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>appname: &quot;-a&quot;
+    &quot;JSONobjects&quot;
+
+JSON-schema: &quot;-s&quot;
+    dirname(__file__)/&lt;appname&gt;.jsd (&quot;jsondata.jsd&quot;)
+
+JSON-data: &quot;-c&quot;
+    &lt;appname&gt;.json (&quot;jsondata.json&quot;)
+
+Search-path-data: &quot;-p&quot;
+    Search path for JSON-data - refer to __file__=JSONData/Serializer.py:
+    default:= ../dirname(__file__)/:dirname(__file__)/:/etc/:$HOME/
+</pre></div>
+</div>
+<p><strong>SYNOPSIS:</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jsondatacheck</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>OPTIONS:</strong>::</dt>
+<dd><dl class="first docutils">
+<dt>-a &#8211;appname= &lt;appname&gt;</dt>
+<dd>Name of application.
+default: jsondatacheck</dd>
+<dt>-c &#8211;configfile= &lt;configfile&gt;</dt>
+<dd><p class="first">A single configuration file including path with JSON data.</p>
+<p class="last">default: jsondatacheck.json</p>
+</dd>
+<dt>-D &#8211;print-data</dt>
+<dd>Pretty print data.</dd>
+<dt>-d &#8211;debug</dt>
+<dd>Debug entries, does NOT work with &#8216;python -O ...&#8217;.
+Developer output, aimed for filtering.</dd>
+<dt>-f &#8211;filelist= &lt;list-of-filenames&gt;</dt>
+<dd><p class="first">List of colon seperated filenames to be searched for. These
+could be relative pathnames too.</p>
+<p class="last">default:=[&lt;appname&gt;.json]</p>
+</dd>
+<dt>-h &#8211;help</dt>
+<dd>This help.</dd>
+<dt>-i &#8211;interactive</dt>
+<dd>Dialog mode, displays formatted for interactive JSON and
+JSONschema design.</dd>
+<dt>-n &#8211;no-default-path</dt>
+<dd><p class="first">Supress load of default path.</p>
+<p class="last">default: False</p>
+</dd>
+<dt>-N &#8211;no-sub-data</dt>
+<dd><p class="first">Supress load of sub-data files, e.g. from plugins.</p>
+<p class="last">default: False</p>
+</dd>
+<dt>-p &#8211;pathlist= &lt;search-path-JSON-data&gt;</dt>
+<dd><p class="first">Search path for JSON data file(s), standard list for current platform.</p>
+<p class="last">default:= ../dirname(__file__)/:dirname(__file__)/:/etc/:$HOME/</p>
+</dd>
+<dt>-P &#8211;plugins-pathlist= &lt;search-path-JSON-data-branches&gt;</dt>
+<dd><p class="first">Search path for JSON data file(s) to be inserted as additional branches,
+standard list for current platform.</p>
+<p class="last">default:= ../dirname(__file__)/:dirname(__file__)/:/etc/:$HOME/</p>
+</dd>
+<dt>-s &#8211;schemafile= &lt;schemafile&gt;</dt>
+<dd><p class="first">Schema file - JSONschema.</p>
+<p class="last">default: jsondatacheck.jsd</p>
+</dd>
+<dt>-S &#8211;print-schema</dt>
+<dd>Pretty print schema.</dd>
+</dl>
+<p>-selftest &#8211;selftest</p>
+<blockquote>
+<div><p>Performs a basic functional selftest by load, verify, and validate.</p>
+<ol class="arabic simple" start="0">
+<li>jsondata/data.json + jsondata/schema.jsd</li>
+<li>jsondata/selftest.json + jsondata/selftest.jsd</li>
+</ol>
+</div></blockquote>
+<dl class="last docutils">
+<dt>-V &#8211;validator= &lt;validator&gt;</dt>
+<dd><blockquote class="first">
+<div>Alternate validator provided by module &#8216;jsonschema&#8217;
+- default: validate
+- draft3: Draft3Validator
+- off: None</div></blockquote>
+<p class="last">default:= validate</p>
+</dd>
+<dt>-Version &#8211;Version</dt>
+<dd>Current version - detailed.</dd>
+<dt>-v &#8211;verbose</dt>
+<dd>Verbose, some relevant states for basic analysis.
+When &#8216;&#8211;selftest&#8217; is set, repetition raises the display level.</dd>
+<dt>-version &#8211;version</dt>
+<dd>Current version - terse.</dd>
+</dl>
+</dd>
+<dt><strong>ENVIRONMENT</strong>::</dt>
+<dd><ul class="first last simple">
+<li>PYTHON OPTIONS:
+-O, -OO: Eliminates &#8216;__debug__&#8217; code.</li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondatacheck.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

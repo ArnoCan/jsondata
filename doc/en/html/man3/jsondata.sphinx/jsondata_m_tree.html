@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.JSONTree’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-jsondata.JSONTree">
+<span id="jsondata-jsontree-module"></span><h1>&#8216;jsondata.JSONTree&#8217; - Module<a class="headerlink" href="#module-jsondata.JSONTree" title="Permalink to this headline">¶</a></h1>
+<p>The JSONTree module provides features for in-memory JSON structures.</p>
+<p>The provided features comprise:</p>
+<ul class="simple">
+<li>The construction and printout of tree formatted 
+structures for screen analysis.</li>
+<li>Comparison of JSON strings as tree structures.</li>
+</ul>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="operations-modes">
+<h3>Operations modes<a class="headerlink" href="#operations-modes" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>_interactive = False: Activates interactive mode.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="diff-mode">
+<h3>Diff Mode<a class="headerlink" href="#diff-mode" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>DIFF_FIRST = 0: break display of diff after first</li>
+<li>DIFF_ALL = 1: list all diffs</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="displayed-character-set">
+<h3>Displayed Character Set<a class="headerlink" href="#displayed-character-set" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>CHARS_RAW = 0: display character set as raw</li>
+<li>CHARS_RAW = 1: display character set as str</li>
+<li>CHARS_RAW = 2: display character set as utf/utf-8</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="line-overflow">
+<h3>Line-Overflow<a class="headerlink" href="#line-overflow" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>LINE_CUT = 0: force line fit</li>
+<li>LINE_WRAP = 1: wrap line in order to fit to length</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="jsontree">
+<h2>JSONTree<a class="headerlink" href="#jsontree" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.JSONTree.JSONTree">
+<em class="property">class </em><code class="descclassname">jsondata.JSONTree.</code><code class="descname">JSONTree</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/JSONTree.html#JSONTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONTree.JSONTree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>self.difflist : reaulting differences</li>
+<li>self.scope: scope of differences</li>
+<li>self.linefit: handle overflow</li>
+<li>self.linewidth: line width</li>
+<li>self.charset: character set</li>
+<li>self.indent: indention steps</li>
+</ul>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.JSONTree.JSONTree.__init__">
+<code class="descclassname">JSONTree.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/JSONTree.html#JSONTree.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONTree.JSONTree.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an object for the tree representation.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first"><a href="#id1"><span class="problematic" id="id2">**</span></a>kargs: Parameter specific for the operation,</p>
+<blockquote class="last">
+<div><p>scope:</p>
+<blockquote>
+<div><ul class="simple">
+<li>all: Display all diffs.</li>
+<li>first: Display first diff only.</li>
+</ul>
+<p>default:=first</p>
+</div></blockquote>
+<p>charset:</p>
+<blockquote>
+<div><ul class="simple">
+<li>raw: Use &#8216;raw&#8217;.</li>
+<li>str: Use &#8216;str&#8217;.</li>
+<li>utf: Use &#8216;utf&#8217;.</li>
+</ul>
+<p>default:=raw</p>
+</div></blockquote>
+<p>debug:</p>
+<blockquote>
+<div>Add developer information.</div></blockquote>
+<p>linefit:</p>
+<blockquote>
+<div><ul class="simple">
+<li>cut: Cut lines to length.</li>
+<li>wrap: Split lines to length.</li>
+</ul>
+<p>default:=wrap</p>
+</div></blockquote>
+<p>indent=#numchars:</p>
+<blockquote>
+<div>Number of characters for indentation.</div></blockquote>
+<p>linewidth=#numchars:</p>
+<blockquote>
+<div>Length of lines.</div></blockquote>
+<p>verbose:</p>
+<blockquote>
+<div>Add progress and status dialogue output.</div></blockquote>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>passed through exceptions:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="printdiff">
+<h4>printDiff<a class="headerlink" href="#printdiff" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.JSONTree.JSONTree.printDiff">
+<code class="descclassname">JSONTree.</code><code class="descname">printDiff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/JSONTree.html#JSONTree.printDiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONTree.JSONTree.printDiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints out the resulting list of differences.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>ffs.</dd>
+<dt>Returns:</dt>
+<dd>When successful returns tree represantation.</dd>
+<dt>Raises:</dt>
+<dd>passed through exceptions:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="fetchdiff">
+<h4>fetchDiff<a class="headerlink" href="#fetchdiff" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.JSONTree.JSONTree.fetchDiff">
+<code class="descclassname">JSONTree.</code><code class="descname">fetchDiff</code><span class="sig-paren">(</span><em>n0</em>, <em>n1</em>, <em>p=[]</em>, <em>dl=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/JSONTree.html#JSONTree.fetchDiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONTree.JSONTree.fetchDiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursive tree compare for Python trees as used for the package &#8216;json&#8217;.</p>
+<p>Finds diff in native Python trees assembled by the standard package &#8216;json&#8217;
+and compatible, e.g. &#8216;ujson&#8217;.</p>
+<ul class="simple">
+<li>leveltop</li>
+<li>levelbottom</li>
+<li>delta (for containers)</li>
+<li>scope(all, first)</li>
+<li>linewidth</li>
+<li>displaycharset (str,utf)</li>
+<li>pathonly</li>
+</ul>
+<p>Args:</p>
+<blockquote>
+<div><p>n0:</p>
+<blockquote>
+<div>JSON string of type &#8216;str&#8217;, or &#8216;unicode&#8217;</div></blockquote>
+<p>n1:</p>
+<blockquote>
+<div>JSON string of type &#8216;str&#8217;, or &#8216;unicode&#8217;</div></blockquote>
+<p>p=[]:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Result entries for each difference:</dt>
+<dd><div class="first highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">,</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]}</span>
+</pre></div>
+</div>
+<ol class="last arabic simple">
+<li>first JSON data</li>
+<li>second JSON data</li>
+<li>diff count increment value</li>
+<li>current diff including path</li>
+</ol>
+</dd>
+</dl>
+<p>List of differences as of:</p>
+<ol class="arabic">
+<li><p class="first">non equal types are different: type(n0) != type(n1)</p>
+</li>
+<li><p class="first">equal types, both list: type(n0) is list</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>length is different: len(n0.keys()) != len(n1.keys())</li>
+<li>at leats one item is different: n1.get(ni) and v != n1[ni]</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">equal types, both dict: type(n0) is dict and type(n1) is dict</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>length is different: len(n0.keys()) != len(n1.keys())</li>
+<li>at leats one item is different: n1.get(ni) and v != n1[ni]</li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>default:=0</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When no diffs returns True, else False or raises an exception.
+The resulting differences are contained in the provided 
+list parameter &#8216;p&#8217;. When not provided the resulting list 
+is suppressed.</dd>
+<dt>Raises:</dt>
+<dd>passed through exceptions:</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.JSONTree.JSONTreeException">
+<em class="property">class </em><code class="descclassname">jsondata.JSONTree.</code><code class="descname">JSONTreeException</code><a class="reference internal" href="_modules/jsondata/JSONTree.html#JSONTreeException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONTree.JSONTreeException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error in JSONTree.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.JSONTree&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+<li><a class="reference internal" href="#operations-modes">Operations modes</a></li>
+<li><a class="reference internal" href="#diff-mode">Diff Mode</a></li>
+<li><a class="reference internal" href="#displayed-character-set">Displayed Character Set</a></li>
+<li><a class="reference internal" href="#line-overflow">Line-Overflow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsontree">JSONTree</a><ul>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#printdiff">printDiff</a></li>
+<li><a class="reference internal" href="#fetchdiff">fetchDiff</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_m_tree.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

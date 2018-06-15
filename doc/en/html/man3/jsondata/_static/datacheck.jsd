@@ -1,0 +1,187 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"type":"object",
+	"required":false,
+	"properties":{
+		"api": {
+			"type":"object",
+			"required":true,
+			"properties":{
+				"name": {
+					"type":"string",
+					"required":true
+				},
+				"uuid": {
+					"type":"string",
+					"required":true
+				},
+				"version": {
+					"type":"string",
+					"required":true
+				},
+				"status": {
+					"type":"string",
+					"required":true
+				}
+			}
+		}
+	},
+	"type":"object",
+	"required":true,
+	"properties":{
+		"mainwin": {
+			"type":"array",
+			"required":false
+		}
+	},
+	"type":"object",
+	"required":true,
+	"properties":{
+		"controlcenter": {
+			"type":"object",
+			"required":true,
+			"properties":{
+				"common": {
+					"type":"object",
+					"required":true,
+					"properties":{
+						"nodepath":{
+							"type":"array",
+							"required":true,
+							"items":{
+								"type":"string",
+								"required":true
+							}
+						}
+					},
+					"type":"object",
+					"required":true,
+					"properties":{
+						"model":{
+							"type":"object",
+							"required":true,
+							"properties": {
+								"filesystem": {
+									"enum": [ "0", "1" ]
+								},
+								"zip": {
+									"enum": [ "0", "1" ]
+								},
+								"jar": {
+									"enum": [ "0", "1" ]
+								},
+								"custom": {
+									"a":{
+										"enum": [ "0", "1" ]
+									},
+									"b":{
+										"enum": [ "0", "1" ]
+									}
+								},
+								"inmemstorage": {
+									"enum": [ "0", "1" ]
+								},
+								"cachesize": {
+									"type": "integer"
+								},
+								"cursorsize": {
+									"type": "integer"
+								}
+							}
+						},
+						"nodescanner":{
+							"treeresolution": {
+								"type": "integer"
+							},
+							"suffixes": {
+								"type": "string"
+							},
+							"regexpr": {
+								"type": "string"
+							},
+							"fromdate": {
+								"year":{
+									"type":"numeric",
+									"min":1900,
+									"max":2100
+								},
+								"month":{
+									"type":"numeric",
+									"min":1,
+									"max":12
+								},
+								"day":{
+									"type":"numeric",
+									"min":1,
+									"max":31
+								}
+							},
+							"fromtime": {
+								"hour":{
+									"type":"numeric",
+									"min":0,
+									"max":24
+								},
+								"minute":{
+									"type":"numeric",
+									"min":0,
+									"max":60
+								},
+								"second":{
+									"type":"numeric",
+									"min":0,
+									"max":60
+								}
+							},
+							"todate": {
+								"year":{
+									"type":"numeric",
+									"min":1900,
+									"max":2100
+								},
+								"month":{
+									"type":"numeric",
+									"min":1,
+									"max":12
+								},
+								"day":{
+									"type":"numeric",
+									"min":1,
+									"max":31
+								}
+							},
+							"totime": {
+								"hour":{
+									"type":"numeric",
+									"min":0,
+									"max":24
+								},
+								"minute":{
+									"type":"numeric",
+									"min":0,
+									"max":60
+								},
+								"second":{
+									"type":"numeric",
+									"min":0,
+									"max":60
+								}
+							},
+							"nodetypes":{
+								"type":"array",
+								"items":{
+									"enum":["0","1","2"]
+								}
+							}
+						},
+						"dirwalk" : {
+							"treeresolution": {
+								"enum": ["0"]
+							}
+						}
+					}
+				}
+			}
+		}
+	} 
+}

@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.JSONPatch</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        Module&nbsp;JSONPatch
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.JSONPatch-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module JSONPatch</h1><p class="nomargin-top"><span class="codelink"><a href="jsondata.JSONPatch-pysrc.html">source&nbsp;code</a></span></p>
+<pre class="literalblock">
+The JSONPatch module provides for the alteration of JSON data compliant to RFC6902.
+
+The emphasis of the design combines low resource requirement with features
+designed for the application of large filters onto large JSON based data 
+structures.
+
+The patch list itself is defined by RFC6902 as a JSON array. The entries 
+could be either constructed in-memory, or imported from a persistent storage.
+The export feature provides for the persistent storage of a modified patch
+list for later reuse.
+
+The module contains the following classes:
+
+* **JSONPatch**:
+    The controller for the application of patches on in-memory
+    data structures provided by the package 'json'.
+    
+* **JSONPatchItem**:
+    Representation of one patch entry in accordance to RFC6902.
+
+* **JSONPatchItemRaw**:
+    Representation of one patch entry read as a raw entry in accordance to RFC6902.
+
+* **JSONPatchFilter**:
+    Selection filter for the application on the current patch list
+    entries JSONPatchItem.
+
+* **JSONPatchException**:
+    Specific exception for this module.
+
+
+The address of the the provided 'path' components for the entries are managed
+by the class JSONPointer in accordance to RFC6901. 
+
+</pre>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        0.2.18
+      </p>
+      <p><strong>Author:</strong>
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>Copyright:</strong>
+        Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero 
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>License:</strong>
+        Artistic-License-2.0 + Forced-Fairplay-Constraints
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatchException-class.html" class="summary-name">JSONPatchException</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatchItemException-class.html" class="summary-name">JSONPatchItemException</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatchItem-class.html" class="summary-name">JSONPatchItem</a><br />
+      Record entry for list of patch tasks.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatchItemRaw-class.html" class="summary-name">JSONPatchItemRaw</a><br />
+      Adds native patch strings or an unsorted dict for RFC6902.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatchFilter-class.html" class="summary-name">JSONPatchFilter</a><br />
+      Filtering capabilities on the entries of patch lists.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch.JSONPatch-class.html" class="summary-name">JSONPatch</a><br />
+      Representation of a JSONPatch task list for RFC6902.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getOp"></a><span class="summary-sig-name">getOp</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Converts input into corresponding enumeration.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#getop" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONPatch-pysrc.html#getOp">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__maintainer__"></a><span class="summary-name">__maintainer__</span> = <code title="'Arno-Can Uestuensoez'">'Arno-Can Uestuensoez'</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__uuid__"></a><span class="summary-name">__uuid__</span> = <code title="'63b597d6-4ada-4880-9f99-f5e0961351fb'">'63b597d6-4ada-4880-9f99-f5e0961351fb'</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'{0}.{1}'.format(* sys.version_info [: 2])">'{0}.{1}'.format(* sys.version_info [: 2])</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_appname"></a><span class="summary-name">_appname</span> = <code title="&quot;jsonpatch&quot;">&quot;jsonpatch&quot;</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_interactive"></a><span class="summary-name">_interactive</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_ADD"></a><span class="summary-name">RFC6902_ADD</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_COPY"></a><span class="summary-name">RFC6902_COPY</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_MOVE"></a><span class="summary-name">RFC6902_MOVE</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_REMOVE"></a><span class="summary-name">RFC6902_REMOVE</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_REPLACE"></a><span class="summary-name">RFC6902_REPLACE</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RFC6902_TEST"></a><span class="summary-name">RFC6902_TEST</span> = <code title="6">6</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch-module.html#op2str" class="summary-name">op2str</a> = <code title="{RFC6902_ADD: &quot;add&quot;, RFC6902_COPY: &quot;copy&quot;, RFC6902_MOVE: &quot;move&quot;, RFC69\
+02_REMOVE: &quot;remove&quot;, RFC6902_REPLACE: &quot;replace&quot;, RFC6902_TEST: &quot;test&quot;}">{RFC6902_ADD: &quot;add&quot;, RFC6902_COPY: &quot;copy&quot;, RFC6902_MO<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPatch-module.html#str2op" class="summary-name">str2op</a> = <code title="{&quot;add&quot;: RFC6902_ADD, &quot;copy&quot;: RFC6902_COPY, &quot;move&quot;: RFC6902_MOVE, &quot;remo\
+ve&quot;: RFC6902_REMOVE, &quot;replace&quot;: RFC6902_REPLACE, &quot;test&quot;: RFC6902_TEST}">{&quot;add&quot;: RFC6902_ADD, &quot;copy&quot;: RFC6902_COPY, &quot;move&quot;: RF<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="op2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">op2str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{RFC6902_ADD: &quot;add&quot;, RFC6902_COPY: &quot;copy&quot;, RFC6902_MOVE: &quot;move&quot;, RFC69<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+02_REMOVE: &quot;remove&quot;, RFC6902_REPLACE: &quot;replace&quot;, RFC6902_TEST: &quot;test&quot;}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="str2op"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">str2op</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{&quot;add&quot;: RFC6902_ADD, &quot;copy&quot;: RFC6902_COPY, &quot;move&quot;: RFC6902_MOVE, &quot;remo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ve&quot;: RFC6902_REMOVE, &quot;replace&quot;: RFC6902_REPLACE, &quot;test&quot;: RFC6902_TEST}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:23 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

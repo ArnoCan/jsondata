@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Process data by ‘jsondata.jsonpatch’ &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="process-data-by-jsondata-jsonpatch">
+<h1>Process data by &#8216;jsondata.jsonpatch&#8217;<a class="headerlink" href="#process-data-by-jsondata-jsonpatch" title="Permalink to this headline">¶</a></h1>
+<p>The module jsondata.jsonpatch provides patch operations in
+accordance to RFC6901.</p>
+<p>Basic types of provided basic operations are:</p>
+<ul class="simple">
+<li><strong>Pointer Arithmetics</strong>:  Manipulates and calculates the pointer itself.
+Thus the comparison is related to the resulting contained set.
+Where the shorter matching pointer path contains more elements, than
+the longer, which itself is contained in the matching shorter path.</li>
+<li><strong>Pointed Value Evaluation</strong>: Fetches values from JSON documents.
+Thus the comparison is related to the resulting values pointed
+to by the pointer path.</li>
+<li><strong>Calculations with Pointed Values</strong>: Applies common arithmetics on to evaluated
+values and numeric parts of pointers.</li>
+</ul>
+<div class="section" id="syntax-elements">
+<h2>Syntax Elements<a class="headerlink" href="#syntax-elements" title="Permalink to this headline">¶</a></h2>
+<p>The current release provides the following operators for the class &#8216;JSONPointer&#8217;.</p>
+<p>Class Components:</p>
+<ul class="simple">
+<li><strong>JSONPatch</strong>:
+Job manager for the complete set tasks represented by patch items.</li>
+<li><strong>JSONPatchItem</strong>:
+A task in accordance to RFC6901 stored as patch item.
+The creation requires the parameters to be prepared for
+the record format.</li>
+<li><strong>JSONPatchItemRaw</strong>:
+Splits a raw JSON patch string into the record format
+for JSONPatchItem.</li>
+</ul>
+<div class="section" id="job-manager">
+<h3>Job Manager<a class="headerlink" href="#job-manager" title="Permalink to this headline">¶</a></h3>
+<p>Job list comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;==&#39;</span> <span class="o">|</span> <span class="s1">&#39;!=&#39;</span>
+</pre></div>
+</div>
+<p>Add and remove task entries:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;+&#39;</span> <span class="o">|</span> <span class="s1">&#39;+=&#39;</span> <span class="o">|</span> <span class="s1">&#39;-&#39;</span> <span class="o">|</span> <span class="s1">&#39;-=&#39;</span>
+</pre></div>
+</div>
+<p>Task execution operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;()&#39;</span>
+</pre></div>
+</div>
+<p>Miscellaneous operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">__len__</span> <span class="o">|</span> <span class="s1">&#39;[]&#39;</span> <span class="o">|</span> <span class="s1">&#39;()&#39;</span>
+</pre></div>
+</div>
+<p>Keyword operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">apply</span> <span class="o">|</span> <span class="n">get</span> <span class="o">|</span> <span class="n">patch_export</span> <span class="o">|</span> <span class="n">patch_import</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="task-items">
+<h3>Task Items<a class="headerlink" href="#task-items" title="Permalink to this headline">¶</a></h3>
+<p>Task comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;==&#39;</span> <span class="o">|</span> <span class="s1">&#39;!=&#39;</span>
+</pre></div>
+</div>
+<p>Task execution operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;()&#39;</span>
+</pre></div>
+</div>
+<p>Keyword operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">apply</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples for the provided basic calculations are:</p>
+<div class="section" id="create-list">
+<h3>Create List<a class="headerlink" href="#create-list" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Create a Job List</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jsonpatchlist</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="add-item">
+<h3>Add Item<a class="headerlink" href="#add-item" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Add a Task Item</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jsonpatchlist</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">jsonpatchlist</span> <span class="o">+=</span> <span class="n">JSONPatchItem</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;/a&quot;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s2">&quot;v&quot;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="remove-item">
+<h3>Remove Item<a class="headerlink" href="#remove-item" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Remove a Task Item</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jsonpatchlist</span> <span class="o">-=</span> <span class="mi">8</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jsonpatchlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">jsonpatchlist</span> <span class="o">-=</span> <span class="n">x</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="apply-list">
+<h3>Apply List<a class="headerlink" href="#apply-list" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Apply the Job List</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="n">jsonpatchlist</span><span class="p">(</span><span class="n">configdata</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">5</span>
+<span class="k">assert</span> <span class="n">err</span> <span class="o">==</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="apply-item">
+<h3>Apply Item<a class="headerlink" href="#apply-item" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Apply a Task Item</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="n">jsonpatchlist</span><span class="p">(</span><span class="n">configdata</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;a0&quot;</span><span class="p">:</span> <span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+<span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="n">err</span> <span class="o">==</span> <span class="p">[]</span>
+<span class="k">assert</span> <span class="n">ref</span> <span class="o">==</span> <span class="n">configdata</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="export-list">
+<h3>Export List<a class="headerlink" href="#export-list" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Export Job List</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="s2">&quot;export.jsonp&quot;</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">jsonpatchlist</span><span class="o">.</span><span class="n">patch_export</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="import-list">
+<h3>Import List<a class="headerlink" href="#import-list" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Import Job List</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">implist</span> <span class="o">=</span> <span class="n">JSONPatch</span><span class="p">()</span>
+<span class="n">imppatch</span> <span class="o">=</span> <span class="n">implist</span><span class="o">.</span><span class="n">patch_import</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">imppatch</span>
+
+<span class="k">assert</span> <span class="n">implist</span> <span class="o">==</span> <span class="n">jsonpatchlist</span><span class="o">.</span><span class="n">patch</span>
+<span class="k">assert</span> <span class="n">implist</span> <span class="o">==</span> <span class="n">jsonpatchlist</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Process data by &#8216;jsondata.jsonpatch&#8217;</a><ul>
+<li><a class="reference internal" href="#syntax-elements">Syntax Elements</a><ul>
+<li><a class="reference internal" href="#job-manager">Job Manager</a></li>
+<li><a class="reference internal" href="#task-items">Task Items</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#create-list">Create List</a></li>
+<li><a class="reference internal" href="#add-item">Add Item</a></li>
+<li><a class="reference internal" href="#remove-item">Remove Item</a></li>
+<li><a class="reference internal" href="#apply-list">Apply List</a></li>
+<li><a class="reference internal" href="#apply-item">Apply Item</a></li>
+<li><a class="reference internal" href="#export-list">Export List</a></li>
+<li><a class="reference internal" href="#import-list">Import List</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_patch_operations.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

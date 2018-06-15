@@ -1,0 +1,110 @@
+{
+	"testcase": {
+		"description": [
+			{ "body": "A first test base"},
+			{ "body": "with a testcase description."}	
+		]
+	},
+	"address":{
+		"streetAddress": "21 2nd Street",
+		"city":"New York",
+		"houseNumber":12
+	},
+	"phoneNumber":
+    [
+		{
+			"type":"home0",
+			"number":"000"
+		},
+		{
+			"type":"home1",
+			"number":"111"
+		},
+		{
+			"type":"office",
+			"number":"222"
+		},
+		{
+			"type":"holidays",
+			"number":"333"
+		}
+	],
+	"customers": {
+		"domestic": [
+			{
+				"name":"customer0",
+				"industries": "industry0",
+				"products": [
+					{
+						"name": "product0",
+						"quantities": 2000,
+						"priority": 0,
+						"quota": 1.5
+					},
+					{
+						"name": "product1",
+						"quantities": 2001,
+						"priority": 1,
+						"quota": 2.5
+					}
+				]
+			},
+			{
+				"name":"customer1",
+				"industries": "industry1",
+				"products": [
+					{
+						"name": "product0",
+						"quantities": 2000,
+						"priority": 0,
+						"quota": 1.5
+					},
+					{
+						"name": "product1",
+						"quantities": 2001,
+						"priority": 1,
+						"quota": 2.5
+					}
+				]
+			}
+		],
+		"abroad": [
+			{
+				"name": "customer0",
+				"industries": "industry0",
+				"products": [
+					{
+						"name": "product0",
+						"quantities": 2000,
+						"priority": 0,
+						"quota": 1.5
+					},
+					{
+						"name": "product1",
+						"quantities": 2001,
+						"priority": 1,
+						"quota": 2.5
+					}
+				]
+			},
+			{
+				"name": "customer1",
+				"industries": "industry1",
+				"products": [
+					{
+						"name": "product0",
+						"quantities": 2000,
+						"priority": 0,
+						"quota": 1.5
+					},
+					{
+						"name": "product1",
+						"quantities": 2001,
+						"priority": 1,
+						"quota": 2.5
+					}
+				]
+			}
+		]
+	}
+}

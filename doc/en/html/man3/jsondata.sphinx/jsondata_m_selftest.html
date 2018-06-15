@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.Selftest’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-jsondata.Selftest">
+<span id="jsondata-selftest-module"></span><h1>&#8216;jsondata.Selftest&#8217; - Module<a class="headerlink" href="#module-jsondata.Selftest" title="Permalink to this headline">¶</a></h1>
+<p>Test of basic features for the user by &#8216;&#8211;selftest&#8217;.</p>
+<p>This module is used by &#8216;jsondc&#8217; when the opverify_data_schemaardoced 
+basic functional checks by calling &#8216;runselftest&#8217;.</p>
+<p>The display of actions and results could be activated and 
+raised by multiple repetition of the &#8216;-v&#8217; option.</p>
+<dl class="docutils">
+<dt>The following data and schema are applied:</dt>
+<dd><ol class="first last arabic simple" start="0">
+<li>jsondata/data.json + jsondata/schema.jsd</li>
+<li>jsondata/datacheck.json + jsondata/datacheck.jsd</li>
+</ol>
+</dd>
+<dt>The performed process flow is:</dt>
+<dd><ol class="first last arabic simple" start="0">
+<li>load</li>
+<li>validate</li>
+<li>verify</li>
+</ol>
+</dd>
+</dl>
+<p>By default either &#8216;True&#8217; is returned, or in case of a failed test
+and/or error condition an exception is raised.</p>
+<div class="section" id="basic">
+<h2>Basic<a class="headerlink" href="#basic" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>runselftest</strong></li>
+</ul>
+<blockquote>
+<div><dl class="function">
+<dt id="jsondata.Selftest.runselftest">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">runselftest</code><span class="sig-paren">(</span><em>appname='selftest'</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#runselftest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.runselftest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the selftest returns True or False.
+Executes some the basic runtime test cases for user verification.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>appname: Name of the application. Changing this may break the</dt>
+<dd>selftest.
+default:=selftest</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>debug: Displays extended state data for developers.</dt>
+<dd>Requires __debug__==True.</dd>
+<dt>verbose: Extends the amount of the display of </dt>
+<dd>processing data.</dd>
+<dt>_verbose=#levels: Extends the amount of the display </dt>
+<dd>of processing data by given number of levels
+at once.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Selftest object.</dd>
+<dt>Raises:</dt>
+<dd>bypassed subsystems</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+<ul class="simple">
+<li><strong>printverbose</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.printverbose">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">printverbose</code><span class="sig-paren">(</span><em>lvl</em>, <em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#printverbose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.printverbose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="load-tests">
+<h2>Load Tests<a class="headerlink" href="#load-tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>load_data</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.load_data">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">load_data</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and verifies the self test &#8216;data.json&#8217;.</p>
+<p>Therefore the result of the creation of JSONDataSerializer 
+is compared to the load by json.load().</p>
+</dd></dl>
+
+<ul class="simple">
+<li><strong>load_appname</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.load_appname">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">load_appname</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#load_appname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.load_appname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and verifies the self test &#8216;selftest.json&#8217;.</p>
+<p>Therefore the result of the creation of JSONDataSerializer
+is compared to the load by json.load().</p>
+</dd></dl>
+
+</div>
+<div class="section" id="validation-tests">
+<h2>Validation Tests<a class="headerlink" href="#validation-tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>verify_data_schema</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.verify_data_schema">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">verify_data_schema</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#verify_data_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.verify_data_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and validates the self test &#8216;data.json&#8217; and &#8216;schema.jsd&#8217;.</p>
+<p>Therefore the result of the creation of JSONDataSerializer is performed
+with draft3 validation by jsonschema.validate().</p>
+</dd></dl>
+
+<ul class="simple">
+<li><strong>verify_appname_schema</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.verify_appname_schema">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">verify_appname_schema</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#verify_appname_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.verify_appname_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and validates the self test &#8216;selftest.json&#8217; and &#8216;selftest.jsd&#8217;.</p>
+<p>Therefore the result of the creation of JSONDataSerializer is performed
+with draft3 validation by jsonschema.validate().</p>
+</dd></dl>
+
+</div>
+<div class="section" id="jsonpointer-tests">
+<h2>JSONPointer tests<a class="headerlink" href="#jsonpointer-tests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>jsonpointer_data_schema</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.jsonpointer_data_schema">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">jsonpointer_data_schema</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#jsonpointer_data_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.jsonpointer_data_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and verifies by using JSONPointer access &#8216;data.json&#8217;.</p>
+</dd></dl>
+
+<ul class="simple">
+<li><strong>jsonpointer_selftest_data</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.jsonpointer_selftest_data">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">jsonpointer_selftest_data</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#jsonpointer_selftest_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.jsonpointer_selftest_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and verifies by using JSONPointer access &#8216;selftest.json&#8217;.</p>
+</dd></dl>
+
+<ul class="simple">
+<li><strong>jsonpointer_selftest_data_schema</strong></li>
+</ul>
+<dl class="function">
+<dt id="jsondata.Selftest.jsonpointer_selftest_data_schema">
+<code class="descclassname">jsondata.Selftest.</code><code class="descname">jsonpointer_selftest_data_schema</code><span class="sig-paren">(</span><em>appname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/Selftest.html#jsonpointer_selftest_data_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.Selftest.jsonpointer_selftest_data_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and verifies by using JSONPointer access &#8216;selftest.json&#8217;.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.Selftest&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#basic">Basic</a></li>
+<li><a class="reference internal" href="#load-tests">Load Tests</a></li>
+<li><a class="reference internal" href="#validation-tests">Validation Tests</a></li>
+<li><a class="reference internal" href="#jsonpointer-tests">JSONPointer tests</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_m_selftest.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

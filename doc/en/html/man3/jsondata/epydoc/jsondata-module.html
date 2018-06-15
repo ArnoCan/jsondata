@@ -1,0 +1,1593 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;jsondata
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package jsondata</h1><p class="nomargin-top"><span class="codelink"><a href="jsondata-pysrc.html">source&nbsp;code</a></span></p>
+<p>Modular processing of JSON data by trees and branches, pointers and 
+  patches.</p>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        0.2.21
+      </p>
+      <p><strong>Author:</strong>
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>Copyright:</strong>
+        Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero 
+        Arno-Can Uestuensoez
+      </p>
+      <p><strong>License:</strong>
+        Artistic-License-2.0 + Forced-Fairplay-Constraints
+      </p>
+</div><!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="jsondata.JSONData-module.html">jsondata.JSONData</a></strong>: <em class="summary">Core features for the processing of structured JSON based in-memory data.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.JSONDataExceptions-module.html">jsondata.JSONDataExceptions</a></strong>: <em class="summary">Common exceptions for the package 'jsondata'.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.JSONDataSerializer-module.html">jsondata.JSONDataSerializer</a></strong>: <em class="summary">Basic features for the persistence of JSON based in-memory data.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.JSONPatch-module.html">jsondata.JSONPatch</a></strong>: <em class="summary">The JSONPatch module provides for the alteration of JSON data compliant to RFC6902.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.JSONPointer-module.html">jsondata.JSONPointer</a></strong>: <em class="summary">Provides classes for the JSONPointer definition in accordance to 
+        RFC6901.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.JSONTree-module.html">jsondata.JSONTree</a></strong>: <em class="summary">The JSONTree module provides features for in-memory JSON structures.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.Selftest-module.html">jsondata.Selftest</a></strong>: <em class="summary">Test of basic features for the user by '--selftest'.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.data_json-module.html">jsondata.data_json</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsondata-module.html">jsondata.jsondata</a></strong>: <em class="summary">Core features for the processing of JSON based structures of 
+        in-memory data.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsondatacheck_jsd-module.html">jsondata.jsondatacheck_jsd</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsondatacheck_json-module.html">jsondata.jsondatacheck_json</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsondataserializer-module.html">jsondata.jsondataserializer</a></strong>: <em class="summary">Basic features for the persistence of JSON based in-memory data.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsonpatch-module.html">jsondata.jsonpatch</a></strong>: <em class="summary">The JSONPatch module provides for the alteration of JSON data 
+        compliant to RFC6902.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.jsonpointer-module.html">jsondata.jsonpointer</a></strong>: <em class="summary">Provides classes for the JSONPointer definition in accordance to 
+        RFC6901 and relative pointers draft-1/2018.</em>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.rfc6902_jsonp-module.html">jsondata.rfc6902_jsonp</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.schema_jsd-module.html">jsondata.schema_jsd</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.selftest_jsd-module.html">jsondata.selftest_jsd</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="jsondata.selftest_json-module.html">jsondata.selftest_json</a></strong>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataError-class.html" class="summary-name">JSONDataError</a><br />
+      base Exception.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataIndexError-class.html" class="summary-name">JSONDataIndexError</a><br />
+      Error on key.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataKeyError-class.html" class="summary-name">JSONDataKeyError</a><br />
+      Error on key.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataPathError-class.html" class="summary-name">JSONDataPathError</a><br />
+      Error on key.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataNodeError-class.html" class="summary-name">JSONDataNodeError</a><br />
+      Error on node, slightly different from key.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataNodeTypeError-class.html" class="summary-name">JSONDataNodeTypeError</a><br />
+      Error on NodeTypes.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataParameterError-class.html" class="summary-name">JSONDataParameterError</a><br />
+      Erroneous parameters.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataSourceFileError-class.html" class="summary-name">JSONDataSourceFileError</a><br />
+      Error on read of a source file.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataModeError-class.html" class="summary-name">JSONDataModeError</a><br />
+      Type error of source file content.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataTargetFileError-class.html" class="summary-name">JSONDataTargetFileError</a><br />
+      Error on writing a file.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataValueError-class.html" class="summary-name">JSONDataValueError</a><br />
+      Error on a value.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataAmbiguityError-class.html" class="summary-name">JSONDataAmbiguityError</a><br />
+      Error ambiguity of provided parameters.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPointerError-class.html" class="summary-name">JSONPointerError</a><br />
+      Pointer error.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONPointerTypeError-class.html" class="summary-name">JSONPointerTypeError</a><br />
+      Pointer type error, the JSON pointer syntax does not represent a 
+        valid pointer.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONTypeError-class.html" class="summary-name">JSONTypeError</a><br />
+      Pointer error.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDiffError-class.html" class="summary-name">JSONDiffError</a><br />
+      Error in JSONDiff.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONSearchError-class.html" class="summary-name">JSONSearchError</a><br />
+      Error in JSONSearch.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataPatchError-class.html" class="summary-name">JSONDataPatchError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata.JSONDataPatchItemError-class.html" class="summary-name">JSONDataPatchItemError</a>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__maintainer__"></a><span class="summary-name">__maintainer__</span> = <code title="'Arno-Can Uestuensoez'"><code class="variable-quote">'</code><code class="variable-string">Arno-Can Uestuensoez</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__uuid__"></a><span class="summary-name">__uuid__</span> = <code title="'63b597d6-4ada-4880-9f99-f5e0961351fb'"><code class="variable-quote">'</code><code class="variable-string">63b597d6-4ada-4880-9f99-f5e0961351fb</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="appname"></a><span class="summary-name">appname</span> = <code title="'jsondata'"><code class="variable-quote">'</code><code class="variable-string">jsondata</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_interactive"></a><span class="summary-name">_interactive</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="V3K"></a><span class="summary-name">V3K</span> = <code title="False">False</code><br />
+      Python3.5+
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ISSTR"></a><span class="summary-name">ISSTR</span> = <code title="(&lt;type 'str'&gt;, &lt;type 'unicode'&gt;)"><code class="variable-group">(</code>&lt;type 'str'&gt;<code class="variable-op">, </code>&lt;type 'unicode'&gt;<code class="variable-group">)</code></code><br />
+      string and unicode
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC4627"></a><span class="summary-name">MJ_RFC4627</span> = <code title="1">1</code><br />
+      The first JSON RFC.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC7493"></a><span class="summary-name">MJ_RFC7493</span> = <code title="2">2</code><br />
+      The IJSON RFC.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC7159"></a><span class="summary-name">MJ_RFC7159</span> = <code title="2">2</code><br />
+      The JSON RFC by 'now'.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC8259"></a><span class="summary-name">MJ_RFC8259</span> = <code title="4">4</code><br />
+      The JSON RFC by 'now'.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_ECMA404"></a><span class="summary-name">MJ_ECMA404</span> = <code title="16">16</code><br />
+      The first JSON EMCMA standard.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC6901"></a><span class="summary-name">MJ_RFC6901</span> = <code title="32">32</code><br />
+      JSONPointer first IETF RFC.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RELPOINTERD1"></a><span class="summary-name">MJ_RELPOINTERD1</span> = <code title="64">64</code><br />
+      JSONPointer - relative pointer Draft-1.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_RFC6902"></a><span class="summary-name">MJ_RFC6902</span> = <code title="128">128</code><br />
+      JSONPatch first IETF RFC.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MJ_DEFAULT"></a><span class="summary-name">MJ_DEFAULT</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MS_OFF"></a><span class="summary-name">MS_OFF</span> = <code title="40">40</code><br />
+      No validation.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MS_DRAFT3"></a><span class="summary-name">MS_DRAFT3</span> = <code title="43">43</code><br />
+      The first supported JSONSchema IETF-Draft.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MS_DRAFT4"></a><span class="summary-name">MS_DRAFT4</span> = <code title="44">44</code><br />
+      The current supported JSONSchema IETF-Draft.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MS_ON"></a><span class="summary-name">MS_ON</span> = <code title="44">44</code><br />
+      The current when the default is activated.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MODE_SCHEMA_DEFAULT"></a><span class="summary-name">MODE_SCHEMA_DEFAULT</span> = <code title="40">40</code><br />
+      The current default validation mode.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#str2mj" class="summary-name">str2mj</a> = <code title="{1: 1,
+ 2: 2,
+ 16: 16,
+ 32: 32,
+ 40: 40,
+ 128: 128,
+ '1': 1,
+ '128': 128,
+..."><code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>16<code class="variable-op">: </code>16<code class="variable-op">, </code>32<code class="variable-op">: </code>32<code class="variable-op">, </code>40<code class="variable-op">: </code>40<code class="variable-op">, </code>128<code class="variable-op">: </code>128<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">1</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#mj2str" class="summary-name">mj2str</a> = <code title="{1: 'rfc4627',
+ 2: 'rfc7159',
+ 4: 'rfc8259',
+ 16: 'ecma404',
+ 32: 'rfc6901',
+ 40: 'off',
+ 64: 'relpointerD1',
+ 128: 'rfc6902'}"><code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc4627</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc7159</code><code class="variable-quote">'</code><code class="variable-op">, </code>4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc8259</code><code class="variable-quote">'</code><code class="variable-op">, </code>16<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">ecma4</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_INSERT"></a><span class="summary-name">MATCH_INSERT</span> = <code title="0">0</code><br />
+      for dicts
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_NO"></a><span class="summary-name">MATCH_NO</span> = <code title="1">1</code><br />
+      negates the whole set
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_KEY"></a><span class="summary-name">MATCH_KEY</span> = <code title="2">2</code><br />
+      for dicts
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_CHLDATTR"></a><span class="summary-name">MATCH_CHLDATTR</span> = <code title="3">3</code><br />
+      for dicts and lists
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_INDEX"></a><span class="summary-name">MATCH_INDEX</span> = <code title="4">4</code><br />
+      for lists
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_MEM"></a><span class="summary-name">MATCH_MEM</span> = <code title="5">5</code><br />
+      for dicts(value) and lists
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_NEW"></a><span class="summary-name">MATCH_NEW</span> = <code title="6">6</code><br />
+      If not present create a new, else ignore and keep present untouched.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MATCH_PRESENT"></a><span class="summary-name">MATCH_PRESENT</span> = <code title="7">7</code><br />
+      Check all are present, else fails.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_ALL"></a><span class="summary-name">B_ALL</span> = <code title="0">0</code><br />
+      OP-On-Branches: process in any case.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_AND"></a><span class="summary-name">B_AND</span> = <code title="1">1</code><br />
+      OP-On-Branches: process only when both present.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_OR"></a><span class="summary-name">B_OR</span> = <code title="2">2</code><br />
+      OP-On-Branches: process if one at all is present.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_XOR"></a><span class="summary-name">B_XOR</span> = <code title="4">4</code><br />
+      OP-On-Branches: process if only one is present.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_ADD"></a><span class="summary-name">B_ADD</span> = <code title="8">8</code><br />
+      OP-On-Branches: add in accordance to RFC6902
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_MOD"></a><span class="summary-name">B_MOD</span> = <code title="16">16</code><br />
+      OP-On-Branches: modulo of branches.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="B_SUB"></a><span class="summary-name">B_SUB</span> = <code title="32">32</code><br />
+      OP-On-Branches: subtract branches.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="C_REF"></a><span class="summary-name">C_REF</span> = <code title="0">0</code><br />
+      OP-Copy: Copy reference.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="C_DEEP"></a><span class="summary-name">C_DEEP</span> = <code title="1">1</code><br />
+      OP-Copy: Copy deep.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="C_SHALLOW"></a><span class="summary-name">C_SHALLOW</span> = <code title="2">2</code><br />
+      OP-Copy: Copy shallow.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="C_DEFAULT"></a><span class="summary-name">C_DEFAULT</span> = <code title="0">0</code><br />
+      Default value.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SC_DATA"></a><span class="summary-name">SC_DATA</span> = <code title="0">0</code><br />
+      OP-Scope: the managed JSON data only
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SC_SCHEMA"></a><span class="summary-name">SC_SCHEMA</span> = <code title="1">1</code><br />
+      OP-Scope: the managed JSON schema only
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SC_JSON"></a><span class="summary-name">SC_JSON</span> = <code title="2">2</code><br />
+      OP-Scope: the managed JSON data and schema only.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SC_OBJ"></a><span class="summary-name">SC_OBJ</span> = <code title="3">3</code><br />
+      OP-Scope: the attributes of current instance.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SC_ALL"></a><span class="summary-name">SC_ALL</span> = <code title="4">4</code><br />
+      OP-Scope: the complete object, including data.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SD_BOTH"></a><span class="summary-name">SD_BOTH</span> = <code title="0">0</code><br />
+      Apply on mixed input and output data.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SD_INPUT"></a><span class="summary-name">SD_INPUT</span> = <code title="1">1</code><br />
+      Apply on input data.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SD_OUTPUT"></a><span class="summary-name">SD_OUTPUT</span> = <code title="2">2</code><br />
+      Apply on output data.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="S_NONE"></a><span class="summary-name">S_NONE</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="S_SIMPLE"></a><span class="summary-name">S_SIMPLE</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="R_OBJ"></a><span class="summary-name">R_OBJ</span> = <code title="0">0</code><br />
+      Return object of type self.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="R_DATA"></a><span class="summary-name">R_DATA</span> = <code title="1">1</code><br />
+      Return self.data.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="R_JDATA"></a><span class="summary-name">R_JDATA</span> = <code title="2">2</code><br />
+      Return object of type JSONData.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_STR"></a><span class="summary-name">RT_STR</span> = <code title="1">1</code><br />
+      string - 'str' or 'unicode'
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_DICT"></a><span class="summary-name">RT_DICT</span> = <code title="2">2</code><br />
+      dict
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_LST"></a><span class="summary-name">RT_LST</span> = <code title="4">4</code><br />
+      list
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_JSONPOINTER"></a><span class="summary-name">RT_JSONPOINTER</span> = <code title="8">8</code><br />
+      JSONPointer
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_JSONPATCH"></a><span class="summary-name">RT_JSONPATCH</span> = <code title="16">16</code><br />
+      JSONPatch
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_JSONDATA"></a><span class="summary-name">RT_JSONDATA</span> = <code title="32">32</code><br />
+      JSONData
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="RT_DEFAULT"></a><span class="summary-name">RT_DEFAULT</span> = <code title="8">8</code><br />
+      default
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#rtypes2num" class="summary-name">rtypes2num</a> = <code title="{None: 8,
+ 1: 1,
+ 2: 2,
+ 4: 4,
+ 8: 8,
+ 16: 16,
+ 32: 32,
+ 'RT_DICT': 2,
+..."><code class="variable-group">{</code>None<code class="variable-op">: </code>8<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code>8<code class="variable-op">: </code>8<code class="variable-op">, </code>16<code class="variable-op">: </code>16<code class="variable-op">, </code>32<code class="variable-op">: </code>32<code class="variable-op">,</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="M_FIRST"></a><span class="summary-name">M_FIRST</span> = <code title="1">1</code><br />
+      First match only.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="M_LAST"></a><span class="summary-name">M_LAST</span> = <code title="2">2</code><br />
+      Last match only.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="M_ALL"></a><span class="summary-name">M_ALL</span> = <code title="4">4</code><br />
+      All matches.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="V_NONE"></a><span class="summary-name">V_NONE</span> = <code title="1">1</code><br />
+      no checks at all
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="V_FINAL"></a><span class="summary-name">V_FINAL</span> = <code title="2">2</code><br />
+      checks final result only
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="V_STEPS"></a><span class="summary-name">V_STEPS</span> = <code title="4">4</code><br />
+      checks each intermediate directory
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="V_DEFAULT"></a><span class="summary-name">V_DEFAULT</span> = <code title="1">1</code><br />
+      default
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#verify2num" class="summary-name">verify2num</a> = <code title="{None: 1,
+ 1: 1,
+ 2: 2,
+ 4: 4,
+ 'V_DEFAULT': 1,
+ 'V_FINAL': 2,
+ 'V_NONE': 1,
+ 'V_STEPS': 4,
+..."><code class="variable-group">{</code>None<code class="variable-op">: </code>1<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">V_DEFAULT</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">V_FI</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_SUMUP"></a><span class="summary-name">DF_SUMUP</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_CSV"></a><span class="summary-name">DF_CSV</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_JSON"></a><span class="summary-name">DF_JSON</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_TABLE"></a><span class="summary-name">DF_TABLE</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_REVIEW"></a><span class="summary-name">DF_REVIEW</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_REPR"></a><span class="summary-name">DF_REPR</span> = <code title="6">6</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="DF_STR"></a><span class="summary-name">DF_STR</span> = <code title="7">7</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#str2df" class="summary-name">str2df</a> = <code title="{0: 0,
+ 1: 1,
+ 3: 3,
+ 4: 4,
+ 5: 5,
+ 6: 6,
+ 7: 7,
+ '0': 0,
+..."><code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>3<code class="variable-op">: </code>3<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code>5<code class="variable-op">: </code>5<code class="variable-op">, </code>6<code class="variable-op">: </code>6<code class="variable-op">, </code>7<code class="variable-op">: </code>7<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">0</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">1</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#df2str" class="summary-name">df2str</a> = <code title="{0: 'sumup',
+ 1: 'csv',
+ 3: 'json',
+ 4: 'tabble',
+ 5: 'review',
+ 6: 'repr',
+ 7: 'str'}"><code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">sumup</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">csv</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">json</code><code class="variable-quote">'</code><code class="variable-op">, </code>4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">tabble</code><code class="variable-quote">'</code><code class="variable-op">, </code>5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">re</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_TREE"></a><span class="summary-name">PJ_TREE</span> = <code title="0">0</code><br />
+      tree view JSON syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_FLAT"></a><span class="summary-name">PJ_FLAT</span> = <code title="1">1</code><br />
+      flat print JSON syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_PYTREE"></a><span class="summary-name">PJ_PYTREE</span> = <code title="2">2</code><br />
+      tree view Python syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_PYFLAT"></a><span class="summary-name">PJ_PYFLAT</span> = <code title="3">3</code><br />
+      flat print Python syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_REPR"></a><span class="summary-name">PJ_REPR</span> = <code title="4">4</code><br />
+      repr() - raw string, Python syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PJ_STR"></a><span class="summary-name">PJ_STR</span> = <code title="5">5</code><br />
+      str() - formatted string, Python syntax
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#str2pj" class="summary-name">str2pj</a> = <code title="{0: 0,
+ 1: 1,
+ 2: 2,
+ 3: 3,
+ 4: 4,
+ 5: 5,
+ '0': 0,
+ '1': 1,
+..."><code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>3<code class="variable-op">: </code>3<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code>5<code class="variable-op">: </code>5<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">0</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">1</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">, </code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#pj2str" class="summary-name">pj2str</a> = <code title="{0: 'tree', 1: 'flat', 2: 'pytree', 3: 'pyflat', 4: 'repr', 5: 'str'}"><code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">tree</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">flat</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">pytree</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">pyflat</code><code class="variable-quote">'</code><code class="variable-op">, </code>4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_NATIVE"></a><span class="summary-name">NOTATION_NATIVE</span> = <code title="0">0</code><br />
+      JSON notation in accordance to RFC7159
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_JSON"></a><span class="summary-name">NOTATION_JSON</span> = <code title="1">1</code><br />
+      JSON notation in accordance to RFC7159
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_JSON_REL"></a><span class="summary-name">NOTATION_JSON_REL</span> = <code title="2">2</code><br />
+      JSON notation as relative pointer
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NOTATION_HTTP_FRAGMENT"></a><span class="summary-name">NOTATION_HTTP_FRAGMENT</span> = <code title="3">3</code><br />
+      JSON notation in accordance to RFC7159 with RFC3986.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="CHARS_RAW"></a><span class="summary-name">CHARS_RAW</span> = <code title="0">0</code><br />
+      display character set as raw
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="CHARS_STR"></a><span class="summary-name">CHARS_STR</span> = <code title="1">1</code><br />
+      display character set as str
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="CHARS_UTF"></a><span class="summary-name">CHARS_UTF</span> = <code title="2">2</code><br />
+      display character set as utf
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="LINE_CUT"></a><span class="summary-name">LINE_CUT</span> = <code title="0">0</code><br />
+      force line fit
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="LINE_WRAP"></a><span class="summary-name">LINE_WRAP</span> = <code title="1">1</code><br />
+      wrap line in order to fit to length
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SEARCH_FIRST"></a><span class="summary-name">SEARCH_FIRST</span> = <code title="0">0</code><br />
+      Break display after first match.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SEARCH_ALL"></a><span class="summary-name">SEARCH_ALL</span> = <code title="1">1</code><br />
+      List all matches.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PT_PATH"></a><span class="summary-name">PT_PATH</span> = <code title="0">0</code><br />
+      Displays a list of items.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PT_RFC6901"></a><span class="summary-name">PT_RFC6901</span> = <code title="1">1</code><br />
+      Displays rfc6901 strings.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PT_NODE"></a><span class="summary-name">PT_NODE</span> = <code title="2">2</code><br />
+      Displays the node.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="JSYN_NATIVE"></a><span class="summary-name">JSYN_NATIVE</span> = <code title="1">1</code><br />
+      Literally in accordance to standards.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="JSYN_PYTHON"></a><span class="summary-name">JSYN_PYTHON</span> = <code title="2">2</code><br />
+      Python in-memory syntax representation.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#match2match" class="summary-name">match2match</a> = <code title="{1: 1,
+ 2: 2,
+ 3: 3,
+ 4: 4,
+ 5: 5,
+ 6: 6,
+ 7: 7,
+ 'child_attr_list': 3,
+..."><code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>3<code class="variable-op">: </code>3<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code>5<code class="variable-op">: </code>5<code class="variable-op">, </code>6<code class="variable-op">: </code>6<code class="variable-op">, </code>7<code class="variable-op">: </code>7<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">chil</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#mode2mj" class="summary-name">mode2mj</a> = <code title="{1: 1,
+ 2: 2,
+ 4: 4,
+ 16: 4,
+ 'default': 2,
+ 'ecma404': 4,
+ 'rfc4627': 1,
+ 'rfc7159': 2,
+..."><code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code>4<code class="variable-op">: </code>4<code class="variable-op">, </code>16<code class="variable-op">: </code>4<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ecma404</code><code class="variable-quote">'</code><code class="variable-op">: </code>4<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#validator2ms" class="summary-name">validator2ms</a> = <code title="{40: 40, 43: 43, 44: 44, 'default': 44, 'draft3': 43, 'off': 40}"><code class="variable-group">{</code>40<code class="variable-op">: </code>40<code class="variable-op">, </code>43<code class="variable-op">: </code>43<code class="variable-op">, </code>44<code class="variable-op">: </code>44<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>44<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">draft3</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="jsondata-module.html#copy2c" class="summary-name">copy2c</a> = <code title="{0: 0, 1: 1, 2: 2, 'deep': 1, 'default': 0, 'ref': 0, 'shallow': 2}"><code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">deep</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ref</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">,</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="consolewidth"></a><span class="summary-name">consolewidth</span> = <code title="80">80</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_verbose"></a><span class="summary-name">_verbose</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_debug"></a><span class="summary-name">_debug</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'jsondata'"><code class="variable-quote">'</code><code class="variable-string">jsondata</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="str2mj"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">str2mj</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 16<code class="variable-op">: </code>16<code class="variable-op">,</code>
+ 32<code class="variable-op">: </code>32<code class="variable-op">,</code>
+ 40<code class="variable-op">: </code>40<code class="variable-op">,</code>
+ 128<code class="variable-op">: </code>128<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">1</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">128</code><code class="variable-quote">'</code><code class="variable-op">: </code>128<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="mj2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">mj2str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc4627</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc7159</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc8259</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 16<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">ecma404</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 32<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc6901</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 40<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">off</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 64<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">relpointerD1</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 128<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">rfc6902</code><code class="variable-quote">'</code><code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="rtypes2num"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">rtypes2num</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>None<code class="variable-op">: </code>8<code class="variable-op">,</code>
+ 1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ 8<code class="variable-op">: </code>8<code class="variable-op">,</code>
+ 16<code class="variable-op">: </code>16<code class="variable-op">,</code>
+ 32<code class="variable-op">: </code>32<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">RT_DICT</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="verify2num"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">verify2num</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>None<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">V_DEFAULT</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">V_FINAL</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">V_NONE</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">V_STEPS</code><code class="variable-quote">'</code><code class="variable-op">: </code>4<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="str2df"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">str2df</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">,</code>
+ 1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 3<code class="variable-op">: </code>3<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ 5<code class="variable-op">: </code>5<code class="variable-op">,</code>
+ 6<code class="variable-op">: </code>6<code class="variable-op">,</code>
+ 7<code class="variable-op">: </code>7<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">0</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="df2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">df2str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">sumup</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">csv</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">json</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">tabble</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">review</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">repr</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">str</code><code class="variable-quote">'</code><code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="str2pj"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">str2pj</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">,</code>
+ 1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 3<code class="variable-op">: </code>3<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ 5<code class="variable-op">: </code>5<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">0</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">1</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="pj2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">pj2str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">tree</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">flat</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">pytree</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">pyflat</code><code class="variable-quote">'</code><code class="variable-op">, </code>4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">repr</code><code class="variable-quote">'</code><code class="variable-op">, </code>5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">str</code><code class="variable-quote">'</code><code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="match2match"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">match2match</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 3<code class="variable-op">: </code>3<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ 5<code class="variable-op">: </code>5<code class="variable-op">,</code>
+ 6<code class="variable-op">: </code>6<code class="variable-op">,</code>
+ 7<code class="variable-op">: </code>7<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">child_attr_list</code><code class="variable-quote">'</code><code class="variable-op">: </code>3<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="mode2mj"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">mode2mj</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>1<code class="variable-op">: </code>1<code class="variable-op">,</code>
+ 2<code class="variable-op">: </code>2<code class="variable-op">,</code>
+ 4<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ 16<code class="variable-op">: </code>4<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">ecma404</code><code class="variable-quote">'</code><code class="variable-op">: </code>4<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">rfc4627</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">rfc7159</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="validator2ms"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">validator2ms</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>40<code class="variable-op">: </code>40<code class="variable-op">, </code>43<code class="variable-op">: </code>43<code class="variable-op">, </code>44<code class="variable-op">: </code>44<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>44<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">draft3</code><code class="variable-quote">'</code><code class="variable-op">: </code>43<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">off</code><code class="variable-quote">'</code><code class="variable-op">: </code>40<code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="copy2c"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">copy2c</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code>0<code class="variable-op">, </code>1<code class="variable-op">: </code>1<code class="variable-op">, </code>2<code class="variable-op">: </code>2<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">deep</code><code class="variable-quote">'</code><code class="variable-op">: </code>1<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">default</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ref</code><code class="variable-quote">'</code><code class="variable-op">: </code>0<code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">shallow</code><code class="variable-quote">'</code><code class="variable-op">: </code>2<code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:23 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

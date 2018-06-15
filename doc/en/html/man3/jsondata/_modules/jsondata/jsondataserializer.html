@@ -1,0 +1,814 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.jsondataserializer &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../../index.html" />
+    <link rel="up" title="jsondata" href="../jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" accesskey="U">jsondata</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata.jsondataserializer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="sd">&quot;&quot;&quot;Basic features for the persistence of JSON based in-memory data.</span>
+
+<span class="sd">* import and export of JSON data from/into files</span>
+<span class="sd">* modular import and export of JSON branches from/into files</span>
+<span class="sd">* validation by JSON schema</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># pylint: disable-msg=F0401</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ujson&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">myjson</span>  <span class="c1"># @UnusedImport @Reimport @UnresolvedImport</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">myjson</span>  <span class="c1"># @Reimport</span>
+
+<span class="kn">from</span> <span class="nn">jsondata</span> <span class="k">import</span> <span class="n">ISSTR</span><span class="p">,</span> <span class="n">MS_OFF</span><span class="p">,</span> <span class="n">MODE_SCHEMA_DEFAULT</span><span class="p">,</span> \
+    <span class="n">MATCH_NO</span><span class="p">,</span> <span class="n">MATCH_KEY</span><span class="p">,</span> <span class="n">MATCH_CHLDATTR</span><span class="p">,</span> <span class="n">MATCH_INDEX</span><span class="p">,</span> <span class="n">MATCH_MEM</span><span class="p">,</span> \
+    <span class="n">JSONDataError</span><span class="p">,</span> <span class="n">JSONDataValueError</span><span class="p">,</span> <span class="n">JSONDataModeError</span><span class="p">,</span> \
+    <span class="n">JSONDataSourceFileError</span><span class="p">,</span> <span class="n">JSONDataTargetFileError</span><span class="p">,</span> \
+    <span class="n">JSONDataAmbiguityError</span><span class="p">,</span> <span class="n">JSONDataParameterError</span><span class="p">,</span> \
+    <span class="n">mode2mj</span><span class="p">,</span> <span class="n">MJ_RFC4627</span><span class="p">,</span> <span class="n">MJ_DEFAULT</span><span class="p">,</span> \
+    <span class="n">B_ADD</span><span class="p">,</span> <span class="n">B_AND</span><span class="p">,</span> <span class="n">B_OR</span><span class="p">,</span> <span class="n">B_XOR</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="k">import</span> <span class="n">JSONData</span>
+
+<span class="kn">import</span> <span class="nn">jsondata</span>
+
+<span class="c1"># pylint: enable-msg=F0401</span>
+
+
+<span class="n">_debug</span> <span class="o">=</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">_debug</span>  <span class="c1">#pylint: disable=protected-access</span>
+<span class="n">_verbose</span><span class="o">=</span> <span class="n">jsondata</span><span class="o">.</span><span class="n">_verbose</span>   <span class="c1">#pylint: disable=protected-access</span>
+
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez&quot;</span> \
+                <span class="s2">&quot; @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.21&#39;</span>
+<span class="n">__uuid__</span> <span class="o">=</span> <span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+
+<div class="viewcode-block" id="JSONDataSerializer"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer">[docs]</a><span class="k">class</span> <span class="nc">JSONDataSerializer</span><span class="p">(</span><span class="n">JSONData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Persistency for *JSONData*.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="JSONDataSerializer.__init__"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a serializable instance of *JSONData*, optionally loads</span>
+<span class="sd">        and validates a JSON definition.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **jdata**:</span>
+<span class="sd">                The initial data of current instance, see *JSONData*</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                Keywords are also passed to *JSONData*.</span>
+
+<span class="sd">                **datafile**:</span>
+<span class="sd">                    Filepathname of JSON data file, when provided a further</span>
+<span class="sd">                    search by pathlist, filelist, and filepathlist is suppressed.</span>
+<span class="sd">                    Therefore it has to be a valid filepathname.</span>
+
+<span class="sd">                **mode**:</span>
+<span class="sd">                    The mode of JSON processing: ::</span>
+
+<span class="sd">                       mode := (</span>
+<span class="sd">                            MJ_RFC4627</span>
+<span class="sd">                          | MJ_RFC7493  # currently not supported, mapped to RFC7159</span>
+<span class="sd">                          | MJ_RFC7159</span>
+<span class="sd">                          | MJ_RFC8259</span>
+<span class="sd">                          | MJ_ECMA404  # same as RFC8259</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                    default := MJ_RFC7159</span>
+
+<span class="sd">                **schemafile**:</span>
+<span class="sd">                    Filepathname of JSONschema file.</span>
+
+<span class="sd">                **schema**:</span>
+<span class="sd">                    Could be used instead of *schemafile*, see *JSONData*.</span>
+
+<span class="sd">                **validator**:</span>
+<span class="sd">                    See *JSONData*.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Results in an initialized object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NameError</span>
+
+<span class="sd">            JSONDataSourceFileError</span>
+
+<span class="sd">            JSONDataAmbiguityError</span>
+
+<span class="sd">            JSONDataValueError</span>
+
+<span class="sd">            jsonschema.ValidationError</span>
+
+<span class="sd">            jsonschema.SchemaError</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="n">_debug</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">_verbose</span><span class="p">)</span>
+
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode_json</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="n">MJ_DEFAULT</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode_json</span> <span class="o">=</span> <span class="n">mode2mj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode_json</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode_json</span> <span class="ow">in</span> <span class="p">(</span><span class="n">MJ_RFC4627</span><span class="p">,)</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,):</span>
+                <span class="k">raise</span> <span class="n">JSONDataModeError</span><span class="p">(</span>
+                    <span class="s2">&quot;mode rfc4627 requires dict or list, got:&quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jdata</span><span class="p">))</span>
+                    <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataParameterError</span><span class="p">(</span><span class="s2">&quot;Unknown mode:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode_json</span><span class="p">))</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># data file</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafile&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">):</span>
+            <span class="c1">#</span>
+            <span class="c1"># must exist when provided</span>
+            <span class="c1">#</span>
+            <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;datasource&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">))</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># schema file</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schema&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schemafile&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span>
+                    <span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+                <span class="c1">#</span>
+                <span class="c1"># must exist when provided</span>
+                <span class="c1">#</span>
+                <span class="k">raise</span> <span class="n">JSONDataAmbiguityError</span><span class="p">(</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;schema + schemafile&quot;</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">):</span>
+                <span class="c1">#</span>
+                <span class="c1"># must exist when provided</span>
+                <span class="c1">#</span>
+                <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">))</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">schema_file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">schema_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span>
+                    <span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">))</span>
+
+
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;validator&#39;</span><span class="p">,</span> <span class="n">MODE_SCHEMA_DEFAULT</span><span class="p">)</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># load data when specified</span>
+        <span class="c1"># use import(), for rdf7159 priitives as target too.</span>
+        <span class="c1"># even though import requires a container as target</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">_j</span> <span class="o">=</span> <span class="n">jdata</span>
+            <span class="n">_k</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_j</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">_k</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># prepare the data container</span>
+        <span class="n">JSONData</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">_j</span><span class="p">,</span>
+            <span class="n">schema</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">,</span>
+                    <span class="n">_j</span><span class="p">,</span>
+                    <span class="n">_k</span><span class="p">,</span>
+                    <span class="n">schema</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span>
+                    <span class="n">validator</span><span class="o">=</span><span class="n">validator</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># should not be reached</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="p">,</span>
+                    <span class="n">_j</span><span class="p">,</span>
+                    <span class="n">_k</span><span class="p">,</span>
+                    <span class="n">schemafile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">,</span>
+                    <span class="n">validator</span><span class="o">=</span><span class="n">validator</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_j</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">_j</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span><span class="p">:</span>
+            <span class="c1"># it is the init of the creation, so initialize the schema for the object</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_schema</span><span class="p">(</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONDataSerializer.json_export"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.json_export">[docs]</a>    <span class="k">def</span> <span class="nf">json_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datafile</span><span class="p">,</span> <span class="n">sourcenode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Exports current data into a file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **datafile**:</span>
+<span class="sd">                File name for the exported data.</span>
+
+<span class="sd">            **sourcenode**:</span>
+<span class="sd">                Base of sub-tree for export.</span>
+<span class="sd">                None for complete JSON document.</span>
+
+<span class="sd">                default := *self.data*</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **force**:</span>
+<span class="sd">                    Forces the overwrite of existing files.</span>
+
+<span class="sd">                **pretty**:</span>
+<span class="sd">                    Defines the syntax format of the data. ::</span>
+
+<span class="sd">                      pretty := (</span>
+<span class="sd">                           True     # tree view</span>
+<span class="sd">                         | False    # all in one line</span>
+<span class="sd">                      )</span>
+
+<span class="sd">                    When set, the value is fetched from</span>
+<span class="sd">                    *self.indent*.</span>
+
+<span class="sd">                    default := *True*</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else returns either &#39;False&#39;,</span>
+<span class="sd">            or raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataTargetFileError:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_force</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pretty&#39;</span><span class="p">):</span>
+            <span class="n">_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_ind</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_force</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataTargetFileError</span><span class="p">(</span><span class="s2">&quot;Exists, use the force to replace: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">sourcenode</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sourcenode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                <span class="n">myjson</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sourcenode</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">_ind</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataTargetFileError</span><span class="p">(</span><span class="s2">&quot;open-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s2">&quot;data.dump&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="JSONDataSerializer.json_import"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.json_import">[docs]</a>    <span class="k">def</span> <span class="nf">json_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datafile</span><span class="p">,</span> <span class="n">targetnode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Imports and validates data from a file.</span>
+
+<span class="sd">        The schema and validator for the imported data could be set</span>
+<span class="sd">        independent from the schema of the main data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **datafile**:</span>
+<span class="sd">                JSON data file name containing the subtree for the target branch. ::</span>
+
+<span class="sd">                   datafile := &lt;filepathname&gt;</span>
+
+<span class="sd">            **targetnode**:</span>
+<span class="sd">                Target container for the inclusion of the loaded branch.</span>
+
+<span class="sd">                .. parsed-literal::</span>
+
+<span class="sd">                   targetnode := (</span>
+<span class="sd">                       JSONPointer                  # [RFC6901]_ or [RELPOINTER]_</span>
+<span class="sd">                       | &lt;rfc6901-string&gt;           # [RFC6901]_</span>
+<span class="sd">                       | &lt;relative-pointer-string&gt;  # [RELPOINTER]_</span>
+<span class="sd">                       | &lt;pointer-items-list&gt;       # non-URI-fragment pointer path items of [RFC6901]_</span>
+<span class="sd">                       )</span>
+
+<span class="sd">                default := *self.data*</span>
+
+<span class="sd">            **key**:</span>
+<span class="sd">                The optional index/key-hook within the *targetnode*,</span>
+
+<span class="sd">                default:= None</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **mechanic**:</span>
+<span class="sd">                    The import mechanic. Selects either the RFC6902 conform</span>
+<span class="sd">                    *branch_add*, or the flexible mapping by *branch_superpose*.</span>
+<span class="sd">                    The latter is more suitable for the application of modular </span>
+<span class="sd">                    templates.  ::</span>
+
+<span class="sd">                       mechanic := (</span>
+<span class="sd">                            B_ADD  |  &#39;add&#39;   # branch_add</span>
+<span class="sd">                          | B_AND  |  &#39;and&#39;   # branch_superpose(map=B_AND)</span>
+<span class="sd">                          | B_OR   |  &#39;or&#39;    # branch_superpose(map=B_OR)</span>
+<span class="sd">                          | B_XOR  |  &#39;xor&#39;   # branch_superpose(map=B_XOR)</span>
+<span class="sd">                       )</span>
+
+
+<span class="sd">                **matchcondition**:</span>
+<span class="sd">                    Defines the criteria for comparison of present child nodes</span>
+<span class="sd">                    in the target container. The value is a list of criteria</span>
+<span class="sd">                    combined by logical AND. The criteria may vary due to</span>
+<span class="sd">                    the requirement and the type of applied container.</span>
+
+<span class="sd">                **schema**:</span>
+<span class="sd">                    JSON-Schema for validation of the subtree/branch.</span>
+
+<span class="sd">                    default := *self.schema*  # the pre-loaded schema</span>
+
+<span class="sd">                **schemafile**:</span>
+<span class="sd">                    JSON-Schema filename for validation of the subtree/branch.</span>
+
+<span class="sd">                    default := *self.schema*  # the pre-loaded schema</span>
+
+<span class="sd">                **subpointer**:</span>
+<span class="sd">                    The path of the sub-tree of the serialized document</span>
+<span class="sd">                    to be imported.</span>
+
+<span class="sd">                    default := &#39;&#39;  # whole serialized document</span>
+
+<span class="sd">                **validator**:</span>
+<span class="sd">                    Sets schema validator for the data file.</span>
+<span class="sd">                    Current release relies on *jsonschema*, which</span>
+<span class="sd">                    supports at the time of writing draft-03 and</span>
+<span class="sd">                    draft-04.</span>
+
+<span class="sd">                    The values are: ::</span>
+
+<span class="sd">                        validator := (</span>
+<span class="sd">                              MS_DRAFT3           | &#39;draft3&#39;</span>
+<span class="sd">                            | MS_DRAFT4           | &#39;draft4&#39;</span>
+<span class="sd">                            | MS_ON               | &#39;on&#39;</span>
+<span class="sd">                            | MS_OFF              | &#39;off&#39;</span>
+<span class="sd">                            | MODE_SCHEMA_DEFAULT | &#39;default&#39;</span>
+<span class="sd">                        )</span>
+
+<span class="sd">                    default:= MS_OFF</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else returns either &#39;False&#39;, or</span>
+<span class="sd">            raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataError</span>
+
+<span class="sd">            JSONDataValueError</span>
+
+<span class="sd">            JSONDataSourceFileError:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jval</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">schemafile</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schemafile&#39;</span><span class="p">)</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schema&#39;</span><span class="p">)</span>
+        <span class="n">subpointer</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subpointer&#39;</span><span class="p">)</span>
+
+        <span class="n">mechanic</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mechanic&#39;</span><span class="p">)</span>
+        <span class="n">_call</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch_superpose</span>
+        <span class="k">if</span> <span class="n">mechanic</span> <span class="ow">in</span> <span class="p">(</span><span class="n">B_ADD</span><span class="p">,</span> <span class="s1">&#39;add&#39;</span><span class="p">):</span>
+            <span class="n">_call</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch_add</span> 
+<span class="c1">#         elif mechanic in (B_AND, &#39;and&#39;):</span>
+<span class="c1">#             _call = self.branch_superpose</span>
+<span class="c1">#         elif mechanic in (B_OR, &#39;or&#39;):</span>
+<span class="c1">#             _call = self.branch_superpose</span>
+<span class="c1">#         elif mechanic in (B_XOR, &#39;xor&#39;):</span>
+<span class="c1">#             _call = self.branch_superpose</span>
+
+        <span class="n">matchcondition</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;matchcondition&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matchcondition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">matchcondition</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="n">MATCH_KEY</span><span class="p">):</span>
+                <span class="n">matchcondition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MATCH_KEY</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">matchcondition</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="n">MATCH_NO</span><span class="p">):</span>
+                <span class="n">matchcondition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MATCH_NO</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">matchcondition</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;child_attr_list&#39;</span><span class="p">,</span> <span class="n">MATCH_CHLDATTR</span><span class="p">):</span>
+                <span class="n">matchcondition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MATCH_CHLDATTR</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">matchcondition</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">MATCH_INDEX</span><span class="p">):</span>
+                <span class="n">matchcondition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MATCH_INDEX</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">matchcondition</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;mem&#39;</span><span class="p">,</span> <span class="n">MATCH_MEM</span><span class="p">):</span>
+                <span class="n">matchcondition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MATCH_MEM</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONDataValueError</span><span class="p">(</span><span class="s1">&#39;matchcondition&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">matchcondition</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">validator</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;validator&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">validator</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;validator&#39;</span><span class="p">,</span> <span class="n">MODE_SCHEMA_DEFAULT</span><span class="p">)</span>
+
+
+        <span class="c1"># INPUT-BRANCH: schema for validation</span>
+        <span class="k">if</span> <span class="n">validator</span> <span class="o">!=</span> <span class="n">MS_OFF</span><span class="p">:</span>  <span class="c1"># validation requested, requires schema</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">schemafile</span><span class="p">:</span>  <span class="c1"># no new import, use present data</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>  <span class="c1"># no schema data present</span>
+                    <span class="k">raise</span> <span class="n">JSONDataError</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">schemafile</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">schemafile</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span>
+                                             <span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schemafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">schema_file</span><span class="p">:</span>
+                    <span class="n">schema</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">schema_file</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">schema</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span>
+                                             <span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+        <span class="c1"># INPUT-BRANCH: data</span>
+        <span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">datafile</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;datafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>  <span class="c1"># load data</span>
+                <span class="n">jval</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;datafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="c1"># INPUT-BRANCH: validate data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">validator</span><span class="p">)</span>
+
+        <span class="c1"># now - after validation - use the requested sub-branch only, default is whole branch</span>
+        <span class="k">if</span> <span class="n">subpointer</span><span class="p">:</span>
+            <span class="n">jval</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">subpointer</span><span class="p">)(</span><span class="n">jval</span><span class="p">)</span>
+
+        <span class="c1"># TARGET-CONTAINER: manage new branch data</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="n">JSONData</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="n">targetnode</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">targetnode</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="n">JSONPointer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">targetnode</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ISSTR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">targetnode</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_call</span><span class="p">(</span><span class="n">jval</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1">#         if isinstance(targetnode, JSONData):</span>
+<span class="c1">#             return self.branch_add(jval, targetnode.data, key)</span>
+<span class="c1">#         elif type(targetnode) in (dict, list):</span>
+<span class="c1">#             return self.branch_add(jval, targetnode, key)</span>
+<span class="c1">#         elif isinstance(targetnode, JSONPointer):</span>
+<span class="c1">#             return self.branch_add(jval, targetnode, key)</span>
+<span class="c1">#         elif type(targetnode) in ISSTR:</span>
+<span class="c1">#             return self.branch_add(jval, targetnode, key)</span>
+<span class="c1">#         elif targetnode == None:</span>
+<span class="c1">#             if self.data != None:</span>
+<span class="c1">#                 return self.branch_add(jval, self.data)</span>
+<span class="c1">#             return self.branch_add(jval, &#39;&#39;)</span>
+
+        <span class="k">raise</span> <span class="n">JSONDataParameterError</span><span class="p">(</span><span class="s2">&quot;import requires a container: object(dict) or array(list).&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONDataSerializer.dump_data"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_data">[docs]</a>    <span class="k">def</span> <span class="nf">dump_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pretty</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dumps structured data by calling *json.dumps()*.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **pretty**:</span>
+<span class="sd">                Activates pretty printer for treeview, else flat.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                The remaining keyword arguments are passed </span>
+<span class="sd">                through to *json.dumps()*.</span>
+
+<span class="sd">                **ensure_ascii**:</span>
+<span class="sd">                    See *json_dumps*.</span>
+<span class="sd">                    </span>
+<span class="sd">                    default := False</span>
+
+<span class="sd">                **indent**:</span>
+<span class="sd">                    Sets indent when *pretty* is *True*.</span>
+
+<span class="sd">                **sort_keys**:</span>
+<span class="sd">                    Sorts keys.</span>
+
+<span class="sd">                    default := False</span>
+
+<span class="sd">                **sourcefile**:</span>
+<span class="sd">                    Loads data from &#39;sourcefile&#39; into &#39;source&#39;.</span>
+
+<span class="sd">                    default := None</span>
+
+<span class="sd">                **source**:</span>
+<span class="sd">                    Prints data within &#39;source&#39;.</span>
+
+<span class="sd">                    default := self.data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns the dump string, else either &#39;None&#39;, </span>
+<span class="sd">            or raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataAmbiguityError:</span>
+
+<span class="sd">            forwarded from &#39;json&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="kc">None</span>
+ 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sourcefile</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sourcefile&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">sourcefile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">and</span> <span class="n">source</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataAmbiguityError</span><span class="p">(</span><span class="s1">&#39;sourcefile/source&#39;</span><span class="p">,</span>
+                                         <span class="s2">&quot;sourcefile=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">),</span>
+                                         <span class="s2">&quot;source=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">sourcefile</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">source</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>  <span class="c1"># yes, almost the same...</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;indent&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pretty</span><span class="p">:</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;indent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ensure_ascii&#39;</span><span class="p">):</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;ensure_ascii&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># if not kargs.get(&#39;sort_keys&#39;):</span>
+        <span class="c1">#   kargs[&#39;sort_keys&#39;] = False</span>
+        
+        <span class="k">return</span> <span class="n">myjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONDataSerializer.dump_schema"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_schema">[docs]</a>    <span class="k">def</span> <span class="nf">dump_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pretty</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dumps structured schema by calling *json.dumps()*.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **pretty**:</span>
+<span class="sd">                Activates pretty printer for treeview, else flat.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                The remaining keyword arguments are passed </span>
+<span class="sd">                through to *json.dumps()*.</span>
+
+<span class="sd">                **ensure_ascii**:</span>
+<span class="sd">                    See *json_dumps*.</span>
+<span class="sd">                    </span>
+<span class="sd">                    default := False</span>
+
+<span class="sd">                **indent**:</span>
+<span class="sd">                    Sets indent when *pretty* is *True*.</span>
+
+<span class="sd">                **sort_keys**:</span>
+<span class="sd">                    Sorts keys.</span>
+
+<span class="sd">                    default := False</span>
+
+<span class="sd">                **sourcefile**:</span>
+<span class="sd">                    Loads schema from &#39;sourcefile&#39; into &#39;source&#39;.</span>
+
+<span class="sd">                    default := None</span>
+
+<span class="sd">                **source**:</span>
+<span class="sd">                    Prints schema within &#39;source&#39;.</span>
+
+<span class="sd">                    default := self.schema</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns the dump string, else either &#39;None&#39;,</span>
+<span class="sd">            or raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            JSONDataAmbiguityError:</span>
+
+<span class="sd">            forwarded from &#39;json&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="kc">None</span>
+ 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sourcefile</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sourcefile&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">sourcefile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">and</span> <span class="n">source</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JSONDataAmbiguityError</span><span class="p">(</span><span class="s1">&#39;sourcefile/source&#39;</span><span class="p">,</span>
+                                         <span class="s2">&quot;sourcefile=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">),</span>
+                                         <span class="s2">&quot;source=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">sourcefile</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">source</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span>  <span class="c1"># yes, almost the same...</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;indent&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pretty</span><span class="p">:</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;indent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ensure_ascii&#39;</span><span class="p">):</span>
+            <span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;ensure_ascii&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># if not kargs.get(&#39;sort_keys&#39;):</span>
+        <span class="c1">#     kargs[&#39;sort_keys&#39;] = False</span>
+        <span class="k">return</span> <span class="n">myjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONDataSerializer.set_schema"><a class="viewcode-back" href="../../jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.set_schema">[docs]</a>    <span class="k">def</span> <span class="nf">set_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schemafile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targetnode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets schema or inserts a new branch into the current schema.</span>
+<span class="sd">        The main schema(targetnode==None) is the schema of the current</span>
+<span class="sd">        instance. Additional branches could be added by importing the</span>
+<span class="sd">        specific schema definitions. These could either kept volatile</span>
+<span class="sd">        as a temporary runtime extension, or stored persistently.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **schemafile**:</span>
+<span class="sd">                JSON-Schema filename for validation of the</span>
+<span class="sd">                subtree/branch, see also *kargs[&#39;schema&#39;]*.</span>
+
+<span class="sd">            **targetnode**:</span>
+<span class="sd">                Target container hook for the inclusion of</span>
+<span class="sd">                the loaded branch.</span>
+
+<span class="sd">            kargs:</span>
+<span class="sd">                **schema**:</span>
+<span class="sd">                    In-memory JSON-Schema as an alternative</span>
+<span class="sd">                    to schemafile, when provided the &#39;schemafile&#39;</span>
+<span class="sd">                    is ignored.</span>
+
+<span class="sd">                    default:=None</span>
+
+<span class="sd">                **persistent**:</span>
+<span class="sd">                    Stores the &#39;schema&#39; persistently into &#39;schemafile&#39;</span>
+<span class="sd">                    after the completion of update, requires a</span>
+<span class="sd">                    valid &#39;schemafile&#39;.</span>
+
+<span class="sd">                    default:=False</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else returns either &#39;False&#39;, or</span>
+<span class="sd">            raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+
+<span class="sd">            JSONDataError</span>
+
+<span class="sd">            JSONDataSourceFileError</span>
+
+<span class="sd">            JSONDataValueError</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schema&#39;</span><span class="p">)</span>
+        <span class="n">persistent</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;persistent&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">schemafile</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span> <span class="o">=</span> <span class="n">schemafile</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># use present</span>
+            <span class="n">schemafile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">schemafile</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">persistent</span><span class="p">:</span>  <span class="c1"># persistence requires storage</span>
+                <span class="k">raise</span> <span class="n">JSONDataTargetFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;JSONSchemaFilename&quot;</span><span class="p">,</span>
+                                         <span class="n">schemafile</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">schemafile</span><span class="p">:</span>  <span class="c1"># load from file</span>
+            <span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">schemafile</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schemafile</span> <span class="o">=</span> <span class="n">schemafile</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">schemafile</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schemafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">schema_file</span><span class="p">:</span>
+                <span class="n">schema</span> <span class="o">=</span> <span class="n">myjson</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">schema_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">schema</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># missing at all</span>
+            <span class="k">raise</span> <span class="n">JSONDataSourceFileError</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="s2">&quot;schemafile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># manage new branch data</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">targetnode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">schema</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># data history present, so decide how to handle</span>
+
+            <span class="c1"># the container hook has to match for insertion-</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">targetnode</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">schema</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">JSONDataError</span><span class="p">(</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;target!=branch&quot;</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">targetnode</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;!=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">schema</span><span class="p">)))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">targetnode</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">schema</span> <span class="o">!=</span> <span class="kc">None</span></div></div>
+
+
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="k">import</span> <span class="n">JSONPointer</span>
+<span class="c1"># avoid nested recursion problems</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" >jsondata</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

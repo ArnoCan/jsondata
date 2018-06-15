@@ -1,0 +1,720 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HowTo JSONPointer - RFC6901 &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Howto" href="howto.html" />
+    <link rel="next" title="Relative JSONPointer - draft-handrews-relative-json-pointer" href="howto_class_jsonpointer_relative.html" />
+    <link rel="prev" title="JSONPatch - RFC6902" href="howto_class_jsonpatch.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpointer_relative.html" title="Relative JSONPointer - draft-handrews-relative-json-pointer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpatch.html" title="JSONPatch - RFC6902"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" accesskey="U">Howto</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto-jsonpointer-rfc6901">
+<h1>HowTo JSONPointer - RFC6901<a class="headerlink" href="#howto-jsonpointer-rfc6901" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="pointer-syntax">
+<h2>Pointer Syntax<a class="headerlink" href="#pointer-syntax" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="json-string-representation">
+<h2>JSON String Representation<a class="headerlink" href="#json-string-representation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>See RFC6901 section &#8220;5. JSON String Representation&#8221;</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
+   <span class="nt">&quot;&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+   <span class="nt">&quot;a/b&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+   <span class="nt">&quot;c%d&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+   <span class="nt">&quot;e^f&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+   <span class="nt">&quot;g|h&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+   <span class="nt">&quot;i\\j&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+   <span class="nt">&quot;k\&quot;l&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+   <span class="nt">&quot; &quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+   <span class="nt">&quot;m~n&quot;</span><span class="p">:</span> <span class="mi">8</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The following JSON strings evaluate to the accompanying values:</p>
+<div class="last highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>&quot;&quot;          // the whole document
+&quot;/foo&quot;      [&quot;bar&quot;, &quot;baz&quot;]
+&quot;/foo/0&quot;    &quot;bar&quot;
+&quot;/&quot;         0
+&quot;/a~1b&quot;     1
+&quot;/c%d&quot;      2
+&quot;/e^f&quot;      3
+&quot;/g|h&quot;      4
+&quot;/i\\j&quot;     5
+&quot;/k\&quot;l&quot;     6
+&quot;/ &quot;        7
+&quot;/m~0n&quot;     8
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="uri-fragment-identifier-representation">
+<h2>URI Fragment Identifier Representation<a class="headerlink" href="#uri-fragment-identifier-representation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>See RFC6901 section &#8220;6. URI Fragment Identifier Representation&#8221;</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
+   <span class="nt">&quot;&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+   <span class="nt">&quot;a/b&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+   <span class="nt">&quot;c%d&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+   <span class="nt">&quot;e^f&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+   <span class="nt">&quot;g|h&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+   <span class="nt">&quot;i\\j&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+   <span class="nt">&quot;k\&quot;l&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+   <span class="nt">&quot; &quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+   <span class="nt">&quot;m~n&quot;</span><span class="p">:</span> <span class="mi">8</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Given the same example document as above, the following URI fragment
+identifiers evaluate to the accompanying values:</p>
+<div class="last highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>#            // the whole document
+#/foo        [&quot;bar&quot;, &quot;baz&quot;]
+#/foo/0      &quot;bar&quot;
+#/           0
+#/a~1b       1
+#/c%25d      2
+#/e%5Ef      3
+#/g%7Ch      4
+#/i%5Cj      5
+#/k%22l      6
+#/%20        7
+#/m~0n       8
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="evaluate-nodes-keys-and-values">
+<h2>Evaluate Nodes, Keys, and Values<a class="headerlink" href="#evaluate-nodes-keys-and-values" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get-node-and-child">
+<h3>get_node_and_child<a class="headerlink" href="#get-node-and-child" title="Permalink to this headline">¶</a></h3>
+<p>Gets the parent node and the node of a given pointer.
+The child is the value of the actual pointed node.
+The data:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {
+        &quot;a&quot;: 10,
+        &quot;b&quot;: 11,
+        &quot;c&quot;: {
+            &quot;x&quot;: 20,
+            &quot;y&quot;: 21,
+            &quot;z&quot;: [
+                {&quot;r&quot;: 30},
+                {&quot;o&quot;: 31}
+            ]
+        }
+    }
+    )
+
+x0,x1  = JSONPointer(&quot;/c/z/0&quot;).get_node_and_child(jsondata)
+</pre></div>
+</td></tr></table></div>
+<p>evaluates to:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x0 = [{&#39;r&#39;: 30}, {&#39;o&#39;: 31}]  # /c/z
+x1 = {&#39;r&#39;: 30}               # /c/z/0
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="get-node-and-key">
+<h3>get_node_and_key<a class="headerlink" href="#get-node-and-key" title="Permalink to this headline">¶</a></h3>
+<p>Gets the parent node and the key of a given pointer.
+The key is the last item of the path, pointing to
+the node.
+The data:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {
+        &quot;a&quot;: 10,
+        &quot;b&quot;: 11,
+        &quot;c&quot;: {
+            &quot;x&quot;: 20,
+            &quot;y&quot;: 21,
+            &quot;z&quot;: [
+                {&quot;r&quot;: 30},
+                {&quot;o&quot;: 31}
+            ]
+        }
+    }
+    )
+
+x0,x1  = JSONPointer(&quot;/c/z/0&quot;).get_node_and_key(jsondata)
+</pre></div>
+</td></tr></table></div>
+<p>evaluates to:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x0 = [{&#39;r&#39;: 30}, {&#39;o&#39;: 31}]  # /c/z
+x1 = 0                       # 0
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="get-node-value">
+<h3>get_node_value<a class="headerlink" href="#get-node-value" title="Permalink to this headline">¶</a></h3>
+<p>Gets the value of the pointed node, which is basically the
+same as the result of <em>get_node</em>.
+The data:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {
+        &quot;a&quot;: 10,
+        &quot;b&quot;: 11,
+        &quot;c&quot;: {
+            &quot;x&quot;: 20,
+            &quot;y&quot;: 21,
+            &quot;z&quot;: [
+                {&quot;r&quot;: 30},
+                {&quot;o&quot;: 31}
+            ]
+        }
+    }
+    )
+
+x0,x1  = JSONPointer(&quot;/c/z/0&quot;).get_node_value(jsondata)
+</pre></div>
+</td></tr></table></div>
+<p>evaluates to:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x = {&#39;r&#39;: 30}   # /c/z/0
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="get-node-exist">
+<h3>get_node_exist<a class="headerlink" href="#get-node-exist" title="Permalink to this headline">¶</a></h3>
+<p>Gets the path splitted into it&#8217;s existing component, and the
+non-existent part of the path.
+When the node exists, the latter is empty.
+The data:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {
+        &quot;a&quot;: 10,
+        &quot;b&quot;: 11,
+        &quot;c&quot;: {
+            &quot;x&quot;: 20,
+            &quot;y&quot;: 21,
+            &quot;z&quot;: [
+                {&quot;r&quot;: 30},
+                {&quot;o&quot;: 31}
+            ]
+        }
+    }
+    )
+
+x0,x1  = JSONPointer(&quot;/c/z/0&quot;).get_node_value(jsondata)
+</pre></div>
+</td></tr></table></div>
+<p>evaluates to:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x = [{&#39;r&#39;: 30}, None]
+</pre></div>
+</td></tr></table></div>
+<p>While the call:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x  = JSONPointer(&quot;/c/z/0/y&quot;).get_node_value(jsondata)
+</pre></div>
+</td></tr></table></div>
+<p>evaluates to:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>x = [{&#39;r&#39;: 30}, [&#39;y&#39;]]
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="iterate-paths">
+<h2>Iterate Paths<a class="headerlink" href="#iterate-paths" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="iterate-path-items">
+<h3>Iterate Path Items<a class="headerlink" href="#iterate-path-items" title="Permalink to this headline">¶</a></h3>
+<p>The method <em>iter_path</em> iterates the path parts of the <em>JSONPointer</em> itself.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from __future__ import absolute_import
+from __future__ import print_function
+
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {&#39;a&#39;: {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}}
+    )
+
+jp = JSONPointer(&#39;/a/b/0/c&#39;)
+
+
+for jpi in jp.iter_path():
+    print(jpi)
+</pre></div>
+</td></tr></table></div>
+<p>with the resulting display</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>a
+b
+0
+c
+</pre></div>
+</td></tr></table></div>
+<p>The following example verifies the path items for presence
+by using the data.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from __future__ import absolute_import
+from __future__ import print_function
+
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {&#39;a&#39;: {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}}
+    )
+
+jp = JSONPointer(&#39;/a/b/1/c&#39;)
+
+
+for jpi in jp.iter_path(jsondata):
+    print(jpi)
+</pre></div>
+</td></tr></table></div>
+<p>Resulting for &#8216;<em>/a/b/1/c</em>&#8216; in the error</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>jsondata.JSONPointerError: ERROR::Node(2):1 of /a/b/1/c:list index out of range
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="iterate-sub-paths">
+<h3>Iterate Sub Paths<a class="headerlink" href="#iterate-sub-paths" title="Permalink to this headline">¶</a></h3>
+<p>The method <em>iter_path_subpaths</em> iterates the sub paths resulting from cumulated
+the path items.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from __future__ import absolute_import
+from __future__ import print_function
+
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {&#39;a&#39;: {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}}
+    )
+
+jp = JSONPointer(&#39;/a/b/0/c&#39;)
+for jpi in jp.iter_path_subpaths(jsondata):
+    print(jpi)
+</pre></div>
+</td></tr></table></div>
+<p>Resulting for &#8216;<em>/a/b/0/c</em>&#8216; in</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>[&#39;a&#39;]
+[&#39;a&#39;, &#39;b&#39;]
+[&#39;a&#39;, &#39;b&#39;, 0]
+[&#39;a&#39;, &#39;b&#39;, 0, &#39;c&#39;]
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="iterate-path-nodes">
+<h3>Iterate Path Nodes<a class="headerlink" href="#iterate-path-nodes" title="Permalink to this headline">¶</a></h3>
+<p>The method <em>iter_path_nodes</em> iterates the nodes resulting from the path items of
+the <em>JSONPointer</em>.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from __future__ import absolute_import
+from __future__ import print_function
+
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {&#39;a&#39;: {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}}
+    )
+
+jp = JSONPointer(&#39;/a/b/0/c&#39;)
+
+for jpi in jp.iter_path_nodes(jsondata):
+    print(jpi)
+</pre></div>
+</td></tr></table></div>
+<p>Resulting for &#8216;<em>/a/b/0/c</em>&#8216; in the display of the node contents
+of the cumulated subpaths</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>{&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}
+[{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]
+{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}
+2
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="iterate-path-data">
+<h3>Iterate Path Data<a class="headerlink" href="#iterate-path-data" title="Permalink to this headline">¶</a></h3>
+<p>The method <em>iter_path_subpathdata</em> iterates the complete data resulting from the path items of
+the <em>JSONPointer</em>.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span># -*- coding:utf-8   -*-
+from __future__ import absolute_import
+from __future__ import print_function
+
+from jsondata.jsondata import JSONData
+from jsondata.jsonpointer import JSONPointer
+
+jsondata = JSONData(
+    {&#39;a&#39;: {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]}}
+    )
+
+jp = JSONPointer(&#39;/a/b/0/c&#39;)
+
+for jpi in jp.iter_path_subpathdata(jsondata):
+    print(jpi)
+</pre></div>
+</td></tr></table></div>
+<p>Resulting for &#8216;<em>/a/b/0/c</em>&#8216; in the display of the node contents
+of the cumulated subpaths consisting of the tuple</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>(&lt;path-item&gt;, &lt;sub-path&gt;, &lt;node&gt;)
+</pre></div>
+</td></tr></table></div>
+<p>with the output</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>(&#39;a&#39;, [&#39;a&#39;], {&#39;b&#39;: [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}]})
+(&#39;b&#39;, [&#39;a&#39;, &#39;b&#39;], [{&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3}])
+(0, [&#39;a&#39;, &#39;b&#39;, 0], {&#39;c&#39;: 2, &#39;d&#39;: 4, &#39;f&#39;: 3})
+(&#39;c&#39;, [&#39;a&#39;, &#39;b&#39;, 0, &#39;c&#39;], 2)
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HowTo JSONPointer - RFC6901</a><ul>
+<li><a class="reference internal" href="#pointer-syntax">Pointer Syntax</a></li>
+<li><a class="reference internal" href="#json-string-representation">JSON String Representation</a></li>
+<li><a class="reference internal" href="#uri-fragment-identifier-representation">URI Fragment Identifier Representation</a></li>
+<li><a class="reference internal" href="#evaluate-nodes-keys-and-values">Evaluate Nodes, Keys, and Values</a><ul>
+<li><a class="reference internal" href="#get-node-and-child">get_node_and_child</a></li>
+<li><a class="reference internal" href="#get-node-and-key">get_node_and_key</a></li>
+<li><a class="reference internal" href="#get-node-value">get_node_value</a></li>
+<li><a class="reference internal" href="#get-node-exist">get_node_exist</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iterate-paths">Iterate Paths</a><ul>
+<li><a class="reference internal" href="#iterate-path-items">Iterate Path Items</a></li>
+<li><a class="reference internal" href="#iterate-sub-paths">Iterate Sub Paths</a></li>
+<li><a class="reference internal" href="#iterate-path-nodes">Iterate Path Nodes</a></li>
+<li><a class="reference internal" href="#iterate-path-data">Iterate Path Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto_class_jsonpatch.html"
+                        title="previous chapter">JSONPatch - RFC6902</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_class_jsonpointer_relative.html"
+                        title="next chapter">Relative JSONPointer - draft-handrews-relative-json-pointer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_class_jsonpointer.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpointer_relative.html" title="Relative JSONPointer - draft-handrews-relative-json-pointer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpatch.html" title="JSONPatch - RFC6902"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" >Howto</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.__init__ &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="next" title="‘jsondata.jsondata’ - Module" href="jsondata_jsondata_doc.html" />
+    <link rel="prev" title="‘jsondata’ - package" href="index_jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsondata_doc.html" title="‘jsondata.jsondata’ - Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index_jsondata.html" title="‘jsondata’ - package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" accesskey="U">&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-init">
+<span id="commonconsts"></span><h1>jsondata.__init__<a class="headerlink" href="#jsondata-init" title="Permalink to this headline">¶</a></h1>
+<p>The data represented as in-memory &#8216;json&#8217; compatible structure,
+with dynamically added and/or removed branches.
+The components are:</p>
+<ul class="simple">
+<li><strong>JSONData</strong>:
+The main class JSONData provides for the core interface.</li>
+<li><strong>JSONDataSerializer</strong>:
+Derived from JSONData provides for serialization and integration
+of documents and sub-documents.</li>
+<li><strong>JSONPointer</strong>:
+The JSONPointer module provides for addressing in accordance
+to RCF7159 and RFC6901.</li>
+<li><strong>JSONPatch</strong>:
+The JSONPatch module provides features in accordance to RFC6902.</li>
+<li><strong>JSONDiff</strong>:
+Structure utilities.</li>
+</ul>
+<div class="section" id="module-jsondata.__init__">
+<span id="module"></span><h2>Module<a class="headerlink" href="#module-jsondata.__init__" title="Permalink to this headline">¶</a></h2>
+<p>Modular processing of JSON data by trees and branches, pointers and patches.</p>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="assigment-types">
+<span id="commonconstsassigntypes"></span><span id="index-0"></span><h3>Assigment Types<a class="headerlink" href="#assigment-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>C_REF(0)</em> - OP-Copy: Copy reference.</li>
+<li><em>C_DEEP(1)</em> - OP-Copy: Copy deep.</li>
+<li><em>C_SHALLOW(2)</em> - OP-Copy: Copy shallow.</li>
+</ul>
+</div>
+<div class="section" id="branch-operations-types">
+<span id="commonconstsbranchopsets"></span><span id="index-1"></span><h3>Branch-Operations Types<a class="headerlink" href="#branch-operations-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>B_ALL(0)</em> - OP-On-Branches: in any case.</li>
+<li><em>B_AND(1)</em> - OP-On-Branches: only when both present.</li>
+<li><em>B_OR(2)</em> - OP-On-Branches: if one is present.</li>
+<li><em>B_XOR(3)</em> - OP-On-Branches: if only one is present.</li>
+<li><em>B_MOD(4)</em> - OP-On-Branches: modulo of branches.</li>
+<li><em>B_SUB(5)</em> - OP-On-Branches: subtract branches.</li>
+<li><em>B_MULT(6)</em> - OP-On-Branches: add a pattern to the whole tree.</li>
+<li><em>B_DIV(7)</em> - OP-On-Branches: remove a pattern from the whole tree.</li>
+</ul>
+</div>
+<div class="section" id="character-display">
+<span id="commonconstscharcterdisp"></span><span id="index-2"></span><h3>Character Display<a class="headerlink" href="#character-display" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>CHARS_RAW(0)</em> - display character set as raw</li>
+<li><em>CHARS_STR(1)</em> - display character set as str</li>
+<li><em>CHARS_UTF(2)</em> - display character set as utf</li>
+</ul>
+</div>
+<div class="section" id="data-scopes">
+<span id="pointerdisplaytype"></span><span id="index-3"></span><h3>Data Scopes<a class="headerlink" href="#data-scopes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>SD_BOTH(0)</em> - Apply on mixed input and output data.</li>
+<li><em>SD_INPUT(1)</em> - Apply on input data.</li>
+<li><em>SD_OUTPUT(2)</em> - Apply on output data.</li>
+</ul>
+<span class="target" id="index-4"></span></div>
+<div class="section" id="display-style">
+<span id="commonconstsdsipstyle"></span><span id="index-5"></span><h3>Display Style<a class="headerlink" href="#display-style" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>PT_PATH(0)</em> - Displays a list of items.</li>
+<li><em>PT_RFC6901(1)</em> - Displays rfc6901 strings.</li>
+<li><em>PT_NODE(2)</em> - Displays the node.</li>
+</ul>
+</div>
+<div class="section" id="line-handling-of-overflow">
+<span id="commonconstslineoverflow"></span><span id="index-6"></span><h3>Line Handling of Overflow<a class="headerlink" href="#line-handling-of-overflow" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>LINE_CUT(0)</em> - force line fit</li>
+<li><em>LINE_WRAP(1)</em> - wrap line in order to fit to length</li>
+</ul>
+</div>
+<div class="section" id="modes">
+<span id="commonconstsmodes"></span><span id="index-7"></span><h3>Modes<a class="headerlink" href="#modes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="data">
+<h4>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><em>MJ_RFC4627(1)</em> - The first JSON RFC by July 2006 <a class="reference internal" href="references.html#rfc4627" id="id1">[RFC4627]</a>.</li>
+<li><em>MJ_RFC7493(2)</em> - The iJSON RFC - for now same as RFC7159 <a class="reference internal" href="references.html#rfc7493" id="id2">[RFC7493]</a>.</li>
+<li><em>MJ_RFC7159(2)</em> - The JSON RFC by &#8216;now&#8217;, by March 2014 <a class="reference internal" href="references.html#rfc7159" id="id3">[RFC7159]</a>.</li>
+<li><em>MJ_RFC8259(4)</em> - The JSON RFC by December 2017 <a class="reference internal" href="references.html#rfc8259" id="id4">[RFC8259]</a>.</li>
+<li><em>MJ_ECMA264(16)</em> - The first JSON EMCMA standard [ECMA264].</li>
+<li><em>MJ_RFC6901(32)</em> - JSONPointer first IETF RFC <a class="reference internal" href="references.html#rfc6901" id="id6">[RFC6901]</a>.</li>
+<li><em>MJ_RELPOINTER(64)</em> - JSONPointer - relative pointer Draft-01 January 2018 <a class="reference internal" href="references.html#relpointer" id="id7">[RELPOINTER]</a>.</li>
+<li><em>MJ_RFC6902(128)</em> - JSONPatch first IETF RFC <a class="reference internal" href="references.html#rfc6902" id="id8">[RFC6902]</a>.</li>
+</ul>
+</div>
+<div class="section" id="schema">
+<h4>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><em>MS_DRAFT3(512)</em> - The first supported JSONSchema IETF-Draft.</li>
+<li><em>MS_DRAFT4(1024)</em> - The current supported JSONSchema IETF-Draft <a class="reference internal" href="references.html#zyp" id="id9">[ZYP]</a>.</li>
+</ul>
+<p>Defaults:</p>
+<ul class="simple">
+<li><em>MS_ON = MS_DRAFT4</em> - The current default.</li>
+<li><em>MS_OFF(0)</em> - No validation.</li>
+<li><em>MODE_SCHEMA_DEFAULT = MS_OFF</em> - The current default validation mode.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="match-criteria">
+<span id="commonconstsmatchcriteria"></span><span id="index-8"></span><h3>Match Criteria<a class="headerlink" href="#match-criteria" title="Permalink to this headline">¶</a></h3>
+<p>Match criteria for node comparison.</p>
+<ul class="simple">
+<li><em>MATCH_INSERT(0)</em> - For dicts.</li>
+<li><em>MATCH_NO(1)</em> - Negates the whole set.</li>
+<li><em>MATCH_KEY(2)</em> - For dicts.</li>
+<li><em>MATCH_CHLDATTR(3)</em> - For dicts and lists.</li>
+<li><em>MATCH_INDEX(4)</em> - For lists.</li>
+<li><em>MATCH_MEM(5)</em> - For dicts(value) and lists.</li>
+<li><em>MATCH_NEW(6)</em> - If not present create a new, else ignore and keep present untouched.</li>
+<li><em>MATCH_PRESENT(7)</em> - Check all are present, else fails.</li>
+</ul>
+</div>
+<div class="section" id="match-sets">
+<span id="commonconstsmatchsets"></span><span id="index-9"></span><h3>Match Sets<a class="headerlink" href="#match-sets" title="Permalink to this headline">¶</a></h3>
+<p>Defines the returned sets of matches.</p>
+<ul class="simple">
+<li><em>M_FIRST(1)</em> - The first match only.</li>
+<li><em>M_LAST(2)</em> - The last match only.</li>
+<li><em>M_ALL(4)</em> - All matches.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="json-notation">
+<span id="commonconstsjsonnotation"></span><span id="index-10"></span><h2>JSON Notation<a class="headerlink" href="#json-notation" title="Permalink to this headline">¶</a></h2>
+<p>Notation of the API - in/out.</p>
+<ul class="simple">
+<li><em>NOTATION_NATIVE(0)</em> - JSON notation in accordance to RFC7159. This is the default.</li>
+<li><em>NOTATION_JSON(1)</em> - JSON notation in accordance to RFC7159 with RFC3986.</li>
+<li><em>NOTATION_JSON_REL(2)</em> - JSON notation as relative pointer.</li>
+<li><em>NOTATION_HTTP_FRAGMENT(1)</em> - JSON notation in accordance to RFC7159 with RFC3986.</li>
+</ul>
+<div class="section" id="operator-scopes">
+<span id="commonconstsscope"></span><span id="index-11"></span><h3>Operator Scopes<a class="headerlink" href="#operator-scopes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>SC_DATA(0)</em> - OP-Scope: the managed JSON data only.</li>
+<li><em>SC_SCHEMA(1)</em> - OP-Scope: the managed JSON schema only.</li>
+<li><em>SC_JSON(2)</em> - OP-Scope: the managed JSON data and schema only.</li>
+<li><em>SC_OBJ(3)</em> - OP-Scope: the attributes of current instance.</li>
+<li><em>SC_ALL(4)</em> - OP-Scope: the complete object, including data.</li>
+<li><em>C_DEFAULT = C_REF</em> - Default value.</li>
+</ul>
+</div>
+<div class="section" id="pointer-display">
+<span id="id10"></span><h3>Pointer Display<a class="headerlink" href="#pointer-display" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>PT_PATH = 0</em></li>
+<li><em>PT_RFC6901 = 1</em></li>
+</ul>
+</div>
+<div class="section" id="print-formats">
+<span id="printformats"></span><span id="index-12"></span><h3>Print Formats<a class="headerlink" href="#print-formats" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>DF_SUMUP = 0</em> - short list</li>
+<li><em>DF_CSV = 1</em> - csv, for now semicolon only</li>
+<li><em>DF_JSON = 3</em> - JSON struture</li>
+<li><em>DF_TABLE = 4</em> - table, for now fixed</li>
+<li><em>DF_REVIEW = 5</em> - short for quick review</li>
+<li><em>DF_REPR = 6</em> - repr() - raw string, Python syntax</li>
+<li><em>DF_STR = 7</em> - str() - formatted string, Python syntax</li>
+</ul>
+</div>
+<div class="section" id="return-types">
+<span id="commonconstsrettypes"></span><span id="index-13"></span><h3>Return Types<a class="headerlink" href="#return-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>R_OBJ(0)</em> - Return object of type self.</li>
+<li><em>R_DATA(1)</em> - Return self.data.</li>
+<li><em>R_JDATA(2)</em> 0 Return object of type JSONData.</li>
+</ul>
+</div>
+<div class="section" id="search-parameters">
+<span id="searchparam"></span><span id="index-14"></span><h3>Search Parameters<a class="headerlink" href="#search-parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>SEARCH_FIRST(0)</em> - Break display after first match.</li>
+<li><em>SEARCH_ALL(1)</em> - List all matches.</li>
+</ul>
+</div>
+<div class="section" id="sort-order">
+<span id="sortorder"></span><span id="index-15"></span><h3>Sort Order<a class="headerlink" href="#sort-order" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>S_NONE = 0</em> - no sort</li>
+<li><em>S_SIMPLE = 1</em> - goups upper lower</li>
+</ul>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataAmbiguityError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataAmbiguityError</code><span class="sig-paren">(</span><em>requested</em>, <em>*sources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataAmbiguityError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataAmbiguityError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error ambiguity of provided parameters.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>base Exception.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataIndexError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataIndexError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataIndexError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataIndexError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataKeyError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataKeyError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataKeyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataKeyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataModeError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataModeError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataModeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataModeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type error of source file content.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataNodeTypeError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataNodeTypeError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataNodeTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataNodeTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on NodeTypes.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataParameterError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataParameterError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataParameterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataParameterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erroneous parameters.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataPatchError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataPatchError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataPatchError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataPatchError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataPatchItemError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataPatchItemError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataPatchItemError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataPatchItemError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataPathError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataPathError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataPathError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataPathError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataSourceFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataSourceFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataSourceFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataSourceFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on read of a source file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataTargetFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataTargetFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataTargetFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataTargetFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on writing a file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONDataValueError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONDataValueError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONDataValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONDataValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on a value.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.__init__.JSONPointerError">
+<em class="property">exception </em><code class="descclassname">jsondata.__init__.</code><code class="descname">JSONPointerError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/__init__.html#JSONPointerError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.__init__.JSONPointerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pointer error.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">jsondata.__init__</a><ul>
+<li><a class="reference internal" href="#module-jsondata.__init__">Module</a></li>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+<li><a class="reference internal" href="#assigment-types">Assigment Types</a></li>
+<li><a class="reference internal" href="#branch-operations-types">Branch-Operations Types</a></li>
+<li><a class="reference internal" href="#character-display">Character Display</a></li>
+<li><a class="reference internal" href="#data-scopes">Data Scopes</a></li>
+<li><a class="reference internal" href="#display-style">Display Style</a></li>
+<li><a class="reference internal" href="#line-handling-of-overflow">Line Handling of Overflow</a></li>
+<li><a class="reference internal" href="#modes">Modes</a><ul>
+<li><a class="reference internal" href="#data">Data</a></li>
+<li><a class="reference internal" href="#schema">Schema</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#match-criteria">Match Criteria</a></li>
+<li><a class="reference internal" href="#match-sets">Match Sets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json-notation">JSON Notation</a><ul>
+<li><a class="reference internal" href="#operator-scopes">Operator Scopes</a></li>
+<li><a class="reference internal" href="#pointer-display">Pointer Display</a></li>
+<li><a class="reference internal" href="#print-formats">Print Formats</a></li>
+<li><a class="reference internal" href="#return-types">Return Types</a></li>
+<li><a class="reference internal" href="#search-parameters">Search Parameters</a></li>
+<li><a class="reference internal" href="#sort-order">Sort Order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index_jsondata.html"
+                        title="previous chapter">&#8216;jsondata&#8217; - package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsondata_jsondata_doc.html"
+                        title="next chapter">&#8216;jsondata.jsondata&#8217; - Module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_init_doc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsondata_doc.html" title="‘jsondata.jsondata’ - Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index_jsondata.html" title="‘jsondata’ - package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" >&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.Selftest &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../../index.html" />
+    <link rel="up" title="jsondata" href="../jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" accesskey="U">jsondata</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata.Selftest</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Test of basic features for the user by &#39;--selftest&#39;.</span>
+
+<span class="sd">This module is used by &#39;jsondc&#39; when the opverify_data_schemaardoced </span>
+<span class="sd">basic functional checks by calling &#39;runselftest&#39;.</span>
+
+<span class="sd">The display of actions and results could be activated and </span>
+<span class="sd">raised by multiple repetition of the &#39;-v&#39; option.</span>
+
+<span class="sd">The following data and schema are applied:</span>
+<span class="sd">    0. jsondata/data.json + jsondata/schema.jsd</span>
+<span class="sd">    1. jsondata/datacheck.json + jsondata/datacheck.jsd</span>
+
+<span class="sd">The performed process flow is:</span>
+<span class="sd">    0. load</span>
+<span class="sd">    1. validate</span>
+<span class="sd">    2. verify</span>
+
+<span class="sd">By default either &#39;True&#39; is returned, or in case of a failed test</span>
+<span class="sd">and/or error condition an exception is raised.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.12&#39;</span>
+<span class="n">__uuid__</span><span class="o">=</span><span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span><span class="c1">#,jsonschema</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">jsondata.JSONPointer</span> <span class="k">import</span> <span class="n">JSONPointer</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#</span><span class="se">\n</span><span class="s2">#*** Set &#39;PYTHONPATH&#39; (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">#</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">jsondata.JSONDataSerializer</span> <span class="k">import</span> <span class="n">JSONDataSerializer</span> <span class="k">as</span> <span class="n">ConfigData</span>
+    <span class="kn">from</span> <span class="nn">jsondata.JSONDataSerializer</span> <span class="k">import</span> <span class="n">MODE_SCHEMA_OFF</span><span class="p">,</span><span class="n">MODE_SCHEMA_DRAFT3</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#</span><span class="se">\n</span><span class="s2">#*** Set &#39;PYTHONPATH&#39; (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">#</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="c1"># name of application, used for several filenames as default</span>
+<span class="n">_APPNAME</span> <span class="o">=</span> <span class="s2">&quot;selftest&quot;</span>
+
+<span class="c1"># Sets display for inetractive JSON/JSONschema design.</span>
+<span class="n">_interactive</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">_verbose</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="runselftest"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.runselftest">[docs]</a><span class="k">def</span> <span class="nf">runselftest</span><span class="p">(</span><span class="n">appname</span><span class="o">=</span><span class="s2">&quot;selftest&quot;</span><span class="p">,</span><span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Performs the selftest returns True or False.</span>
+<span class="sd">    Executes some the basic runtime test cases for user verification.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        appname: Name of the application. Changing this may break the</span>
+<span class="sd">            selftest.</span>
+<span class="sd">            default:=selftest</span>
+
+<span class="sd">        **kargs:</span>
+<span class="sd">            debug: Displays extended state data for developers.</span>
+<span class="sd">                Requires __debug__==True.</span>
+<span class="sd">            verbose: Extends the amount of the display of </span>
+<span class="sd">                processing data.</span>
+<span class="sd">            _verbose=#levels: Extends the amount of the display </span>
+<span class="sd">                of processing data by given number of levels</span>
+<span class="sd">                at once.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Selftest object.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        bypassed subsystems</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">debug</span>
+    <span class="k">global</span> <span class="n">_verbose</span>
+    
+    <span class="c1"># set display mode for errors</span>
+    <span class="n">_interactive</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_verbose</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">debug</span> <span class="o">=</span> <span class="n">kargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_o</span><span class="p">,</span><span class="n">_a</span> <span class="ow">in</span> <span class="n">kargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">_o</span> <span class="o">==</span> <span class="s1">&#39;verbose&#39;</span><span class="p">:</span>
+            <span class="n">_verbose</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">_o</span> <span class="o">==</span> <span class="s1">&#39;_verbose&#39;</span><span class="p">:</span>
+            <span class="n">_verbose</span> <span class="o">+=</span> <span class="n">_a</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># load tests</span>
+    <span class="n">load_data</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    <span class="n">load_appname</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    
+    <span class="c1">#</span>
+    <span class="c1"># validation tests</span>
+    <span class="n">verify_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    <span class="n">verify_appname_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># JSONPointer tests</span>
+    <span class="n">jsonpointer_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    <span class="n">jsonpointer_selftest_data</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    <span class="n">jsonpointer_selftest_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">True</span></div>
+        
+<div class="viewcode-block" id="printverbose"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.printverbose">[docs]</a><span class="k">def</span> <span class="nf">printverbose</span><span class="p">(</span><span class="n">lvl</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">lvl</span><span class="o">&lt;=</span><span class="n">_verbose</span> <span class="ow">or</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">args</span></div>
+    
+<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and verifies the self test &#39;data.json&#39;.</span>
+
+<span class="sd">    Therefore the result of the creation of JSONDataSerializer </span>
+<span class="sd">    is compared to the load by json.load().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1"># case=0:</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;data.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;schema.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;load_data: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_OFF</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+
+    <span class="c1"># jval</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">datafile</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Missing JSON data:file=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+    <span class="c1"># load data</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">jval</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">jval</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to load data:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">data_file</span><span class="p">))</span>
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;check data...&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">,]:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;]...&quot;</span><span class="p">)</span>   
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;streetAddress&#39;</span><span class="p">,</span><span class="s2">&quot;city&quot;</span><span class="p">,</span><span class="s2">&quot;houseNumber&quot;</span><span class="p">,]:</span>
+            <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+            <span class="n">jdata</span> <span class="o">=</span> <span class="n">jval</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+            <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;]...OK&quot;</span><span class="p">)</span>   
+       
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;phoneNumber&#39;</span><span class="p">,]:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;]...&quot;</span><span class="p">)</span>   
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,]:</span>
+            <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;]...&quot;</span><span class="p">)</span>   
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span><span class="s2">&quot;number&quot;</span><span class="p">,]:</span>
+                <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">p</span><span class="p">]</span>
+                <span class="n">jdata</span> <span class="o">=</span> <span class="n">jval</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">p</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+                <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;]...OK&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="load_appname"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.load_appname">[docs]</a><span class="k">def</span> <span class="nf">load_appname</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and verifies the self test &#39;selftest.json&#39;.</span>
+
+<span class="sd">    Therefore the result of the creation of JSONDataSerializer</span>
+<span class="sd">    is compared to the load by json.load().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1"># case=0:</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;load_appname: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_OFF</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+
+    <span class="c1"># jval</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">datafile</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Missing JSON data:file=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+    <span class="c1"># load data</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">jval</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">jval</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to load data:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">data_file</span><span class="p">))</span>
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers]...&quot;</span><span class="p">)</span>   
+
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;domestic&#39;</span><span class="p">,</span><span class="s1">&#39;abroad&#39;</span><span class="p">,]:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;]...&quot;</span><span class="p">)</span>   
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,]:</span>
+            <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;]...&quot;</span><span class="p">)</span>
+            <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="n">jdata</span> <span class="o">=</span> <span class="n">jval</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+            <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][name]...OK&quot;</span><span class="p">)</span>
+    
+            <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;industries&quot;</span><span class="p">]</span>
+            <span class="n">jdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;industries&quot;</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+            <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][industries]...OK&quot;</span><span class="p">)</span>
+    
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,]:</span>
+                <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="n">jdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+                <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][products][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][name]...OK&quot;</span><span class="p">)</span>
+         
+                <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;quantities&quot;</span><span class="p">]</span>
+                <span class="n">jdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;quantities&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+                <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][products][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][quantities]...OK&quot;</span><span class="p">)</span>   
+         
+                <span class="n">cdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span>
+                <span class="n">jdata</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;customers&quot;</span><span class="p">][</span><span class="n">l</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">][</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">cdata</span> <span class="o">==</span> <span class="n">jdata</span> 
+                <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;check data[customers][&quot;</span><span class="o">+</span><span class="n">l</span><span class="o">+</span><span class="s2">&quot;][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][products][&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;][priority]...OK&quot;</span><span class="p">)</span>   
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="verify_data_schema"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.verify_data_schema">[docs]</a><span class="k">def</span> <span class="nf">verify_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and validates the self test &#39;data.json&#39; and &#39;schema.jsd&#39;.</span>
+
+<span class="sd">    Therefore the result of the creation of JSONDataSerializer is performed</span>
+<span class="sd">    with draft3 validation by jsonschema.validate().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1"># case=0:</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;data.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;schema.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;verify_data_schema: load and validate &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;verify_data_schema: load and validate &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_DRAFT3</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="verify_appname_schema"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.verify_appname_schema">[docs]</a><span class="k">def</span> <span class="nf">verify_appname_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and validates the self test &#39;selftest.json&#39; and &#39;selftest.jsd&#39;.</span>
+
+<span class="sd">    Therefore the result of the creation of JSONDataSerializer is performed</span>
+<span class="sd">    with draft3 validation by jsonschema.validate().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1">#</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;verify_appname_schema: load and validate &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;verify_appname_schema: load and validate &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_DRAFT3</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="jsonpointer_data_schema"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.jsonpointer_data_schema">[docs]</a><span class="k">def</span> <span class="nf">jsonpointer_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and verifies by using JSONPointer access &#39;data.json&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1"># case=0:</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;data.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;schema.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_data_schema: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_data_schema: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_DRAFT3</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/address&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">jsx</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">jsonptrdata</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="s2">&quot;{u&#39;city&#39;: u&#39;New York&#39;, u&#39;streetAddress&#39;: u&#39;21 2nd Street&#39;, u&#39;houseNumber&#39;: 12}&quot;</span>
+    <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/address/streetAddress&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="s2">&quot;21 2nd Street&quot;</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/address/city&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="s2">&quot;New York&quot;</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/address/houseNumber&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="mi">12</span>
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="jsonpointer_selftest_data"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.jsonpointer_selftest_data">[docs]</a><span class="k">def</span> <span class="nf">jsonpointer_selftest_data</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and verifies by using JSONPointer access &#39;selftest.json&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1">#</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;data.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="s2">&quot;schema.jsd&quot;</span>        
+<span class="c1">#     datafile = position+appname+&quot;.json&quot;        </span>
+<span class="c1">#     schemafile = position+appname+&quot;.jsd&quot;        </span>
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_selftest_data: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_selftest_data: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_DRAFT3</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/address&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">jsx</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">jsonptrdata</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="s2">&quot;{u&#39;city&#39;: u&#39;New York&#39;, u&#39;streetAddress&#39;: u&#39;21 2nd Street&#39;, u&#39;houseNumber&#39;: 12}&quot;</span>
+    <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/type&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="s2">&quot;home&quot;</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/number&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="s2">&quot;212 555-1234&quot;</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/active&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="kc">True</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/private&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="kc">False</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/addons&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="kc">None</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/index&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0/testnumber&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonptr</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">BaseException</span><span class="p">(</span><span class="s2">&quot;Failed to create JSONPointer&quot;</span><span class="p">)</span>    
+    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">jsonptrdata</span> <span class="o">==</span> <span class="mf">1.5</span>
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="jsonpointer_selftest_data_schema"><a class="viewcode-back" href="../../jsondata_m_selftest.html#jsondata.Selftest.jsonpointer_selftest_data_schema">[docs]</a><span class="k">def</span> <span class="nf">jsonpointer_selftest_data_schema</span><span class="p">(</span><span class="n">appname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads and verifies by using JSONPointer access &#39;selftest.json&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span>
+
+    <span class="c1">#</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.json&quot;</span>        
+    <span class="n">schemafile</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">appname</span><span class="o">+</span><span class="s2">&quot;.jsd&quot;</span>        
+    
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_selftest_data_schema: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;jsonpointer_selftest_data_schema: load &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>   
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;#------------------------------------------&quot;</span><span class="p">)</span>   
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datafile</span><span class="p">))</span>
+        <span class="n">printverbose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;DBG:self.schemafile=  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">schemafile</span><span class="p">))</span>
+
+    
+    <span class="n">_kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_verbose</span><span class="o">&gt;</span><span class="mi">2</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MODE_SCHEMA_DRAFT3</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+    <span class="n">_kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+    <span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">_kargs</span><span class="p">)</span>        
+
+
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;domestic&#39;</span><span class="p">,</span><span class="s1">&#39;abroad&#39;</span><span class="p">,]:</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,]:</span>
+
+            <span class="n">basep</span> <span class="o">=</span> <span class="s1">&#39;/customers/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">basep</span><span class="o">+</span><span class="s1">&#39;/name&#39;</span><span class="p">)</span>
+            <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">jsx</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">jsonptrdata</span><span class="p">)</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="s2">&quot;customer&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+
+            <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">basep</span><span class="o">+</span><span class="s1">&#39;/industries&#39;</span><span class="p">)</span>
+            <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">jsx</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">jsonptrdata</span><span class="p">)</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="s2">&quot;industry&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,]:</span> <span class="c1"># products</span>
+                <span class="n">basep</span> <span class="o">=</span> <span class="s1">&#39;/customers/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;/products/&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+                <span class="n">prodlist</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s2">&quot;product&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+                    <span class="s2">&quot;quantities&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="o">+</span><span class="n">p</span><span class="p">,</span>
+                    <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="o">+</span><span class="n">p</span><span class="p">,</span>
+                    <span class="s2">&quot;quota&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="o">+</span><span class="n">p</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">prodlist</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">attr</span> <span class="o">=</span> <span class="n">k</span> <span class="c1"># attribute</span>
+                    <span class="n">ref</span> <span class="o">=</span> <span class="n">v</span> <span class="c1"># attribute value</span>
+                    <span class="c1">#</span>
+                    <span class="n">jsonptr</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">basep</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">attr</span><span class="p">)</span>
+                    <span class="n">jsonptrdata</span> <span class="o">=</span> <span class="n">jsonptr</span><span class="o">.</span><span class="n">get_node_or_value</span><span class="p">(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">jsx</span><span class="o">=</span><span class="n">jsonptrdata</span>
+
+                    <span class="c1">#assert jsx == ref</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+                    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="nb">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s2">&quot;ERROR:AssertionError:k=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; / v=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; / type=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                        <span class="nb">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s2">&quot;ERROR:AssertionError:jsx=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">jsx</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; / type=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jsx</span><span class="p">))</span>
+                        <span class="k">assert</span> <span class="n">jsx</span> <span class="o">==</span> <span class="n">ref</span>
+                        <span class="c1">#raise AssertionError</span>
+                        <span class="c1">#raise Exception</span>
+
+    <span class="n">printverbose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>   </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" >jsondata</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

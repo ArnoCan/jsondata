@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Software Design - A Blueprint &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="software-design-a-blueprint">
+<h1>Software Design - A Blueprint<a class="headerlink" href="#software-design-a-blueprint" title="Permalink to this headline">¶</a></h1>
+<p>The integration of &#8216;jsondata&#8217; into the JSON processing flow could be extended
+by custom classes as required:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>          <span class="o">+----------------------------------------------+</span>
+          <span class="o">|</span>              <span class="n">application</span><span class="o">-</span><span class="n">layer</span>               <span class="o">|</span>    <span class="o">&lt;=</span> <span class="n">Application</span> <span class="n">layer</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span> <span class="n">including</span>
+          <span class="o">+-------------+-------------+--------------+</span>   <span class="o">|</span>       <span class="n">REST</span><span class="o">-</span><span class="n">Middleware</span>
+          <span class="o">|</span> <span class="n">JSONCompute</span> <span class="o">|</span> <span class="n">jsoncliopts</span> <span class="o">|</span> <span class="n">jsondataunit</span> <span class="o">|</span>   <span class="o">|</span>    <span class="o">&lt;=</span> <span class="n">JSON</span> <span class="n">processing</span> <span class="ow">and</span> <span class="n">test</span>
+          <span class="o">+-------------+-------------+--------------+</span>   <span class="o">|</span>
+          <span class="o">+--------------+-------------------------------+</span>
+                 <span class="o">|</span>       <span class="o">|</span>         <span class="o">|</span>
+        <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span>  <span class="o">|</span>  <span class="o">.</span>  <span class="o">.</span> <span class="o">|</span> <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span> <span class="o">|</span> <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span> <span class="o">&lt;=</span> <span class="n">combined</span> <span class="n">API</span>
+                 <span class="o">|</span>       <span class="n">V</span>         <span class="o">|</span>
+                 <span class="o">|</span> <span class="o">+-----------+</span>   <span class="o">|</span>
+<span class="n">RFC6902</span>          <span class="o">|</span> <span class="o">|</span> <span class="n">JSONPatch</span> <span class="o">|</span>   <span class="o">|</span>            <span class="o">&lt;=</span> <span class="n">modify</span> <span class="n">JSON</span> <span class="n">data</span>
+                 <span class="o">|</span> <span class="o">+-----------+</span>   <span class="o">|</span>
+                 <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+                 <span class="n">V</span>     <span class="n">V</span>     <span class="o">|</span>     <span class="o">|</span>
+            <span class="o">+-------------+</span>  <span class="o">|</span>     <span class="o">|</span>
+<span class="n">RFC6901</span>     <span class="o">|</span> <span class="n">JSONPointer</span> <span class="o">|</span>  <span class="o">|</span>     <span class="o">|</span>            <span class="o">&lt;=</span> <span class="n">address</span> <span class="n">JSON</span> <span class="n">data</span>
+            <span class="o">+-------------+</span>  <span class="o">|</span>     <span class="o">|</span>
+                   <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+                   <span class="n">V</span>         <span class="n">V</span>     <span class="n">V</span>
+<span class="n">RFC7159</span>         <span class="o">+---------------------+</span>
+   <span class="o">+</span>            <span class="o">|</span>      <span class="n">JSONData</span>       <span class="o">|</span>         <span class="o">&lt;=</span> <span class="n">integrate</span> <span class="n">JSON</span><span class="o">+</span><span class="n">JSONschema</span>
+<span class="n">DRAFT4</span>          <span class="o">+----------</span><span class="n">o</span><span class="o">----------+</span>
+                           <span class="o">|</span>
+                <span class="o">+---------------------+</span>
+                <span class="o">|</span> <span class="n">JSONDataSerializer</span>  <span class="o">|</span>         <span class="o">&lt;=</span> <span class="n">provide</span> <span class="n">persistency</span> <span class="k">for</span>
+                <span class="o">+---------------------+</span>            <span class="n">JSONData</span>
+
+            <span class="o">*</span>         <span class="o">*</span>          <span class="o">*</span>        <span class="o">*</span>
+        <span class="o">.</span>  <span class="o">.|</span> <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span> <span class="o">|</span> <span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span>  <span class="o">|</span> <span class="o">.</span>  <span class="o">.</span>  <span class="o">.|</span> <span class="o">.</span>  <span class="o">.&lt;=</span> <span class="n">common</span> <span class="n">access</span> <span class="n">to</span> <span class="n">JSON</span> <span class="n">data</span>
+            <span class="n">V</span>         <span class="n">V</span>          <span class="n">V</span>        <span class="n">V</span>
+         <span class="o">+----------------+-----------------+</span>
+<span class="n">RFC7159</span>  <span class="o">|</span>     <span class="n">json</span>       <span class="o">|</span>   <span class="n">jsonschema</span>    <span class="o">|</span>  <span class="o">&lt;=</span> <span class="n">provide</span> <span class="n">JSON</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">JSONschema</span>
+   <span class="o">&amp;&amp;</span>    <span class="o">|</span>     <span class="n">ujson</span>      <span class="o">|</span>                 <span class="o">|</span>
+<span class="n">DRAFT4</span>   <span class="o">+----------------+-----------------+</span>
+</pre></div>
+</div>
+<p>For referenced components refer to resources at
+<a class="reference external" href="index.html#resources">PyPI</a> .</p>
+</div>
+<div class="section" id="layered-subcomponents-for-reuse">
+<h1>Layered Subcomponents for Reuse<a class="headerlink" href="#layered-subcomponents-for-reuse" title="Permalink to this headline">¶</a></h1>
+<p>The overall design is structured for component wise reuse.
+Therefore a layered software stack is implemented, which starts above basic JSON data encoding and decoding
+and adds on top various features:</p>
+<ul class="simple">
+<li>Manage branches of substructures - <strong>jsondata.jsondata</strong></li>
+<li>Serialize JSON documents - <strong>jsondata.jsondataserializer</strong></li>
+<li>Access pointer paths and values - <strong>jsondata.jsonpointer</strong></li>
+<li>Modify data structures and values - <strong>jsondata.jsonpatch</strong></li>
+</ul>
+<p>With the external packages:</p>
+<ul class="simple">
+<li>Computing JSON based data - <strong>jsoncompute.JSONCompute</strong></li>
+<li>Unit tests for the data content of JSON based data - <strong>jsondataunit.JSONDataUnit</strong></li>
+<li>Commandline processing  - <strong>jsoncliopts.JSONCLIOpts</strong></li>
+</ul>
+<p>The JSON-DSL is moved into the package &#8216;jsoncompute&#8217;.</p>
+<p>Utilities for structure analysis and operations on JSON data structures, e.g. diff.</p>
+<p>The syntax primitives of underlying layers are processed by the imported standard packages &#8216;json&#8217; and &#8216;jsonschema&#8217;
+in conformance to related standards.
+Current supported compatible packages include: &#8216;ujson&#8217;.</p>
+<p>The examples from the standards with some extensions are included as Use-Cases in order to
+verify implementation details for the recommendations.
+This serves also as a first introduction to JSON processing with the
+package &#8216;jsondata&#8217;.</p>
+<p>This document provides the developer information for the API, Use-Cases, and the
+documentation of the PyUnit tests as examples and application patterns.</p>
+<div class="section" id="unittest-on-json-data">
+<h2>Unittest on JSON Data<a class="headerlink" href="#unittest-on-json-data" title="Permalink to this headline">¶</a></h2>
+<p>The component &#8216;jsondata&#8217; relies on unittest.TestCase class due to it&#8217;s lower position within
+the software stack.
+In case of large amounts of JSON based data is to be verified consider using the packgae
+&#8216;jsondataunit&#8217; <a class="reference external" href="https://pypi.python.org/pypi/jsondataunit/">[online]</a>, which
+is derived from this package &#8216;jsondata.jsondataserializer&#8217;.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">+---------------------+</span>
+<span class="o">|</span>    <span class="n">JSONDataUnit</span>     <span class="o">|</span>
+<span class="o">+----------+----------+</span>
+           <span class="o">|</span>
+<span class="o">+----------+----------+</span>
+<span class="o">|</span> <span class="n">JSONDataSerializer</span>  <span class="o">|</span>
+<span class="o">+----------+----------+</span>
+           <span class="o">|</span>
+<span class="o">+----------+----------+</span>
+<span class="o">|</span>       <span class="n">JSONData</span>      <span class="o">|</span>
+<span class="o">+---------------------+</span>
+</pre></div>
+</div>
+<p>Du to it&#8217;s base class the class &#8216;JSONDataUnit&#8217; provides the full scope of:</p>
+<ul class="simple">
+<li>Serialization and persistency for regression</li>
+<li>Logic and arithmetic operators for advanced tests</li>
+</ul>
+</div>
+<div class="section" id="commandline-processing">
+<h2>Commandline processing<a class="headerlink" href="#commandline-processing" title="Permalink to this headline">¶</a></h2>
+<p>The component &#8216;jsoncliopts&#8217; extends &#8216;jsondata&#8217; for advanced commandline processing.
+This enables for:</p>
+<ul class="simple">
+<li>partial options which are removed before further processed, e.g.
+by &#8216;getopts&#8217;, or &#8216;argparser&#8217;</li>
+<li>standard internal representation of complex options with subpoptions</li>
+</ul>
+<p>The sturture is due to common processing with additional persistency when reauired as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">+---------------------+</span>       <span class="o">+---------------------+</span>
+<span class="o">|</span>    <span class="n">JSONCLISubOpts</span>   <span class="o">|</span> <span class="o">&lt;---&gt;</span> <span class="o">|</span> <span class="n">JSONDataSerializer</span>  <span class="o">|</span>
+<span class="o">+----------+----------+</span>       <span class="o">+----------+----------+</span>
+           <span class="o">|</span>                             <span class="o">|</span>
+           <span class="o">+--------------+--------------+</span>
+                          <span class="o">|</span>
+               <span class="o">+----------+----------+</span>
+               <span class="o">|</span>       <span class="n">JSONData</span>      <span class="o">|</span>
+               <span class="o">+---------------------+</span>
+</pre></div>
+</div>
+<p>Persistency may be required e.g. in case of test automation for load of regression data.</p>
+<p>Du to it&#8217;s base class the class &#8216;JSONDataUnit&#8217; provides the full scope of:</p>
+<ul class="simple">
+<li>Logic and arithmetic operators for advanced tests</li>
+</ul>
+<p>with optional:</p>
+<ul class="simple">
+<li>Serialization and persistency for regression</li>
+</ul>
+</div>
+<div class="section" id="dsl-for-json-data-jsoncompute">
+<h2>DSL for JSON Data - JSONCompute<a class="headerlink" href="#dsl-for-json-data-jsoncompute" title="Permalink to this headline">¶</a></h2>
+<p>Documents following soon.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Software Design - A Blueprint</a></li>
+<li><a class="reference internal" href="#layered-subcomponents-for-reuse">Layered Subcomponents for Reuse</a><ul>
+<li><a class="reference internal" href="#unittest-on-json-data">Unittest on JSON Data</a></li>
+<li><a class="reference internal" href="#commandline-processing">Commandline processing</a></li>
+<li><a class="reference internal" href="#dsl-for-json-data-jsoncompute">DSL for JSON Data - JSONCompute</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/software_design.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

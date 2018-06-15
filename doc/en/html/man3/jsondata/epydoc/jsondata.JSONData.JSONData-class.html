@@ -1,0 +1,2347 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.JSONData.JSONData</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        <a href="jsondata.JSONData-module.html">Module&nbsp;JSONData</a> ::
+        Class&nbsp;JSONData
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.JSONData.JSONData-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JSONData</h1><p class="nomargin-top">[<span class="codelink"><a href="../jsondata.html#jsondata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData">source&nbsp;code</a></span></p>
+<pre class="literalblock">
+Representation of a JSON based object data tree.
+
+This class provides for the handling of the in-memory data
+by the main hooks 'data', and 'schema'. This includes generic 
+methods for the advanced management of arbitrary 'branches'
+in extension to RCF6902, and additional methods strictly 
+compliant to RFC6902.
+
+Due to the pure in-memory support and addressing by the enclosed 
+module JSONPointer for RFC6901 compliant addressing by in memory
+caching, the JSONData may outperform designs based on 
+operation on the native JSON representation.
+
+Attributes:
+    **data**: The data tree of JSON based objects provided
+        by the module 'json'.
+    **schema**: The validator for 'data' provided by 
+        the module 'jsonschema'.
+
+Common call parameters provided by the methods of this class are:
+    *targetnode := addressreference*
+        The target node of called method. The 'targetnode' in general 
+        represents the target of the called method. In most cases this
+        has to be a reference to a container for the modification 
+        and/or insertion of resulting elements. The methods require
+        the change of contained items, which involves the application
+        of a 'key' pointing to the hook in point of the reference
+        to the modification.
+        
+    *key := key-value* 
+        The hook-in point for references of modified entries within
+        the targetnode container. The following values are supported:
+                   
+    *sourcenode := addressreference*
+        The in-memory node address of the source branch for the method,
+        e.g. 'copy' or 'move' operation.
+
+The address references supported in this class refer the resulting
+in-memory representation of a pointer path. The target is a node 
+within a Python data representation as provided by the package 
+'**json**' and compatible packages, e.g. '**ujson**'. The supported input
+syntax is one of the following interchangeable formats::
+    
+    # The reference to a in-memory-node.
+    addressreference := (
+          nodereference
+        | addressreference-source
+    )
+
+    nodereference:= (
+          &lt;in-memory&gt;
+        | ''
+    )
+    
+    &lt;in-memory&gt; := &quot;Memory representation of a JSON node, a 'dict'
+        or a 'list'. The in-memory Python node reference has to be
+        located within the document, due to performance reasons this
+        is not verified by default.
+        
+        The 'nodereference' could be converted from the
+        'addressreference-source' representation.&quot;
+
+    '' := &quot;Represents the whole document in accordance to RFC6901.
+        Same as 'self.data'.&quot; 
+    
+    # The source of the syntax for the description of the reference
+    # pointer path to a node. This is applicable on paths to be created.
+    addressreference-source := (
+        JSONPointer
+    )
+          
+    JSONPointer:=&quot;A JSONPointer object in accordance to RFC6901.
+        for additional information on input formats refer to the 
+        class documentation.
+        This class provides a fully qualified path pointer, which
+        could be converted into any of the required representations.&quot;
+
+For hooks by 'key-value' within addressed containers::
+
+    key-value:=(None|&lt;list-index&gt;|&lt;dict-key&gt;) 
+        
+    None := &quot;When the 'key' parameter is 'None', the action 
+        optionally could be based on the keys of the 'sourcenode'.  
+        The contents of the branch replace the node contents
+        when the type of the branch matches the hook.&quot;
+
+    &lt;list-index&gt;:=('-'|int)
+    
+    &lt;dict-key&gt;:=&quot;Valid for a 'dict' only, sets key/value pair, 
+        where present is replace, new is created.&quot;
+
+    '-' := &quot;Valid for a 'list' only, appends to present.&quot;
+    
+    int := &quot;Valid for a 'list' only, replaces present when
+        0 &lt; #int &lt; len(Node).&quot;
+   
+In the parameter lists of methods used term 'pointer' is either 
+an object of class 'JSONPointer', or a list of pointer path 
+entries.
+
+The JSON types 'object' and 'array' behave in Python slightly 
+different in accordance to RFC6902. The main difference arise 
+from the restrictions on applicable key values. Whereas the
+ranges are limited logically by the actual container sizes, 
+the object types provide free and unlimited keys. The limit 
+is set by type restriction to unicode and 'non-nil' only 
+for keys.  
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Loads and validates a JSON definition with the corresponding schema file.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__add__"></a><span class="summary-sig-name">__add__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Adds the structure 'x' to 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__add__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__and__"></a><span class="summary-sig-name">__and__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the intersection of 'x' and 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__and__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__and__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__call__" class="summary-sig-name">__call__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Evaluates the pointed value from the document.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__call__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__eq__" class="summary-sig-name">__eq__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this JSONData.data with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__eq__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iadd__"></a><span class="summary-sig-name">__iadd__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Adds the structure 'x' to 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__iadd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__iadd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iand__"></a><span class="summary-sig-name">__iand__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the intersection of 'x' and 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__iand__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__iand__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__imod__"></a><span class="summary-sig-name">__imod__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the difference-modulo-set.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__imod__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__imod__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__imul__"></a><span class="summary-sig-name">__imul__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Duplicates the elements of 'self' 'x' times.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__imul__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__imul__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__mul__" class="summary-sig-name">__mul__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Duplicates the elements of 'self' 'x' times.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__mul__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__mul__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__ior__"></a><span class="summary-sig-name">__ior__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the superset of branches and attributes.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__ior__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__ior__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__isub__"></a><span class="summary-sig-name">__isub__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the residue of X after each present element of 'x' is 
+      removed.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__isub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__isub__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__ixor__"></a><span class="summary-sig-name">__ixor__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the elements present in one only.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__ixor__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__ixor__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__mod__" class="summary-sig-name">__mod__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the difference-modulo-set.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__mod__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__mod__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__radd__"></a><span class="summary-sig-name">__radd__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Adds the structure 'x' to 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__radd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__radd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__rand__"></a><span class="summary-sig-name">__rand__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the intersection of 'x' and 'self', performs deep-operation.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__rand__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__rand__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__rmod__"></a><span class="summary-sig-name">__rmod__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the difference-modulo-set.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__rmod__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__rmod__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__rmul__"></a><span class="summary-sig-name">__rmul__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Duplicates the elements of 'self' 'x' times.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__rmul__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__rmul__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__or__"></a><span class="summary-sig-name">__or__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the superset of branches and attributes.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__or__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__or__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__ror__"></a><span class="summary-sig-name">__ror__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the superset of branches and attributes.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__ror__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__ror__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__rsub__"></a><span class="summary-sig-name">__rsub__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the residue of X after each present element of 'x' is 
+      removed.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__rsub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__rsub__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__rxor__"></a><span class="summary-sig-name">__rxor__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the elements present in one only.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__rxor__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__rxor__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__sub__" class="summary-sig-name">__sub__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Returns the residue of X after each present element of 'x' is removed.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__sub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__sub__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__xor__"></a><span class="summary-sig-name">__xor__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the structure elements present in in one only.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__xor__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__xor__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__repr__"></a><span class="summary-sig-name">__repr__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Dump data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__repr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__str__"></a><span class="summary-sig-name">__str__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Dumps data by pretty print.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__str__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span><br />
+      Support of slices, for 'iterator' refer to self.__iter__.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__getitem__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Provides an iterator for data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__iter__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__iter__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#__ne__" class="summary-sig-name">__ne__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this JSONData with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__ne__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_add" class="summary-sig-name">branch_add</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">sourcenode</span>)</span><br />
+      Add a complete branch into a target structure of type object.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_add" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_add">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_copy" class="summary-sig-name">branch_copy</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">sourcenode</span>,
+        <span class="summary-sig-arg">force</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Copies the source branch to the target node.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_copy" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_copy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_create" class="summary-sig-name">branch_create</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">branch</span>,
+        <span class="summary-sig-arg">value</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates a branch located at targetnode.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_create" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_create">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_move" class="summary-sig-name">branch_move</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">sourcenode</span>,
+        <span class="summary-sig-arg">skey</span>,
+        <span class="summary-sig-arg">force</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">forcext</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Moves a source branch to target node.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_move" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_move">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_remove" class="summary-sig-name">branch_remove</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>)</span><br />
+      Removes a branch from a target structure.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_remove" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_remove">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_replace" class="summary-sig-name">branch_replace</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">sourcenode</span>)</span><br />
+      Replaces the value of the target node by the copy of the source branch.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_replace" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_replace">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getData"></a><span class="summary-sig-name">getData</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the reference to data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.getdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getData">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getSchema"></a><span class="summary-sig-name">getSchema</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the reference to schema.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.getschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getSchema">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#getCanonical" class="summary-sig-name">getCanonical</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span><br />
+      Fetches the canonical value.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.getcanonical" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getCanonical">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#isApplicable" class="summary-sig-name">isApplicable</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">branch</span>,
+        <span class="summary-sig-arg">matchcondition</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Checks applicability by validation of provided match criteria.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.isapplicable" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.isApplicable">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="pop"></a><span class="summary-sig-name">pop</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span><br />
+      Transparently passes the 'pop()' call to 'self.data'.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.pop" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.pop">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#printData" class="summary-sig-name">printData</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pretty</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Prints structured data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.printdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.printData">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#printSchema" class="summary-sig-name">printSchema</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pretty</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Prints structured schema.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.printschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.printSchema">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#setSchema" class="summary-sig-name">setSchema</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">schemafile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">targetnode</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Sets schema or inserts a new branch into the current assigned schema.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.setschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.setSchema">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#validate" class="summary-sig-name">validate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">schema</span>,
+        <span class="summary-sig-arg">validator</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Validate data with schema by selected validator.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.validate" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.validate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS METHODS ==================== -->
+<a name="section-ClassMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#branch_test" class="summary-sig-name">branch_test</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">value</span>)</span><br />
+      Tests match in accordance to RFC6902.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.branch_test" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#getTreeDiff" class="summary-sig-name">getTreeDiff</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">n0</span>,
+        <span class="summary-sig-arg">n1</span>,
+        <span class="summary-sig-arg">difflst</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">alldifs</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">dl</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">''</span>)</span><br />
+      Recursive tree compare for Python trees as used for the package 
+      'json'.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.gettreediff" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getTreeDiff">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONData.JSONData-class.html#getPointerPath" class="summary-sig-name">getPointerPath</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">node</span>,
+        <span class="summary-sig-arg">base</span>,
+        <span class="summary-sig-arg">restype</span>=<span class="summary-sig-default">FIRST</span>)</span><br />
+      Converts a node address into the corresponding pointer path.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondata.html#jsondata.getpointerpath" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getPointerPath">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FIRST"></a><span class="summary-name">FIRST</span> = <code title="1">1</code><br />
+      First match only.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ALL"></a><span class="summary-name">ALL</span> = <code title="3">3</code><br />
+      All matches.
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Loads and validates a JSON definition with the corresponding schema file.
+
+Args:
+    args*: Optional position parameters, these branch_replace corresponding key
+         parameters.
+        data
+        
+    **kargs:
+        data: JSON data within memory.
+            
+            default:= None
+        indent_str: Defied the indentation of 'str'.
+            
+            default:= 4
+        interactive: Hints on command line call for optional change of display format. 
+            
+            default:= False
+        schema: A valid in-meory JSONschema.
+            
+            default:= None
+        validator: [default, draft3, draft4, on, off, ]
+            Sets schema validator for the data file.
+            The values are: default=validate, draft3=Draft3Validator,
+            off=None
+            
+            default:= off
+
+        printdata: branch=None
+            Pretty print resulting final data of branch.
+            
+            default:= top
+        printschema: branch=None
+            Pretty print resulting schema.
+            
+            default:= top
+
+        debug: Displays extended state data for developers.
+            Requires __debug__==True.
+        verbose: Extends the amount of the display of 
+            processing data.
+
+Returns:
+    Results in an initialized object.
+
+Raises:
+    NameError:
+
+    JSONDataValue:
+
+    jsonschema.ValidationError:
+
+    jsonschema.SchemaError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__call__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__call__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Call operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__call__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Evaluates the pointed value from the document.
+
+Args:
+    x: A valid JSONPointer.
+
+Returns:
+    The pointed value, or None.
+
+Raises:
+    JSONPointerException
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__eq__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__eq__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Equality operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__eq__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this JSONData.data with x.
+
+Args:
+    x: A valid JSONData.
+
+Returns:
+    True or False
+
+Raises:
+    JSONDataException
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__mul__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__mul__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__mul__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__mul__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Duplicates the elements of 'self' 'x' times.
+
+The operations::
+
+   z = S * x
+
+Returns the remaining subset of: 
+
+   z = S - 1 * x
+
+where '1*x' is for each present element of 'x'. When multiple exist
+'n-1' remain.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__mod__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__mod__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__mod__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__mod__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns the difference-modulo-set.
+
+The operations::
+
+   z = S % x
+
+Returns the remaining subset of: 
+
+   z = S - n * x
+
+where 'n*x' is the maximum number of present branches 'x'. When
+multiple exist, all matching are removed.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__sub__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__sub__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Subtraction operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__sub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__sub__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns the residue of X after each present element of 'x' is removed.
+
+The operations::
+
+   z = S - x
+
+Returns the remaining subset of: 
+
+   z = S - 1 * x
+
+where '1*x' is for each present element of 'x'. When multiple exist
+'n-1' remain.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__ne__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__ne__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.__ne__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this JSONData with x.
+
+Args:
+    x: A valid JSONData.
+
+Returns:
+    True or False
+
+Raises:
+    JSONDataException
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_add"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_add</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">sourcenode</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_add" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_add">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Add a complete branch into a target structure of type object.
+
+Present previous branches are replaced, non-existent branches are 
+added. The added branch is created by a deep copy, thus is completely 
+independent from the source. 
+
+   Call: *branch_add* ( **t**, **k**, **s** )
+
+   +---+------------------+---------+----------------+-----------+
+   | i |  target          | source  | add            |           |
+   |   +----------+-------+---------+-------+--------+           |
+   |   |  t       | k     | s       | from  | to     | type      |
+   +===+==========+=======+=========+=======+========+===========+
+   | 0 |  node    | key   | node    | s     | t[k]   | any       |
+   +---+----------+-------+---------+-------+--------+-----------+
+   | 1 |  node    | None  | node    | s     | t[*]   | match     |
+   +---+----------+-------+---------+-------+--------+-----------+
+
+    0. Use-Case-0: Any source node type is added as 't[k]'.
+    
+    1. Use-Case-1: The content keys of node 's' are added each
+        to the node 't'. Therefore the node types of 's' and 't'
+        have to match.
+        
+        This behaviour is defined in respect to the parameter 
+        passing of Python.
+         
+Args:
+    targetnode := nodereference
+        Target container node where the branch is to be inserted.
+    
+    key := key-value
+        Hook for the insertion within target node.
+    
+    sourcenode := nodereference
+        Source branch to be inserted into the target tree.
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataNodeType:
+    JSONDataKeyError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_copy"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_copy</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">sourcenode</span>,
+        <span class="sig-arg">force</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_copy" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_copy">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Copies the source branch to the target node.
+
+The copy is internally mapped onto the 'branch_add' call, 
+thus shares basically the same parameters and behaviour.
+Due to the required modification of the target only, the
+copy is slightly different from the 'branch_move' call.
+
+   Call: *branch_copy* ( **t**, **k**, **s** )
+
+   +---+------------------+---------+----------------+-----------+
+   | i |  target          | source  | copy           |           |
+   |   +----------+-------+---------+-------+--------+           |
+   |   |  t       | k     | s       | from  |  to    | type      |
+   +===+==========+=======+=========+=======+========+===========+
+   | 0 |  node    | key   | node    | s     | t[k]   | any       |
+   +---+----------+-------+---------+-------+--------+-----------+
+   | 1 |  node    | None  | node    | s     | t[sk]  | match     |
+   +---+----------+-------+---------+-------+--------+-----------+
+
+    For the description of the Use-Cases refer to branch_add.
+
+Args:
+    targetnode := nodereference
+        Target tree the branch is to be inserted.
+    
+    key := key-value
+        Key of insertion point within target node.
+    
+    sourcenode := nodereference
+        Source branch to be inserted into target tree.
+    
+    force: If true present are replaced, else only non-present 
+        are copied.
+        
+        default:=True
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_create"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_create</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">branch</span>,
+        <span class="sig-arg">value</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_create" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_create">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Creates a branch located at targetnode.
+
+The requested branch as created as child value of provided 
+'targetnode'. 'targetnode' is required to exist.
+ 
+**REMARK**: Current version relies for the created nodes on the
+    content type of the key(str,unicode)/index(int), later 
+    versions may use a provided schema.
+
+   Call: *branch_create* ( **t**, **b**, **v** )
+
+   +---+----------+---------+-------+
+   | i |  target  | branch  | value |
+   |   +----------+---------+-------+
+   |   |  t       | b       | v     |
+   +===+==========+=========+=======+
+   | 0 |  node    | list    | [any] |
+   +---+----------+---------+-------+
+   | 1 |  node    | list    | [any] |
+   +---+----------+---------+-------+
+   | 2 |  node    | pointer | [any] |
+   +---+----------+---------+-------+
+   | 3 |  node    | pointer | [any] |
+   +---+----------+---------+-------+
+
+
+Args:
+    targetnode := nodereference
+        Base node for the insertion of branch.
+
+    branch :=  addressreference-source
+        New branch to be created in the target tree.
+        A Pointer address path relative to the 'targetnode'. 
+
+    value: Optional value for the leaf. The value itselfn
+        could be either an atomic type, or a branch itself
+        in accordance to RFC6902. 
+
+Returns:
+    When successful returns the leaf node, else returns either 
+    'None', or raises an exception.
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_move"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_move</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">sourcenode</span>,
+        <span class="sig-arg">skey</span>,
+        <span class="sig-arg">force</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">forcext</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_move" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_move">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Moves a source branch to target node.
+
+Moves by default only when target is not yet present. The
+parameters for 'list', 'force' enabled to overwrite, whereas 
+the parameter 'forcext' enables to move all entries and 
+extend the target items.
+
+Due to the Python specific passing of flat parameters as
+a copy of the reference without access to the actual source
+entry, these are slightly different from the 'branch_copy'
+and 'branch_add' methods modifying the target only. Therefore 
+additional source keys 'skey' are required by 'move' in order
+to enable the modification of the source entry. 
+
+   Call: *branch_move* ( **t**, **k**, **s**, **sk** )
+
+   +---+------------------+-----------------+---------------+-------+
+   | i |  target          | source          | move          |       |
+   |   +----------+-------+---------+-------+-------+-------+       |
+   |   |  t       | k     | s       | sk    | from  |  to   | type  |
+   +===+==========+=======+=========+=======+=======+=======+=======+
+   | 0 |  node    | key   | node    | key   | s[sk] | t[k]  | any   |
+   +---+----------+-------+---------+-------+-------+-------+-------+
+   | 1 |  node    | None  | node    | key   | s[sk] | t[sk] | match |
+   +---+----------+-------+---------+-------+-------+-------+-------+
+
+   0. Use-Case-0: Moves any.
+
+   1. Use-Case-1: Moves matching key types only: list-to-list, 
+       or dict-to-dict.
+
+Args:
+    targetnode := nodereference
+        Target tree the branch is to be inserted.
+    
+    key := key-value
+        Key of insertion point within target node.
+    
+    sourcenode := nodereference
+        Source branch to be inserted into target tree.
+    
+    skey := key-value
+        Key of the source to be moved to target node.
+
+    force: If true present are replaced, else only 
+        non-present are moved.
+        
+        default:=True
+
+    forcext: If true target size will be extended when 
+        required. This is applicable on 'list' only, and
+        extends RFC6902. The same effect is given for 
+        a 'list' by one of:
+         
+        * key:='-' 
+
+        * key:=None and skey:='-'
+
+Returns:
+    When successful returns 'True', else returns either 
+    'False', or raises an exception.
+
+Raises:
+    JSONData:
+    JSONDataKey:
+    KeyError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_remove"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_remove</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_remove" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_remove">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Removes a branch from a target structure.
+
+The corresponding elements of the 'targetnode' tree are removed.
+The remaining are kept untouched. For tree nodes as leafs the whole
+corresponding subtree is deleted.
+
+REMARK: No reference checks are done, so the user is responsible
+    for additional references.
+
+   Call: *branch_remove* ( **t**, **k** )
+
+   +---+------------------+--------+-------+
+   | i |  target          | remove |       |
+   |   +----------+-------+--------+       |
+   |   |  t       | k     | branch | type  |
+   +===+==========+=======+========+=======+
+   | 0 |  node    | key   | t[k]   | any   |
+   +---+----------+-------+--------+-------+
+   | 1 |  node    | None  | t[*]   | any   |
+   +---+----------+-------+--------+-------+
+
+   0. Use-Case-0: Removes any type of node.
+
+   1. Use-Case-1: Removes all contained items of any type.
+
+Args:
+    targetnode := nodereference
+        Container of 'targetnode' with items to be removed.
+
+    key := key-value
+        The item to be removed from the 'targetnode'.
+        When 'None', all contained items are removed.
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataException:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_replace"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_replace</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">sourcenode</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_replace" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_replace">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Replaces the value of the target node by the copy of the source branch.
+
+Requires in order to RFC6902, all items to be replaced has to be
+present. Thus fails if at least one is missing.
+
+Internally the 'branch_add()' call is used with a deep copy.
+When a swallow copy is required the 'branch_move()' has to be used. 
+
+Args:
+    targetnode := nodereference
+        Target tree the branch is to be inserted.
+    
+    key := key-value
+        Key of insertion point within target node.
+        If key==None, the whole set of keys is replaced by
+        the content of the 'sourcenode'.
+    
+    sourcenode := nodereference
+        Source branch to be inserted into target tree.
+    
+    force: If true present are replaced, else only non-present 
+        are copied.
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="branch_test"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">branch_test</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">value</span>)</span>
+    <br /><em class="fname">Class Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.branch_test" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.branch_test">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Tests match in accordance to RFC6902.
+
+Args:
+    targetnode := a valid node
+        Node to be compared with the value. Due to
+        ambiguity the automated conversion is not 
+        reliable, thus it has to be valid. 
+
+    value: Expected value for the given node.
+    
+Returns:
+    When successful returns 'True', else returns 'False'.
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getTreeDiff"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getTreeDiff</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">n0</span>,
+        <span class="sig-arg">n1</span>,
+        <span class="sig-arg">difflst</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">alldifs</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">dl</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">path</span>=<span class="sig-default">''</span>)</span>
+    <br /><em class="fname">Class Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.gettreediff" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getTreeDiff">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Recursive tree compare for Python trees as used for the package 
+  'json'.</p>
+  <p>Finds diff in native Python trees assembled by the standard package 
+  'json' and compatible, e.g. 'ujson'.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getPointerPath"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getPointerPath</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">node</span>,
+        <span class="sig-arg">base</span>,
+        <span class="sig-arg">restype</span>=<span class="sig-default">FIRST</span>)</span>
+    <br /><em class="fname">Class Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.getpointerpath" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getPointerPath">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Converts a node address into the corresponding pointer path.
+
+The current implementation is search based, thus may have 
+performance issues when frequently applied.
+
+Args:
+    node: Address of Node to be searched for.
+    
+    base: A tree top nodes to search for node.
+    
+    restype: Type of search.
+        
+        first: The first match only. 
+        
+        all: All matches.
+    
+Returns:
+    Returns a list of lists, where the contained lists are pointer 
+    path-lists for matched elements.
+    
+    * restype:=FIRST: '[[&lt;first-match&gt;]]',
+    
+    * restype:=ALL: '[[&lt;first-match&gt;],[&lt;second-match&gt;],...]'
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getCanonical"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getCanonical</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.getcanonical" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.getCanonical">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Fetches the canonical value.
+
+The actual value could be either an atomic value, a node 
+representing a branch, or a reference to an atomic value.
+ 
+Args:
+    value: Value pointer to be evaluated to the actual value.
+        Valid input types are:
+            int,str,unicode: Integer, kept as an atomic integer 
+                value.
+            dict,list: Assumed to be a valid node for 'json' 
+                package, used by reference.
+
+            JSONPointer: A JSON pointer in accordance to 
+                RFC6901.
+
+Returns:
+    When successful returns the value, else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONData:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="isApplicable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isApplicable</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">branch</span>,
+        <span class="sig-arg">matchcondition</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.isapplicable" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.isApplicable">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks applicability by validation of provided match criteria.
+
+The contained data in 'datafile' could be either the initial data
+tree, or a new branch defined by a fresh tree structure. The
+'targetnode' defines the parent container where the new branch has
+to be hooked-in.
+
+Args:
+    targetnode:
+        Target container hook for the inclusion of the loaded branch.
+        The branch is treated as a child-branch, hooked into the
+        provided container 'targetnode'.
+    branch:
+        Branch to be imported into the target container. The branch
+        is treated as a child-branch.
+    matchcondition:
+        Defines the criteria for comparison of present child nodes
+        in the target container. The value is a list of critarias
+        combined by logical AND. The criteria may vary due to
+        the requirement and the type of applied container:
+        - common: Common provided criteria are:
+            - insert: Just checks whether the branch could be inserted.
+                In case of 'list' by 'append', in case of a 'dict' by
+                the insert-[]-operator.
+                This is in particular foreseen for the initial creation
+                of new nodes.
+            - present: Checks whether all are present.
+            - no: Inverts the match criteria for the whole current set.
+        - dict: The provided criteria are:
+            - key: Both share the same key(s).
+            - child_attr_list: A list of child attributes to be matched.
+                This may assure e.g. compatibility by a user defined ID,
+                and or a UUID.
+            
+            default:=['key',]
+        - list: The provided criteria are:
+            - index: The positions of source and target have to match.
+            - child_attr_list: A list of child attributes to be matched,
+                thus e.g. the 'key' of dictionaries could be emulated
+                by an arbitrary attribute like 'mykey'.
+                This may assure e.g. compatibility by a user defined ID,
+                and or a UUID.
+            - mem: Checks whether the in-memory element is already present.
+                Even though this is a quite weak criteria, it is probably
+                the only and one common generic criteria for lists.
+            
+            default:= mem # ATTENTION: almost any call adds a branch!
+    **kargs:
+        childattrlist: A list of user defined child attributes which
+            all together(AND) define the match criteria.
+            
+            default:=None, returns 'True'
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+    The rule of thumb is:
+        - type-mismatch: Exception
+        - value-mismatch: return False
+
+    Success is: no-defined-condition or no-failing-condition
+
+Raises:
+    JSONData:
+
+    JSONDataValue:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="printData"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printData</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pretty</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.printdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.printData">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Prints structured data.
+
+Args:
+    pretty: Activates pretty printer for treeview, else flat.
+
+    sourcefile: Loads data from 'sourcefile' into 'source'.
+        
+        default:=None
+    source: Prints data within 'source'.
+        
+        default:=self.data
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataAmbiguity:
+
+    forwarded from 'json'
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="printSchema"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printSchema</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pretty</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.printschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.printSchema">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Prints structured schema.
+
+Args:
+    pretty: Activates pretty printer for treeview, else flat.
+
+    sourcefile: Loads schema from 'sourcefile' into 'source'.
+        
+        default:=None
+    source: Prints schema within 'source'.
+        
+        default:=self.schema
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataAmbiguity:
+
+    forwarded from 'json'
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="setSchema"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setSchema</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">schemafile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">targetnode</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.setschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.setSchema">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Sets schema or inserts a new branch into the current assigned schema.
+
+The main schema(targetnode==None) is the schema related to the current
+instance. Additional branches could be added by importing the specific
+schema definitions into the main schema. These could either kept
+volatile as a temporary runtime extension, or stored into a new schema
+file in order as extension of the original for later combined reuse.
+
+Args:
+    schemafile:
+        JSON-Schema filename for validation of the subtree/branch.
+        See also **kargs['schema'].
+    targetnode:
+        Target container hook for the inclusion of the loaded branch.
+    **kargs:
+        schema:
+            In-memory JSON-Schema as an alternative to schemafile.
+            When provided the 'schemafile' is ignored.
+            
+            default:=None
+        validator: [default, draft3, off, ]
+            Sets schema validator for the data file.
+            The values are: default=validate, draft3=Draft3Validator,
+            off=None.
+            
+            default:= validate
+        persistent:
+            Stores the 'schema' persistently into 'schemafile' after
+            completion of update including addition of branches.
+            Requires valid 'schemafile'.
+            
+            default:=False
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+
+    JSONData:
+
+    JSONDataSourceFile:
+
+    JSONDataValue:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="validate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">validate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">data</span>,
+        <span class="sig-arg">schema</span>,
+        <span class="sig-arg">validator</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondata.html#jsondata.validate" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONData-pysrc.html#JSONData.validate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Validate data with schema by selected validator.
+
+Args:
+    data:
+        JSON-Data.
+    schema:
+        JSON-Schema for validation.
+    validator:
+        Validator to be applied, current supported:
+        
+        schema:
+            In-memory JSON-Schema as an alternative to schemafile.
+            When provided the 'schemafile' is ignored.
+            
+            default:=None
+        validator: [default, draft3, draft4, off, on, ]
+            default|MODE_SCHEMA_ON
+                The current default.
+            draft3|MODE_SCHEMA_DRAFT3
+                The first supported JSONSchema IETF-Draft.
+            draft4|MODE_SCHEMA_DRAFT4
+                The current supported JSONSchema IETF-Draft.
+            off|MODE_SCHEMA_OFF:
+                No validation.
+
+            Sets schema validator for the data file.
+            
+            default:= MODE_SCHEMA_DRAFT4
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    ValidationError:
+    SchemaError:
+    JSONDataValue:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:23 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

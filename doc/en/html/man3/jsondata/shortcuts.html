@@ -1,0 +1,1156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Development Documents &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Shortcuts" href="index_shortcuts.html" />
+    <link rel="next" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="prev" title="Shortcuts" href="index_shortcuts.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_jsondata.html" title="‘jsondata’ - package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index_shortcuts.html" title="Shortcuts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_shortcuts.html" accesskey="U">Shortcuts</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="shortcuttab"><div class="section" id="development-documents">
+<span id="developmentdocs"></span><h1>Development Documents<a class="headerlink" href="#development-documents" title="Permalink to this headline">¶</a></h1>
+<p>The <em>jsondata</em> paclkage provides for the structure operations on JSON data.</p>
+<div class="section" id="concepts-and-design">
+<h2>Concepts and Design<a class="headerlink" href="#concepts-and-design" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="software_design.html">Software design</a></li>
+<li><a class="reference external" href="jsondata_branch_operations.html">JSON Data</a> : Manage branches of substructures - jsondata.jsondata
+<a class="reference external" href="jsondata_branch_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsondata_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsondata.html#JSONData">[source]</a></li>
+<li><a class="reference external" href="jsondata_branch_serializer.html">JSON Serializer</a> : Serialize JSON documents - jsondata.jsondataserializer
+<a class="reference external" href="jsondata_branch_serializer.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonserializer_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsondataSerializer.html#JSONDataSerializer">[source]</a></li>
+<li><a class="reference external" href="jsondata_pointer_operations.html">JSON Pointer</a> : Access pointer paths and values - jsondata.jsonpointer
+<a class="reference external" href="jsondata_pointer_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonpointer_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer">[source]</a></li>
+<li><a class="reference external" href="jsondata_patch_operations.html">JSON Patch</a> : Modify data structures and values - jsondata.jsonpatch
+<a class="reference external" href="jsondata_patch_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonpatch_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch">[source]</a></li>
+<li><a class="reference external" href="jsondata_integration.html">Integration with Standard Libraries</a></li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>API<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="jsondata_init_doc.html">jsondata</a></li>
+<li><a class="reference external" href="jsondata_jsondata_doc.html">jsondata.jsondata</a></li>
+<li><a class="reference external" href="jsondata_jsonserializer_doc.html">jsondata.jsondataserializer</a></li>
+<li><a class="reference external" href="jsondata_jsonpatch_doc.html">jsondata.jsonpatch</a></li>
+<li><a class="reference external" href="jsondata_jsonpointer_doc.html">jsondata.jsonpointer</a></li>
+<li><a class="reference external" href="epydoc/index.html">API in javadoc-style</a></li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="howto.html">HowTo - Typical call examples</a></li>
+<li>Selected Common UsesCases <a class="reference external" href="usecases.html">[examples]</a></li>
+<li>Test data <a class="reference external" href="#test-data">[testdata]</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="scut-jsonini">
+<span id="developmentapi"></span><span id="id12"></span><h1>jsondata<a class="headerlink" href="#scut-jsonini" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_init_doc.html#">jsondata module</a></td>
+<td><a class="reference external" href="_modules/jsondata/__init__.html#">jsondata.__init__ (0)</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="scut-jsondata">
+<span id="id13"></span><h1>jsondata.jsondata<a class="headerlink" href="#scut-jsondata" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id14">
+<h2>JSONData<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<p>Provides operations modes in accordance to <em>RFC7159</em> <a class="reference internal" href="references.html#rfc7159" id="id15">[RFC7159]</a> and <em>RFC4627</em> <a class="reference internal" href="references.html#rfc4627" id="id16">[RFC4627]</a>.</p>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<p>The slim wrapper only around the attributes of native data structures:</p>
+<ul class="simple">
+<li><em>JSONData.data</em> - a reference to the in-memory JSON data,
+compatible to <em>json</em> <a class="reference internal" href="references.html#json" id="id17">[json]</a> and <em>ujson</em> <a class="reference internal" href="references.html#ujson" id="id18">[ujson]</a>.</li>
+<li><em>JSONData.schema</em> - a reference to an optional schema based on
+<em>jsonschema</em> <a class="reference internal" href="references.html#jsonschema" id="id19">[jsonschema]</a>.</li>
+</ul>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="basic">
+<h4>Basic<a class="headerlink" href="#basic" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="43%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[op-unit-scope]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__init__">JSONData()</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__init__">JSONData.__init__</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__repr__">__repr__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__repr__">JSONData.__repr__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__str__">__str__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__str__">JSONData.__str__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#get-data">get_data</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.get_data">JSONData.get_data</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.get_schema">get_schema</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.get_schema">JSONData.get_schema</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_data">dump_data</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.dump_data">JSONData.dump_data</a></td>
+<td>A</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_schema">dump_schema</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.dump_schema">JSONData.dump_schema</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.set_schema">set_schema</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.set_schema">JSONData.set_schema</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#validate">validate</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.validate">JSONData.validate</a></td>
+<td>B,A</td>
+</tr>
+</tbody>
+</table>
+<p>The column <em>[op-unit-scope]</em> depicts the types and levels of provided operations:</p>
+<ul class="simple">
+<li>A: attribute</li>
+<li>B: branch</li>
+</ul>
+</div>
+<div class="section" id="branches-and-trees">
+<h4>Branches and Trees<a class="headerlink" href="#branches-and-trees" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="34%" />
+<col width="18%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[op-unit-scope]</th>
+<th class="head">[equivalet-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-add">branch_add</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_add">JSONData.branch_add</a></td>
+<td>B</td>
+<td>add</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-copy">branch_copy</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_copy">JSONData.branch_copy</a></td>
+<td>B</td>
+<td>cp</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-create">branch_create</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_create">JSONData.branch_create</a></td>
+<td>B</td>
+<td>new</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-move">branch_move</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_move">JSONData.branch_move</a></td>
+<td>B</td>
+<td>mv</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-remove">branch_remove</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_remove">JSONData.branch_remove</a></td>
+<td>B</td>
+<td>del</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-replace">branch_replace</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_replace">JSONData.branch_replace</a></td>
+<td>B</td>
+<td>replace</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-superpose">branch_superpose</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_superpose">JSONData.branch_superpose</a></td>
+<td>B</td>
+<td>all-ops</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#branch-test">branch_test</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.branch_test">JSONData.branch_test</a></td>
+<td>B</td>
+<td>test</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#copy">copy</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.copy">JSONData.copy</a></td>
+<td>B</td>
+<td>cp</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#deepcopy">deepcopy</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.deepcopy">JSONData.deepcopy</a></td>
+<td>B</td>
+<td>cp</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsondata_doc.html#get-canonical-value">get_canonical_value</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.get_canonical_value">JSONData.get_canonical_value</a></td>
+<td>B</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsondata_doc.html#pop">pop</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.pop">JSONData.pop</a></td>
+<td>&nbsp;</td>
+<td>pop</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="evaluation-operators">
+<h4>Evaluation Operators<a class="headerlink" href="#evaluation-operators" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="19%" />
+<col width="31%" />
+<col width="24%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[logic-operator]</th>
+<th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[op-unit-scope]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>exec</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__call__">__call__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__call__">JSONData.__call__</a></td>
+<td>A</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="comparison-operators">
+<h4>Comparison Operators<a class="headerlink" href="#comparison-operators" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="17%" />
+<col width="30%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[logic-operator]</th>
+<th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[op-unit-scope]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>==</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__eq__">__eq__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__eq__">JSONData.__eq__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-odd"><td>!=</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__ne__">__ne__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__ne__">JSONData.__ne__</a></td>
+<td>B,A</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="items">
+<h3>Items<a class="headerlink" href="#items" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="24%" />
+<col width="35%" />
+<col width="21%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[operator]</th>
+<th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[op-unit-scope]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>del S[x]</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__delitem__">__delitem__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__delitem__">JSONData.__delitem__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-odd"><td>__iter__</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__iter__">__iter__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__iter__">JSONData.__iter__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-even"><td>S[x]</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__getitem__">__getitem__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__getitem__">JSONData.__getitem__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-odd"><td>S[x] = v</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.__setitem__">__setitem__</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.__setitem__">JSONData.__setitem__</a></td>
+<td>B,A</td>
+</tr>
+<tr class="row-even"><td>get_data_items</td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html#jsondata.jsondata.JSONData.get_data_items">get_data_items</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondata.html#JSONData.get_data_items">JSONData.get_data_items</a></td>
+<td>B,A</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="scut-jsonserialize">
+<span id="id21"></span><h1>jsondata.jsondataserializer<a class="headerlink" href="#scut-jsonserialize" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="jsondataserializer">
+<h2>JSONDataSerializer<a class="headerlink" href="#jsondataserializer" title="Permalink to this headline">¶</a></h2>
+<p>Is derived from <em>JSONData</em>, provides persistency and schema validation.</p>
+<div class="section" id="id22">
+<h3>Methods<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id23">
+<h4>Basic<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.__init__">JSONDataSerializer</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.__init__">JSONDataSerializer.__init__</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_data">dump_data</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.dump_data">JSONDataSerializer.dump_data</a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.dump_schema">dump_schema</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.dump_schema">JSONDataSerializer.dump_schema</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.set_schema">set_schema (1)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.set_schema">JSONDataSerializer.set_schema</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="import-export">
+<h4>Import/Export<a class="headerlink" href="#import-export" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.json_export">json_export</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.json_export">JSONDataSerializer.json_export</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonserializer_doc.html#jsondata.jsondataserializer.JSONDataSerializer.json_import">json_import</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsondataserializer.html#JSONDataSerializer.json_import">JSONDataSerializer.json_import</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="scut-jsonpatch">
+<span id="id25"></span><h1>jsondata.jsonpatch<a class="headerlink" href="#scut-jsonpatch" title="Permalink to this headline">¶</a></h1>
+<p>Supports <em>RFC6902</em> <a class="reference internal" href="references.html#rfc6902" id="id26">[RFC6902]</a>.</p>
+<div class="section" id="jsonpatchitem">
+<h2>JSONPatchItem<a class="headerlink" href="#jsonpatchitem" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id27">
+<h3>Methods<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id28">
+<h4>Basic<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="43%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__init__">JSONPatchItem</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__init__">JSONPatchItem.__init__</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__repr__">__repr__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__repr__">JSONPatchItem.__repr__</a></td>
+<td>repr</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__str__">__str__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__str__">JSONPatchItem.__str__</a></td>
+<td>str</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id29">
+<h4>Basic<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="44%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.apply">apply (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.apply">JSONPatchItem.apply</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.repr_export">repr_export (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.repr_export">JSONPatchItem.repr_export</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.str_export">str_export (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.str_export">JSONPatchItem.str_export</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="id30">
+<h3>Operators<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="44%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__call__">__call__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__call__">JSONPatchItem.__call__</a></td>
+<td>exec</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__eq__">__eq__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__eq__">JSONPatchItem.__eq__</a></td>
+<td>==</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__getitem__">__getitem__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__getitem__">JSONPatchItem.__getitem__</a></td>
+<td>[i]</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItem.__ne__">__ne__ (2)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__ne__">JSONPatchItem.__ne__</a></td>
+<td>!=</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="jsonpatchitemraw">
+<h2>JSONPatchItemRaw<a class="headerlink" href="#jsonpatchitemraw" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id32">
+<h3>Methods<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchItemRaw.__init__">JSONPatchItemRaw</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchItemRaw.__init__">JSONPatchItemRaw.__init__</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="jsonpatchfilter">
+<h2>JSONPatchFilter<a class="headerlink" href="#jsonpatchfilter" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id34">
+<h3>Methods<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="43%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter.__init__">JSONPatchFilter</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter.__init__">JSONPatchFilter.__init__</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id35">
+<h3>Operators<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="45%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatchFilter.__eq__">__eq__ (4)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter.__eq__">JSONPatchFilter.__eq__</a></td>
+<td>==</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="jsonpatch">
+<h2>JSONPatch<a class="headerlink" href="#jsonpatch" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id37">
+<h3>Methods<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id38">
+<h4>Basic<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="40%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__init__">JSONPatch</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__init__">JSONPatch.__init__</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__repr__">__repr__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__repr__">JSONPatch.__repr__</a></td>
+<td>repr</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__str__">__str__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__str__">JSONPatch.__str__</a></td>
+<td>str</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="patch">
+<h4>Patch<a class="headerlink" href="#patch" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="41%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.apply">apply (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.apply">JSONPatch.apply</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.get">get (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.get">JSONPatch.get</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.patch_export">patch_export (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.patch_export">JSONPatch.patch_export</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.patch_import">patch_import (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.patch_import">JSONPatch.patch_import</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.repr_export">repr_export (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.repr_export">JSONPatch.repr_export</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.str_export">str_export (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.str_export">JSONPatch.str_export</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="id39">
+<h3>Operators<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="41%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__add__">__add__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__add__">JSONPatch.__add__</a></td>
+<td>+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__call__">__call__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__call__">JSONPatch.__call__</a></td>
+<td>exec</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__eq__">__eq__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__eq__">JSONPatch.__eq__</a></td>
+<td>==</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__getitem__">__getitem__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__getitem__">JSONPatch.__getitem__</a></td>
+<td>[i]</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__iadd__">__iadd__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__iadd__">JSONPatch.__iadd__</a></td>
+<td>+=</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__isub__">__isub__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__isub__">JSONPatch.__isub__</a></td>
+<td>-=</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__ne__">__ne__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__ne__">JSONPatch.__ne__</a></td>
+<td>!=</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__sub__">__sub__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__sub__">JSONPatch.__sub__</a></td>
+<td>-</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__len__">__len__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__len__">JSONPatch.__len__</a></td>
+<td>len</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="40%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpatch_doc.html#jsondata.jsonpatch.JSONPatch.__iter__">__iter__ (5)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch.__iter__">JSONPatch.__iter__</a></td>
+<td>-&gt;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="scut-jsonpointer">
+<span id="id41"></span><h1>jsondata.jsonpointer<a class="headerlink" href="#scut-jsonpointer" title="Permalink to this headline">¶</a></h1>
+<p>Supports <em>RFC6901</em> <a class="reference internal" href="references.html#rfc6901" id="id42">[RFC6901]</a> and
+&#8220;Relative JSON Pointers - draft-handrews-relative-json-pointer-01&#8221; <a class="reference internal" href="references.html#relpointer" id="id43">[RELPOINTER]</a>
+.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="35%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#fetch_pointerpath">fetch_pointerpath</a></td>
+<td><a class="reference external" href="jsondata_jsonpointer_doc.html#fetch_pointerpath">fetch_pointerpath</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="jsonpointer">
+<h2>JSONPointer<a class="headerlink" href="#jsonpointer" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id44">
+<h3>Methods<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id45">
+<h4>Basic<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="46%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__init__">JSONPointer</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__init__">JSONPointer.__init__</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__repr__">__repr__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__repr__">JSONPointer.__repr__</a></td>
+<td>repr</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__str__">__str__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__str__">JSONPointer.__str__</a></td>
+<td>str</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#isfragment">isfragment</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.isfragment">JSONPointer.isfragment</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#isrel">isrel</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.isrel">JSONPointer.isrel</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#isrelpathrequest">isrelpathrequest</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.isrelpathrequest">JSONPointer.isrelpathrequest</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#isvalid-nodetype">isvalid_nodetype</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.isvalid_nodetype">JSONPointer.isvalid_nodetype</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#isvalrequest">isvalrequest</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#isvalrequest">JSONPointer.isvalrequest</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="nodes">
+<h4>Nodes<a class="headerlink" href="#nodes" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="46%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.check_node_or_value">check_node_or_value</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.check_node_or_value">JSONPointer.check_node_or_value</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.check_path_list">check_path_list</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.check_path_list">JSONPointer.check_path_list</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_node">get_node</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node">JSONPointer.get_node</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_node_and_child">get_node_and_child</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_and_child">JSONPointer.get_node_and_child</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_node_and_key">get_node_and_key</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_and_key">JSONPointer.get_node_and_key</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_node_value">get_node_value</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_value">JSONPointer.get_node_value</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_node_exist">get_node_exist</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_node_exist">JSONPointer.get_node_exist</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_path_list">get_path_list</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_path_list">JSONPointer.get_path_list</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_path_list_and_key">get_path_list_and_key</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_path_list_and_key">JSONPointer.get_path_list_and_key</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_pointer">get_pointer</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_pointer">JSONPointer.get_pointer</a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.get_raw">get_raw</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.get_raw">JSONPointer.get_raw</a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="id46">
+<h3>Operators<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="42%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__add__">__add__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__add__">JSONPointer.__add__</a></td>
+<td>+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__call__">__call__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__call__">JSONPointer.__call__</a></td>
+<td>exec</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__eq__">__eq__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__eq__">JSONPointer.__eq__</a></td>
+<td>==</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__ge__">__ge__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__ge__">JSONPointer.__ge__</a></td>
+<td>&gt;=</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__gt__">__gt__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__gt__">JSONPointer.__gt__</a></td>
+<td>&gt;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__iadd__">__iadd__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__iadd__">JSONPointer.__iadd__</a></td>
+<td>+=</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__le__">__le__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__le__">JSONPointer.__le__</a></td>
+<td>&lt;=</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__lt__">__lt__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__lt__">JSONPointer.__lt__</a></td>
+<td>&lt;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__ne__">__ne__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__ne__">JSONPointer.__ne__</a></td>
+<td>!=</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.__radd__">__radd__ (6)</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.__radd__">JSONPointer.__radd__</a></td>
+<td>x+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id47">
+<h3>Iterators<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="46%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">[docs]</th>
+<th class="head">[source]</th>
+<th class="head">[logic-operator]</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.iter_path">iter_path</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path">JSONPointer.iter_path</a></td>
+<td>(path)-&gt;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.iter_path_nodes">iter_path_nodes</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_nodes">JSONPointer.iter_path_nodes</a></td>
+<td>(path-nodes)-&gt;</td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.iter_path_subpathdata">iter_path_subpathdata</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_subpathdata">JSONPointer.iter_path_subpathdata</a></td>
+<td>(path-nodes)-&gt;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_jsonpointer_doc.html#jsondata.jsonpointer.JSONPointer.iter_path_subpaths">iter_path_subpaths</a></td>
+<td><a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer.iter_path_subpaths">JSONPointer.iter_path_subpaths</a></td>
+<td>(path-nodes)-&gt;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Development Documents</a><ul>
+<li><a class="reference internal" href="#concepts-and-design">Concepts and Design</a></li>
+<li><a class="reference internal" href="#id10">API</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scut-jsonini">jsondata</a></li>
+<li><a class="reference internal" href="#scut-jsondata">jsondata.jsondata</a><ul>
+<li><a class="reference internal" href="#id14">JSONData</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#basic">Basic</a></li>
+<li><a class="reference internal" href="#branches-and-trees">Branches and Trees</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#evaluation-operators">Evaluation Operators</a></li>
+<li><a class="reference internal" href="#comparison-operators">Comparison Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#items">Items</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scut-jsonserialize">jsondata.jsondataserializer</a><ul>
+<li><a class="reference internal" href="#jsondataserializer">JSONDataSerializer</a><ul>
+<li><a class="reference internal" href="#id22">Methods</a><ul>
+<li><a class="reference internal" href="#id23">Basic</a></li>
+<li><a class="reference internal" href="#import-export">Import/Export</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scut-jsonpatch">jsondata.jsonpatch</a><ul>
+<li><a class="reference internal" href="#jsonpatchitem">JSONPatchItem</a><ul>
+<li><a class="reference internal" href="#id27">Methods</a><ul>
+<li><a class="reference internal" href="#id28">Basic</a></li>
+<li><a class="reference internal" href="#id29">Basic</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id30">Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatchitemraw">JSONPatchItemRaw</a><ul>
+<li><a class="reference internal" href="#id32">Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatchfilter">JSONPatchFilter</a><ul>
+<li><a class="reference internal" href="#id34">Methods</a></li>
+<li><a class="reference internal" href="#id35">Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatch">JSONPatch</a><ul>
+<li><a class="reference internal" href="#id37">Methods</a><ul>
+<li><a class="reference internal" href="#id38">Basic</a></li>
+<li><a class="reference internal" href="#patch">Patch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id39">Operators</a></li>
+<li><a class="reference internal" href="#iterators">Iterators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scut-jsonpointer">jsondata.jsonpointer</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#jsonpointer">JSONPointer</a><ul>
+<li><a class="reference internal" href="#id44">Methods</a><ul>
+<li><a class="reference internal" href="#id45">Basic</a></li>
+<li><a class="reference internal" href="#nodes">Nodes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id46">Operators</a></li>
+<li><a class="reference internal" href="#id47">Iterators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>API</h4><p class="topless"><a href="epydoc/index.html" title="API">Programming Interface</a></p><h4>Previous topic</h4>
+  <p class="topless"><a href="index_shortcuts.html"
+                        title="previous chapter">Shortcuts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="index_jsondata.html"
+                        title="next chapter">&#8216;jsondata&#8217; - package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/shortcuts.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_jsondata.html" title="‘jsondata’ - package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index_shortcuts.html" title="Shortcuts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_shortcuts.html" >Shortcuts</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

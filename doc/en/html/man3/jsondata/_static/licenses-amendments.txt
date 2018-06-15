@@ -1,0 +1,157 @@
+INVARIANT_SECTION_BEG:The whole document
+
+Document Data:
+==============
+
+ORIGINAL-AUTHOR: Arno-Can Uestuensoez - @Ingenieurbuero Arno-Can Uestuensoez
+
+TITLE: Forced-Fairplay-Constraints
+SUBTITLE: Enforcement of Fairplay for Opensource Licenses - Con-Trolls
+AUTHOR: Arno-Can Uestuensoez - @Ingenieurbuero Arno-Can Uestuensoez
+COPYRIGHT: [2007,2008,2010,2013,2014,2015, 2016] Arno-Can Uestuensoez
+VERSION: 00.00.009
+RELEASE: 00.00.009
+DATE: 2016-03-04
+UUID: 6fb5eecc-310c-4147-98e4-7a41698113f4
+SCOPE: This release replaces and obsoletes any previous version.
+
+THIS-DOCUMENT:
+	LICENSE: CC-BY-ND-4.0 - The Craetive Commons
+
+ 
+    Licensed under the above conditions, refer to contained documents
+    or online:
+ 
+      http://creativecommons.org/licenses/by-nd/4.0/
+ 
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+ 
+
+**OpenSource with enforcement of peer-to-peer fairness**
+========================================================
+
+Still in general fully compliant OpenSource, but not for Trolls.
+
+The following restrictions are added to the assigned base-licenses
+as constraints under the following listed conditions by the original
+author Arno-Can Uestuensoez Copyright(C) 2007-2016.
+
+As a tribute to the obvious neccesity of the enforcement of 
+peer-to-peer fairness the following constraints are included 
+in any assigned license to the provided Software. These may in worst 
+case withdraw the license from the licensee and the related group 
+for lifetime, dating back to the beginning of use - which is 
+considered as the public release.
+
+You are free to provide the parts of your own contribution by any
+license, as long as the original base remains in literal compliance
+to the linked base license(s) including this ammendment. The mandatory
+literal compliance of this license add-on in advance of the original 
+author must be inherited on the derived conceptual and implementation 
+parts into any derived work. 
+
+This is due to the racking financial experience of the original 
+author caused by the vast fraud and cheeting after the introduction
+of the Multi-Vendor CloudManagement System 'UnifiedSessionsManager'
+(C)2008-2016 @Ingenieurbuero Arno-Can Uestuensoez, 
+https://sourceforge.net/projects/ctys/
+originally published under GPL-3/2008. 
+
+So the license is and remains in case of fairplay open source, else 
+is completely withdrawn for all the persons being part and/or related
+to the issue. Thus the OpenSource is still the right place to live
+for it.
+
+   For recommendations on the commom fraud in conjunction with the
+   misuse of skills profiles feel free to refer to: 
+   
+      http://xkcd.com/1303/
+
+   Ask to arrange a confirmation call within 2-3 business days. If
+   they cannot ...for whatever reason..., forward me the evidence 
+   please. Record the confirmation call officially and store it 
+   please, I officially confirm to record my confirmation call only
+   for anyone. I am going to blog each call openly on the internet 
+   for your confirmation. I also enumerate each application 
+   individually with a UUID, and sign this with a sha256/sha512 hash. 
+   These are included in any legal contact, else it is fraud!
+
+   See the full story elsewhere...
+
+The following constraints are part of this license agreement, they 
+additionally superpose in any case of inconsistency the terms in the
+previous defined licenses with highest priority:
+
+Unfair competition
+==================
+
+In case of competition against the author for any bid, permissions 
+based on or involved this work are rejected for any work related 
+to the bid.
+
+In case unfair competion against the author, including cases not 
+known to the author worldwide, this includes the forwarding of 
+unauthorized data about the author into any kind of legal, and/or 
+illegal network like procurement systems, in the past or from now on,
+all license permissions are rejected.
+
+The loss of license comprises all involved parties, including customers,
+subcontractors, and competitors as a whole, including chained, shifted, 
+and nested ownership, responsibility, and/or involvement.
+
+Balanced duties and rights
+==========================
+
+In case of a law suite or any legal action against the author, e.g. 
+due to intellectual property, or any other, either direct, or indirect,
+any permitted license - to this parties, their subcontractors nested 
+to the complete level, and any involved person - is rejected back to
+the beginning for concepts and code including derived works.
+
+Invariant Sections
+==================
+
+The artefacts contain invariant sections, which comprise the 
+information about the original author and the copyright. Changing these 
+results in immediate drop of any permission including previous licenses.
+This is also the case for any change of any copyright statement from 
+any deployment package or copied information.
+
+These sections are marked by the string
+
+  INVARIANT_SECTION_BEG:...
+  <project-information-and-data>
+  INVARIANT_SECTION_END:...
+
+and could simply be find by common tools.
+
+Software Patents
+================
+
+You agree that in particular in the case that any previous constraint 
+has to be applied, the author is eventually going to apply his
+intellectual property rights arbitrarily and without the requirement of 
+any previous notice. Either personally, or by transferring his rights 
+to third parties.
+
+Remarks
+=======
+
+Any rejection caused by violation of the license conditions could be 
+withdrawn personally by the original author(s) written statement 
+explicitly only, which requires the proactive disclosure of the whole
+issue in an official written and signed statement by the potentially 
+violating party.
+
+You have additionally to agree in any commercial issue to proof 
+reversal for using this software and related concepts. With using this
+software you accept the authors choice of the country and court for 
+clearing any leagal issue.
+
+
+INVARIANT_SECTION_END:The whole document

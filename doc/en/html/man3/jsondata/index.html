@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Abstract &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="#" />
+    <link rel="next" title="Shortcuts" href="index_shortcuts.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_shortcuts.html" title="Shortcuts"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="abstract">
+<h1>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h1>
+<p>The <em>jsondata</em> package provides standards based processing of JSON data
+with emphasis on the management of modular structures including JSON-Pointer
+and JSON-Patch.</p>
+<p>The data is represented as in-memory tree structures with dynamically added
+and removed components as branches. The data could be validated and stored
+for the later reuse.
+The emphasis is on low resource consumption, thus
+introcudes a slim layer covering the complex structure operations only, while the
+data itself is native Python data compatible to <em>json</em>, <em>ujson</em> and <em>jsonschema</em>.</p>
+<p>Supported main standards and drafts:</p>
+<ul class="simple">
+<li>JSON:  <a class="reference internal" href="references.html#rfc4627" id="id1">[RFC4627]</a>, <a class="reference internal" href="references.html#rfc7159" id="id2">[RFC7159]</a>, <a class="reference internal" href="references.html#rfc6901" id="id3">[RFC6901]</a>, <a class="reference internal" href="references.html#rfc6902" id="id4">[RFC6902]</a>,
+relative JSON Pointer <a class="reference internal" href="references.html#relpointer" id="id5">[RELPOINTER]</a> Draft v1 / 2018</li>
+<li>JSON schema: JSON schema <a class="reference internal" href="references.html#zyp" id="id6">[ZYP]</a>  Draft v4 / 2013</li>
+</ul>
+<p>The supported platforms are:</p>
+<ul class="simple">
+<li>Linux, BSD, Unix, OS-X, Cygwin, and Windows</li>
+<li>Python2, Python3</li>
+</ul>
+</div>
+<div class="section" id="cockpit">
+<h1>Cockpit<a class="headerlink" href="#cockpit" title="Permalink to this headline">¶</a></h1>
+<div class="indextab"><table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="34%" />
+<col width="11%" />
+<col width="15%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Component</th>
+<th class="head">Standards/References</th>
+<th class="head">HowTo</th>
+<th class="head">shortcuts</th>
+<th class="head">API</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="jsondata_branch_operations.html">JSON Data</a></td>
+<td><a class="reference internal" href="references.html#json" id="id7">[json]</a> <a class="reference internal" href="references.html#ujson" id="id8">[ujson]</a> <a class="reference internal" href="references.html#rfc8259" id="id9">[RFC8259]</a> <a class="reference internal" href="references.html#rfc7159" id="id10">[RFC7159]</a> <a class="reference internal" href="references.html#rfc4627" id="id11">[RFC4627]</a> <a class="reference internal" href="references.html#ecma404" id="id12">[ECMA404]</a></td>
+<td><a class="reference external" href="howto_class_jsondata.html">Data</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsondata"><span class="std std-ref">jsondata.jsondata</span></a></td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html">jsondata.jsondata.JSONData</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_pointer_operations.html">JSON Pointer</a></td>
+<td><a class="reference internal" href="references.html#rfc6901" id="id13">[RFC6901]</a></td>
+<td><a class="reference external" href="howto_class_jsonpointer.html">Pointer</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsonpointer"><span class="std std-ref">jsondata.jsonpointer</span></a></td>
+<td><a class="reference external" href="jsondata_jsonpointer_doc.html">jsondata.jsonpointer.JSONPointer</a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_pointer_operations.html#relative-json-pointers">JSON Relative Pointer</a></td>
+<td><a class="reference internal" href="references.html#relpointer" id="id14">[RELPOINTER]</a> Draft v1 / 2018</td>
+<td><a class="reference external" href="howto_class_jsonpointer_relative.html">Relative Pointer</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsonpointer"><span class="std std-ref">jsondata.jsonpointer</span></a></td>
+<td><a class="reference external" href="jsondata_jsonpointer_doc.html">jsondata.jsonpointer.JSONPointer</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_patch_operations.html">JSON Patch</a></td>
+<td><a class="reference internal" href="references.html#rfc6902" id="id15">[RFC6902]</a></td>
+<td><a class="reference external" href="howto_class_jsonpatch.html">Patch</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsonpatch"><span class="std std-ref">jsondata.jsonpatch</span></a></td>
+<td><a class="reference external" href="jsondata_jsonpatch_doc.html">jsondata.jsonpatch.JSONPatch</a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_integration.html">JSON Schema</a></td>
+<td><a class="reference internal" href="references.html#jsonschema" id="id16">[jsonschema]</a> <a class="reference internal" href="references.html#zyp" id="id17">[ZYP]</a>  Draft v4 / 2013</td>
+<td><a class="reference external" href="howto_validate_json.html">Schema</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsondata"><span class="std std-ref">jsondata.jsondata</span></a></td>
+<td><a class="reference external" href="jsondata_jsondata_doc.html">jsondata.jsondata.JSONData</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="jsondata_branch_serializer.html">JSON Persistency</a></td>
+<td>Export and import documents and branches</td>
+<td><a class="reference external" href="howto_class_jsondataserializer.html">Serialize</a></td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsonserialize"><span class="std std-ref">jsondata.jsondataserializer</span></a></td>
+<td><a class="reference external" href="jsondata_jsonserializer_doc.html">jsondata.jsondataserializer.JSONSerializer</a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="jsondata_init_doc.html">JSON Package init</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><a class="reference internal" href="shortcuts.html#scut-jsonini"><span class="std std-ref">jsondata</span></a></td>
+<td><a class="reference external" href="jsondata_init_doc.html#">jsondata.__init__</a></td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Artifacts</th>
+<th class="head">Shortcuts</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Concepts and Design</td>
+<td><a class="reference internal" href="shortcuts.html#developmentdocs"><span class="std std-ref">Development Documents</span></a></td>
+</tr>
+<tr class="row-odd"><td>Programming Interfaces</td>
+<td><a class="reference internal" href="shortcuts.html#developmentapi"><span class="std std-ref">jsondata</span></a></td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="67%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Related Projects</th>
+<th class="head">External</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Commandline Interface</td>
+<td><a class="reference internal" href="references.html#jsoncli" id="id18">[jsoncli]</a></td>
+</tr>
+<tr class="row-odd"><td>Compare and Analyse JSON Data</td>
+<td><a class="reference internal" href="references.html#jsondatadiff" id="id19">[jsondatadiff]</a></td>
+</tr>
+<tr class="row-even"><td>Search JSON Pattern</td>
+<td><a class="reference internal" href="references.html#jsondatafind" id="id20">[jsondatafind]</a></td>
+</tr>
+<tr class="row-odd"><td>Scan Commandline Options to JSON</td>
+<td><a class="reference internal" href="references.html#jsoncliopts" id="id21">[jsoncliopts]</a></td>
+</tr>
+<tr class="row-even"><td>Compute JSON Data</td>
+<td><a class="reference internal" href="references.html#jsoncompute" id="id22">[jsoncompute]</a></td>
+</tr>
+<tr class="row-odd"><td>JSON Unit Tests</td>
+<td><a class="reference internal" href="references.html#jsondataunit" id="id23">[jsondataunit]</a></td>
+</tr>
+</tbody>
+</table>
+<p>Introduced file suffixes.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">suffix</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>json</td>
+<td>JSON data file</td>
+</tr>
+<tr class="row-odd"><td>jsd</td>
+<td>JSON schema</td>
+</tr>
+<tr class="row-even"><td>jsonp</td>
+<td>JSON patch - RFC6902</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="section" id="blueprint">
+<h1>Blueprint<a class="headerlink" href="#blueprint" title="Permalink to this headline">¶</a></h1>
+<p>The architecture is based on the interfaces of the packages <em>json</em> and
+<em>jsonschema</em>, and compatible packages such as <em>ujson</em>.</p>
+<div class="blueprint"><pre class="literal-block">
+               +---------------------------------+
+Applications   |         application-layer       |    see e.g. <a class="reference internal" href="references.html#jsonlathe" id="id24">[jsonlathe]</a>, <a class="reference internal" href="references.html#restdrill" id="id25">[restdrill]</a>
+Middeware      +---------------------------------+
+.   .  .  .  .  . | .  .  .  .  .| .  .  .  .  | .  .  .  .  .  .  .  .  .
+               + - - - - - - - - - - - - - - - - +    Libraries: <a class="reference internal" href="references.html#jsoncompute" id="id26">[jsoncompute]</a>, <a class="reference internal" href="references.html#jsoncliopts" id="id27">[jsoncliopts]</a>, <a class="reference internal" href="references.html#jsondataunit" id="id28">[jsondataunit]</a>,
+Process JSON   |        processing tools         |    <a class="reference internal" href="references.html#jsondatadiff" id="id29">[jsondatadiff]</a>, <a class="reference internal" href="references.html#jsondatafind" id="id30">[jsondatafind]</a>
+               + - - - - - - - - - - - - - - - - +    Command Line Interface: <a class="reference internal" href="references.html#jsoncli" id="id31">[jsoncli]</a>
+.   .  .  .  .  . | .  .  .  .  .| .  .  .  .  | .  .  .  .  .  .  .  .  .
+                  |              V             |
+                  |  +----------------------+  |
+JSON Data         |  |       jsondata       |  |
+  Data Structures |  |  <a class="reference external" href="jsondata_branch_operations.html">jsondata.jsondata</a>   |  |      <a class="reference internal" href="references.html#rfc8259" id="id32">[RFC8259]</a>/<a class="reference internal" href="references.html#rfc7159" id="id33">[RFC7159]</a>/<a class="reference internal" href="references.html#rfc4627" id="id34">[RFC4627]</a>
+  Pointer         |  | <a class="reference external" href="jsondata_pointer_operations.html">jsondata.jsonpointer</a> |  |      <a class="reference internal" href="references.html#rfc6901" id="id35">[RFC6901]</a>/draft-handrews-relative-json-pointer <a class="reference internal" href="references.html#relpointer" id="id36">[RELPOINTER]</a>
+  Patch           |  |  <a class="reference external" href="jsondata_patch_operations.html">jsondata.jsonpatch</a>  |  |      <a class="reference internal" href="references.html#rfc6902" id="id37">[RFC6902]</a>
+                  |  +----------------------+  |
+                  |         |       |          |
+.  .  .  .  .  .  | .  .  . | .  .  | .  .  .  |  .  .  .  .  .  .  .  .  .
+                  +----+----+       +-----+----+
+                       |                  |
+                       V                  V
+               +----------------+-----------------+
+JSON           |     <a class="reference internal" href="references.html#json" id="id38">[json]</a>     |   <a class="reference internal" href="references.html#jsonschema" id="id39">[jsonschema]</a>  |    <a class="reference internal" href="references.html#rfc8259" id="id40">[RFC8259]</a>/<a class="reference internal" href="references.html#rfc7159" id="id41">[RFC7159]</a>/<a class="reference internal" href="references.html#rfc4627" id="id42">[RFC4627]</a>/<a class="reference internal" href="references.html#ecma262" id="id43">[ECMA262]</a>/<a class="reference internal" href="references.html#ecma404" id="id44">[ECMA404]</a>
+Syntax         |     <a class="reference internal" href="references.html#ujson" id="id45">[ujson]</a>    |                 |    draft-zyp-json-schema-04 <a class="reference internal" href="references.html#zyp" id="id46">[ZYP]</a>
+               +----------------+-----------------+
+</pre>
+</div><p>The provided features comprise:</p>
+<ul class="simple">
+<li><a class="reference external" href="jsondata_branch_operations.html">JSON Data</a> : Manage branches of substructures - jsondata.jsondata
+<a class="reference external" href="jsondata_branch_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsondata_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsondata.html#JSONData">[source]</a></li>
+<li><a class="reference external" href="jsondata_branch_serializer.html">JSON Serializer</a> : Serialize JSON documents - jsondata.jsondataserializer
+<a class="reference external" href="jsondata_branch_serializer.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonserializer_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsondataSerializer.html#JSONDataSerializer">[source]</a></li>
+<li><a class="reference external" href="jsondata_pointer_operations.html">JSON Pointer</a> : Access pointer paths and values - jsondata.jsonpointer
+<a class="reference external" href="jsondata_pointer_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonpointer_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsonpointer.html#JSONPointer">[source]</a></li>
+<li><a class="reference external" href="jsondata_patch_operations.html">JSON Patch</a> : Modify data structures and values - jsondata.jsonpatch
+<a class="reference external" href="jsondata_patch_operations.html#">[features]</a>
+<a class="reference external" href="jsondata_jsonpatch_doc.html#">[API]</a>
+<a class="reference external" href="_modules/jsondata/jsonpatch.html#JSONPatch">[source]</a></li>
+</ul>
+<p>The syntax primitives of underlying layers are processed by the imported standard packages <em>json</em> and <em>jsonschema</em>
+in conformance to related standards.
+For the examples including from standards refer to <a class="reference external" href="howto.html#">Howto</a> .
+For the architecture refer to <a class="reference external" href="software_design.html">Software design</a>.</p>
+</div>
+<div class="section" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index_shortcuts.html">Shortcuts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html">Development Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html#scut-jsonini">jsondata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html#scut-jsondata">jsondata.jsondata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html#scut-jsonserialize">jsondata.jsondataserializer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html#scut-jsonpatch">jsondata.jsonpatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortcuts.html#scut-jsonpointer">jsondata.jsonpointer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index_jsondata.html">&#8216;jsondata&#8217; - package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_init_doc.html">jsondata.__init__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsondata_doc.html">&#8216;jsondata.jsondata&#8217; - Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonserializer_doc.html">&#8216;jsondata.jsondataserializer&#8217; - Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpointer_doc.html">&#8216;jsondata.jsonpointer&#8217; - Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html">&#8216;jsondata.jsonpatch&#8217; - Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index_testdata.html">&#8216;testdata&#8217; - package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index_testdata.html#basic">basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_testdata.html#datacheck">datacheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_testdata.html#rfc6902">rfc6902</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_testdata.html#selftest">selftest</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">Howto</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#themes">Themes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#apis">APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#install-python">Install Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference external" href="glossary.html">Glossary</a></li>
+<li><a class="reference external" href="references.html">References</a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+<div class="section" id="resources">
+<h1>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h1>
+<p><strong>Project Data</strong></p>
+<ul class="simple">
+<li>PROJECT=jsondata</li>
+<li>MISSION=Provide a JSON toolset for computing - RFC7159, RFC6901, RFC6902, ...</li>
+<li>AUTHOR=Arno-Can Uestuensoez</li>
+<li>COPYRIGHT=Copyright (C) 2017 Arno-Can Uestuensoez &#64;Ingenieurbuero Arno-Can Uestuensoez</li>
+<li>LICENSE=Artistic-License-2.0 + Forced-Fairplay-Constraints</li>
+<li>VERSION=0.2.22</li>
+<li>RELEASE=0.2.22</li>
+<li>STATUS=alpha</li>
+</ul>
+<p><strong>Online Documents</strong></p>
+<ul class="simple">
+<li>Pythonhosted: <a class="reference external" href="https://pythonhosted.org/timeatdate/">https://pythonhosted.org/timeatdate/</a></li>
+</ul>
+<p><strong>Licenses</strong></p>
+<ul>
+<li><p class="first">Artistic-License-2.0(base license): <a class="reference external" href="_static/ArtisticLicense20.html">ArtisticLicense20.html</a></p>
+</li>
+<li><p class="first">Forced-Fairplay-Constraints(amendments): <a class="reference external" href="_static/licenses-amendments.txt">licenses-amendments.txt</a></p>
+<p><a class="reference external" href="_static/profile_info.html"><img alt="profileinfo" src="_images/profile_info.png" style="width: 48px;" /></a>  <a class="reference internal" href="references.html#xkcd" id="id56">[xkcd]</a> Support the OpenSource Authors :-)</p>
+</li>
+</ul>
+<p><strong>Downloads</strong></p>
+<ul class="simple">
+<li>Python Package Index: <a class="reference external" href="https://pypi.python.org/pypi/timeatdate">https://pypi.python.org/pypi/timeatdate</a></li>
+<li>Sourceforge.net: <a class="reference external" href="https://sourceforge.net/projects/timeatdate/">https://sourceforge.net/projects/timeatdate/</a></li>
+<li>github.com: <a class="reference external" href="https://github.com/ArnoCan/timeatdate/">https://github.com/ArnoCan/timeatdate/</a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Abstract</a></li>
+<li><a class="reference internal" href="#cockpit">Cockpit</a></li>
+<li><a class="reference internal" href="#blueprint">Blueprint</a></li>
+<li><a class="reference internal" href="shortcuts.html">Shortcuts</a></li><li><a class="reference internal" href="howto.html">Howto</a></li><li><a class="reference internal" href="install.html">Install</a></li><li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+
+  <h4>API</h4><p class="topless"><a href="epydoc/index.html" title="API">Programming Interface</a></p><h4>Next topic</h4>
+  <p class="topless"><a href="index_shortcuts.html"
+                        title="next chapter">Shortcuts</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_shortcuts.html" title="Shortcuts"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

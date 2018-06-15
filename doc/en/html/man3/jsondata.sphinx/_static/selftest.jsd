@@ -1,0 +1,160 @@
+{
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"_comment": "This is a comment to be dropped by the initial scan:object(0)",
+	"_doc": "This is a doc string to be inserted when the language supports it.:object(0)",
+	"_doc": "Concatenated for the same instance.:object(0)",
+	"type":"object",
+	"required":false,
+	"properties":{
+		"testcase": {
+			"_comment": "This is a comment(0):address",
+			"type":"object",
+			"required":true,
+			"properties":{
+				"description": {
+					"type":"array",
+					"required":false,
+					"items": {
+						"type":"object",
+						"required":false,
+						"properties":{
+							"body": {
+								"type":"string",
+								"required":true
+							}
+						}
+					}
+				}
+			}
+		},
+		"address": {
+			"_comment": "This is a comment(0):address",
+			"type":"object",
+			"required":true,
+			"properties":{
+				"city": {
+					"type":"string",
+					"required":true
+				},
+				"houseNumber": {
+					"type":"number",
+					"required":false
+				},
+				"streetAddress": {
+					"type":"string",
+					"required":true
+				}
+			}
+		},
+		"phoneNumber": {
+			"_comment": "This is a comment(1):array",
+			"type":"array",
+			"required":false,
+			"items":
+			{
+				"type":"object",
+				"required":false,
+				"properties":{
+					"number": {
+						"type":"string",
+						"required":false
+					},
+					"type": {
+						"type":"string",
+						"required":false
+					}
+				}
+			}
+		},
+		"customers": {
+			"type":"object",
+			"required":true,
+			"properties":{
+				"domestic": {
+					"type":"array",
+					"required":false,
+					"items":
+					{
+						"type":"object",
+						"required":false,
+						"properties":{
+							"name": {
+								"type":"string",
+								"required":true
+							},
+							"industries": {
+								"type":"string",
+								"required":true,
+								"products": {
+									"type":"array",
+									"required":false,
+									"items":
+									{
+										"type":"object",
+										"required":false,
+										"properties":{
+											"name": {
+												"type":"string",
+												"required":true
+											},
+											"quantities": {
+												"type":"number",
+												"required":true
+											},
+											"priority": {
+												"type":"number",
+												"required":true
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"abroad": {
+					"type":"array",
+					"required":false,
+					"items":
+					{
+						"type":"object",
+						"required":false,
+						"properties":{
+							"name": {
+								"type":"string",
+								"required":true
+							},
+							"industries": {
+								"type":"string",
+								"required":true,
+								"products": {
+									"type":"array",
+									"required":false,
+									"items":
+									{
+										"type":"object",
+										"required":false,
+										"properties":{
+											"name": {
+												"type":"string",
+												"required":true
+											},
+											"quantities": {
+												"type":"number",
+												"required":true
+											},
+											"priority": {
+												"type":"number",
+												"required":true
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}	
+}

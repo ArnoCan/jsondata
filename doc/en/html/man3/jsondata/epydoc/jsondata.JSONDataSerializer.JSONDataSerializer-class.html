@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.JSONDataSerializer.JSONDataSerializer</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        <a href="jsondata.JSONDataSerializer-module.html">Module&nbsp;JSONDataSerializer</a> ::
+        Class&nbsp;JSONDataSerializer
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JSONDataSerializer</h1><p class="nomargin-top">[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_jsondata_21" name="uml_class_diagram_for_jsondata_21">
+<area shape="rect" id="node1_6" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#__init__" title="Loads and validates a JSON definition with the corresponding schema file." alt="" coords="17,39,429,57"/>
+<area shape="rect" id="node1_7" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#json_export" title="Exports current data for later import." alt="" coords="17,57,429,76"/>
+<area shape="rect" id="node1_8" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#json_import" title="Imports and validates JSON based data." alt="" coords="17,76,429,95"/>
+<area shape="rect" id="node1_9" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#printData" title="Prints structured data." alt="" coords="17,95,429,113"/>
+<area shape="rect" id="node1_10" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#printSchema" title="Prints structured schema." alt="" coords="17,113,429,132"/>
+<area shape="rect" id="node1_11" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#setSchema" title="Sets schema or inserts a new branch into the current assigned schema." alt="" coords="17,132,429,151"/>
+<area shape="rect" id="node1" href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html" title="Persistency of JSON based data for the class jsondata.JSONData." alt="" coords="5,6,441,157"/>
+</map>
+  <img src="uml_class_diagram_for_jsondata_21.png" alt='' usemap="#uml_class_diagram_for_jsondata_21" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<pre class="literalblock">
+Persistency of JSON based data for the class jsondata.JSONData.
+
+This class provides for persistency of data managed by jsondata.JSONData.
+
+Attributes:
+    **data**: The data tree of JSON based objects provided
+        by the module 'json'.
+    **schema**: The validator for 'data' provided by 
+        the module 'jsonschema'.
+
+Common call parameters provided by the methods of this class are:
+    *targetnode := addressreference*
+        The target node of called method. The 'targetnode' in general 
+        represents the target of the called method. In most cases this
+        has to be a reference to a container for the modification 
+        and/or insertion of resulting elements. The methods require
+        the change of contained items, which involves the application
+        of a 'key' pointing to the hook in point of the reference
+        to the modification.
+        
+    *key := key-value* 
+        The hook-in point for references of modified entries within
+        the targetnode container. The following values are supported:
+                   
+    *sourcenode := addressreference*
+        The in-memory node address of the source branch for the method,
+        e.g. 'copy' or 'move' operation.
+
+The address references supported in this class refer the resulting
+in-memory representation of a pointer path. The target is a node 
+within a Python data representation as provided by the package 
+'**json**' and compatible packages, e.g. '**ujson**'. The supported input
+syntax is one of the following interchangeable formats::
+    
+    # The reference to a in-memory-node.
+    addressreference := (
+          nodereference
+        | addressreference-source
+    )
+
+    nodereference:= (
+          &lt;in-memory&gt;
+        | ''
+    )
+    
+    &lt;in-memory&gt; := &quot;Memory representation of a JSON node, a 'dict'
+        or a 'list'. The in-memory Python node reference has to be
+        located within the document, due to performance reasons this
+        is not verified by default.
+        
+        The 'nodereference' could be converted from the
+        'addressreference-source' representation.&quot;
+
+    '' := &quot;Represents the whole document in accordance to RFC6901.
+        Same as 'self.data'.&quot; 
+    
+    # The source of the syntax for the description of the reference
+    # pointer path to a node. This is applicable on paths to be created.
+    addressreference-source := (
+        JSONPointer
+    )
+          
+    JSONPointer:=&quot;A JSONPointer object in accordance to RFC6901.
+        for additional information on input formats refer to the 
+        class documentation.
+        This class provides a fully qualified path pointer, which
+        could be converted into any of the required representations.&quot;
+
+For hooks by 'key-value' within addressed containers::
+
+    key-value:=(None|&lt;list-index&gt;|&lt;dict-key&gt;) 
+        
+    None := &quot;When the 'key' parameter is 'None', the action 
+        optionally could be based on the keys of the 'sourcenode'.  
+        The contents of the branch replace the node contents
+        when the type of the branch matches the hook.&quot;
+
+    &lt;list-index&gt;:=('-'|int)
+    
+    &lt;dict-key&gt;:=&quot;Valid for a 'dict' only, sets key/value pair, 
+        where present is replace, new is created.&quot;
+
+    '-' := &quot;Valid for a 'list' only, appends to present.&quot;
+    
+    int := &quot;Valid for a 'list' only, replaces present when
+        0 &lt; #int &lt; len(Node).&quot;
+   
+In the parameter lists of methods used term 'pointer' is either 
+an object of class 'JSONPointer', or a list of pointer path 
+entries.
+
+The JSON types 'object' and 'array' behave in Python slightly 
+different in accordance to RFC6902. The main difference arise 
+from the restrictions on applicable key values. Whereas the
+ranges are limited logically by the actual container sizes, 
+the object types provide free and unlimited keys. The limit 
+is set by type restriction to unicode and 'non-nil' only 
+for keys.  
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">appname</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Loads and validates a JSON definition with the corresponding schema file.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#json_export" class="summary-sig-name">json_export</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">sourcenode</span>,
+        <span class="summary-sig-arg">fname</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Exports current data for later import.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.json_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.json_export">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#json_import" class="summary-sig-name">json_import</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">targetnode</span>,
+        <span class="summary-sig-arg">key</span>,
+        <span class="summary-sig-arg">datafile</span>,
+        <span class="summary-sig-arg">schemafile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Imports and validates JSON based data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.json_import" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.json_import">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#printData" class="summary-sig-name">printData</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pretty</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Prints structured data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.printdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.printData">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#printSchema" class="summary-sig-name">printSchema</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pretty</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Prints structured schema.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.printschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.printSchema">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.JSONDataSerializer.JSONDataSerializer-class.html#setSchema" class="summary-sig-name">setSchema</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">schemafile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">targetnode</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Sets schema or inserts a new branch into the current assigned schema.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.setschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.setSchema">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">appname</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Loads and validates a JSON definition with the corresponding schema file.
+
+Args:
+    appname: Name of the application. An arbitrary string representing the
+        name of an application. The name is mainly used for the default
+        name prefix of the JSON data and schema.
+
+    args*: Optional position parameters, these branch_replace corresponding key
+        parameters.
+        filelist, pathlist, filepathlist, schemafile
+    **kargs:
+        datafile: Filepathname of JSON data file, when provided a further
+            search by pathlist, filelist, and filepathlist is suppressed.
+            Therefore it has to be a valid filepathname.
+            
+            default:= &lt;appname&gt;.json
+        filelist: List of valid filenames.
+            
+            default:= &lt;appname&gt;.json
+        filepathlist: List of filepathnames. These are not prefixed by search
+            path components, but made absolute.
+            
+            default:= []
+        filepriority: [firstonly, lastonly, all]
+            Defines the handling of multiple occurrences of a filename at varios
+            positions. This option thus may only be altered in conjunction with 'pathlist'.
+            
+            default:= all
+        indent_str: Defied the indentation of 'str'.
+            
+            default:= 4
+        interactive: Hints on command line call for optional change of display format. 
+            
+            default:= False
+        loadcached: Caching of load for JSON data files.
+            Loads either completely into cache before transferring to
+            production entries, or immediately into production parameters,
+            which may take an effect on the remaining parameters to be loaded.
+            
+            default:= False
+        nodefaultpath: Ignores the default paths, the exception is the
+            base configuration, which still is searched within the default
+            paths exclusively.
+            
+            default:= False
+        nosubdata: Supresses the load of sub-data files.
+            default:= False
+        pathlist: List of pathnames for search of a valid filename.
+            Either a PATH like string, or a list of single paths.
+            
+            default:= ../dirname(__file__)/etc/:dirname(__file__)/:/etc/:$HOME/etc/
+        requires: [all, base, one]
+            Defines how to handle missing or invalid files.
+            
+            default:= all
+        schema: A valid in-meory JSONschema.
+            
+            default:= None
+        schemafile: Filepathname of JSONschema file.
+            
+            default:= &lt;appname&gt;.jsd
+        validator: [default, draft3, off, ]
+            Sets schema validator for the data file.
+            The values are: default=validate, draft3=Draft3Validator,
+            off=None
+            
+            default:= validate
+
+        printdata: branch=None
+            Pretty print resulting final data of branch.
+            
+            default:= top
+        printschema: branch=None
+            Pretty print resulting schema.
+            
+            default:= top
+
+        debug: Displays extended state data for developers.
+            Requires __debug__==True.
+        verbose: Extends the amount of the display of 
+            processing data.
+
+Returns:
+    Results in an initialized object.
+
+Raises:
+    NameError:
+
+    JSONDataSourceFile:
+
+    JSONDataAmbiguity:
+
+    JSONDataValue:
+
+    jsonschema.ValidationError:
+
+    jsonschema.SchemaError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="json_export"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">json_export</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">sourcenode</span>,
+        <span class="sig-arg">fname</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.json_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.json_export">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Exports current data for later import.
+
+The exported data is a snapshot of current state.
+
+Args:
+    fname: File name for the exported data.
+
+    sourcenode: Base of sub-tree for export.
+        None for complete JSON document.
+
+    **kargs:
+        ffs.
+
+Returns:
+    When successful returns 'True', else returns either 'False',
+    or raises an exception.
+
+Raises:
+    JSONDataTargetFile:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="json_import"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">json_import</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">targetnode</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">datafile</span>,
+        <span class="sig-arg">schemafile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.json_import" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.json_import">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Imports and validates JSON based data.
+
+The contained data in 'datafile' could be either the initial data
+tree, or a new branch defined by a fresh tree structure. The
+'targetnode' defines the parent container where the new branch has
+to be hooked-in.
+
+Args:
+    targetnode:
+        Target container for the inclusion of the loaded branch.
+        For the default:='None' the 'self.data' is used.
+    key:
+        The hook within the targetnode,
+    datafile:
+        JSON data filename containing the subtree for the target branch.
+    schemafile:
+        JSON-Schema filename for validation of the subtree/branch.
+    **kargs:
+        matchcondition:
+            Defines the criteria for comparison of present child nodes
+            in the target container. The value is a list of criteria
+            combined by logical AND. The criteria may vary due to
+            the requirement and the type of applied container.
+
+            For information on applicable values refer to:
+                'JSONDataSerializer.isApplicable()'
+
+        validator: [default, draft3, off, ]
+            Sets schema validator for the data file.
+            The values are: default=validate, draft3=Draft3Validator,
+            off=None.
+            
+            default:= validate
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONData:
+
+    JSONDataValue:
+
+    JSONDataSourceFile:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="printData"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printData</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pretty</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.printdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.printData">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Prints structured data.
+
+Args:
+    pretty: Activates pretty printer for treeview, else flat.
+
+    sourcefile: Loads data from 'sourcefile' into 'source'.
+        
+        default:=None
+    source: Prints data within 'source'.
+        
+        default:=self.data
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataAmbiguity:
+
+    forwarded from 'json'
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="printSchema"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printSchema</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pretty</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.printschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.printSchema">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Prints structured schema.
+
+Args:
+    pretty: Activates pretty printer for treeview, else flat.
+
+    sourcefile: Loads schema from 'sourcefile' into 'source'.
+        
+        default:=None
+    source: Prints schema within 'source'.
+        
+        default:=self.schema
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+    JSONDataAmbiguity:
+
+    forwarded from 'json'
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="setSchema"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setSchema</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">schemafile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">targetnode</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsondataserializer.html#jsondataserializer.setschema" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.JSONDataSerializer-pysrc.html#JSONDataSerializer.setSchema">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Sets schema or inserts a new branch into the current assigned schema.
+
+The main schema(targetnode==None) is the schema related to the current
+instance. Additional branches could be added by importing the specific
+schema definitions into the main schema. These could either kept
+volatile as a temporary runtime extension, or stored into a new schema
+file in order as extension of the original for later combined reuse.
+
+Args:
+    schemafile:
+        JSON-Schema filename for validation of the subtree/branch.
+        See also **kargs['schema'].
+    targetnode:
+        Target container hook for the inclusion of the loaded branch.
+    **kargs:
+        schema:
+            In-memory JSON-Schema as an alternative to schemafile.
+            When provided the 'schemafile' is ignored.
+            
+            default:=None
+        validator: [default, draft3, off, ]
+            Sets schema validator for the data file.
+            The values are: default=validate, draft3=Draft3Validator,
+            off=None.
+            
+            default:= validate
+        persistent:
+            Stores the 'schema' persistently into 'schemafile' after
+            completion of update including addition of branches.
+            Requires valid 'schemafile'.
+            
+            default:=False
+
+Returns:
+    When successful returns 'True', else returns either 'False', or
+    raises an exception.
+
+Raises:
+
+    JSONData:
+
+    JSONDataSourceFile:
+
+    JSONDataValue:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:24 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

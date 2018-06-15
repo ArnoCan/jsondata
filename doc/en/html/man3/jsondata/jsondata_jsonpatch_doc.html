@@ -1,0 +1,1317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.jsonpatch’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="next" title="‘testdata’ - package" href="index_testdata.html" />
+    <link rel="prev" title="‘jsondata.jsonpointer’ - Module" href="jsondata_jsonpointer_doc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_testdata.html" title="‘testdata’ - package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpointer_doc.html" title="‘jsondata.jsonpointer’ - Module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" accesskey="U">&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-jsonpatch-module">
+<h1>&#8216;jsondata.jsonpatch&#8217; - Module<a class="headerlink" href="#jsondata-jsonpatch-module" title="Permalink to this headline">¶</a></h1>
+<p>The emphasis of the design combines low resource requirement with features
+designed for the application of large filters onto large JSON based data
+structures.</p>
+<p>The patch list itself is defined by RFC6902 as a JSON array. The entries
+could be either constructed in-memory, or imported from a persistent storage.
+The export feature provides for the persistent storage of a modified patch
+list for later reuse.</p>
+<p>The module contains the following classes:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>JSONPatch</strong>:</dt>
+<dd>The controller for the application of patches on in-memory
+data structures provided by the package &#8216;json&#8217;.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>JSONPatchItem</strong>:</dt>
+<dd>Representation of one patch entry in accordance to RFC6902.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>JSONPatchItemRaw</strong>:</dt>
+<dd>Representation of one patch entry read as a raw entry in accordance to RFC6902.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>JSONPatchFilter</strong>:</dt>
+<dd>Selection filter for the application on the current patch list
+entries JSONPatchItem.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>JSONDataPatchError</strong>:</dt>
+<dd>Specific exception for this module.</dd>
+</dl>
+</li>
+</ul>
+<p>The address of the the provided &#8216;path&#8217; components for the entries are managed
+by the class JSONPointer in accordance to RFC6901.</p>
+<div class="section" id="module-jsondata.jsonpatch">
+<span id="module"></span><h2>Module<a class="headerlink" href="#module-jsondata.jsonpatch" title="Permalink to this headline">¶</a></h2>
+<p>The JSONPatch module provides for the alteration of JSON data compliant to RFC6902.</p>
+</div>
+<div class="section" id="constansts">
+<h2>Constansts<a class="headerlink" href="#constansts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="operations-rfc-6902">
+<span id="index-0"></span><h3>Operations RFC-6902<a class="headerlink" href="#operations-rfc-6902" title="Permalink to this headline">¶</a></h3>
+<p>Standard operations in accordance to RFC6902.
+These are represented by the class <a class="reference internal" href="#patchitem"><span class="std std-ref">JSONPatchItem</span></a>.</p>
+<ul>
+<li><p class="first"><em>RFC6902_ADD(1)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">node</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>RFC6902_COPY(2)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">node</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>RFC6902_MOVE(3)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">node</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>RFC6902_REMOVE(4)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>RFC6902_REPLACE(5)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">node</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>RFC6902_TEST(6)</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">node</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>See <a class="reference internal" href="#patchitem"><span class="std std-ref">JSONPatchItem</span></a>.</p>
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getop">
+<h3>getOp<a class="headerlink" href="#getop" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="jsondata.jsonpatch.getOp">
+<code class="descclassname">jsondata.jsonpatch.</code><code class="descname">getOp</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#getOp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.getOp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts input into corresponding enumeration.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="jsonpatch">
+<h2>JSONPatch<a class="headerlink" href="#jsonpatch" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.jsonpatch.JSONPatch">
+<em class="property">class </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONPatch</code><span class="sig-paren">(</span><em>p=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a JSONPatch task list for RFC6902.</p>
+<p>Contains the defined methods from standards:</p>
+<ul class="simple">
+<li>add</li>
+<li>remove</li>
+<li>replace</li>
+<li>move</li>
+<li>copy</li>
+<li>test</li>
+</ul>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>patch</strong>:</dt>
+<dd>List of patch items.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>JSONPatch.data: JSONPatch object data tree.</li>
+</ul>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__init__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>p=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of patch tasks.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>p</strong>:</dt>
+<dd><p class="first">Patch list.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">JSONPatch</span>
+   <span class="o">|</span> <span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">patch</span><span class="o">-</span><span class="n">items</span><span class="o">&gt;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>replace</strong>:</dt>
+<dd><p class="first">Replace masked characters in <em>target</em> specification.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">replace</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>    <span class="c1"># replaces rfc6901 escape sequences: ~0 and ~1</span>
+   <span class="o">|</span> <span class="kc">False</span>   <span class="c1"># omit unescaping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Match operations are proceeded literally, thus the
+escaped characters should be consistent,
+see rfc6901, Section 3.</p>
+</div>
+<p class="last">default := False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>self.</dd>
+<dt>Raises:</dt>
+<dd>pass-through</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="str">
+<h4>__str__<a class="headerlink" href="#str" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__str__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the display format.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="repr">
+<h4>__repr__<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__repr__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the representation format of a JSON patch list.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="apply">
+<h4>apply<a class="headerlink" href="#apply" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.apply">
+<code class="descclassname">JSONPatch.</code><code class="descname">apply</code><span class="sig-paren">(</span><em>jsondata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the JSONPatch task.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>JSON data the joblist has to be applied on.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">Returns a tuple of:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">lerr</span><span class="p">):</span> 
+
+<span class="n">n</span><span class="p">:</span>    <span class="n">number</span> <span class="n">of</span> <span class="n">present</span> <span class="n">active</span> <span class="n">entries</span>
+<span class="n">lerr</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">failed</span> <span class="n">entries</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="getpatchitem">
+<h4>getpatchitem<a class="headerlink" href="#getpatchitem" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.getpatchitem">
+<code class="descclassname">JSONPatch.</code><code class="descname">getpatchitem</code><span class="sig-paren">(</span><em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.getpatchitem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.getpatchitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the reference to a single patch item.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd><p class="first">Requested item.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">int</span>
+   <span class="o">|</span> <span class="n">JSONPatchItem</span>
+<span class="p">)</span> 
+
+<span class="nb">int</span><span class="p">:</span>           <span class="n">index</span> <span class="n">of</span> <span class="n">patch</span> <span class="n">item</span>
+<span class="n">JSONPatchItem</span><span class="p">:</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">patch</span> <span class="n">item</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The selected patch item.</dd>
+<dt>Raises:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="getpatchitems">
+<h4>getpatchitems<a class="headerlink" href="#getpatchitems" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.getpatchitems">
+<code class="descclassname">JSONPatch.</code><code class="descname">getpatchitems</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.getpatchitems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.getpatchitems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a list of references of patch items.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>args:</dt>
+<dd><p class="first">Requested items.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">args</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+   <span class="o">&lt;</span><span class="n">item</span><span class="o">&gt;</span>
+   <span class="o">|</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span>
+   <span class="o">|</span> <span class="kc">None</span>
+<span class="p">)</span>
+<span class="n">item</span><span class="o">-</span><span class="nb">list</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">&gt;</span><span class="p">[,</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="n">item</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">int</span>
+   <span class="o">|</span> <span class="n">JSONPatchItem</span>
+<span class="p">)</span>
+<span class="kc">None</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;all items of the current patch list&quot;</span>
+
+<span class="nb">int</span><span class="p">:</span>           <span class="n">index</span> <span class="n">of</span> <span class="n">patch</span> <span class="n">item</span>
+<span class="n">JSONPatchItem</span><span class="p">:</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">patch</span> <span class="n">item</span>
+</pre></div>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>idxlist</strong>:</dt>
+<dd><p class="first">Print with index:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">idxlist</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>     <span class="c1"># format: [{&lt;index&gt;: &lt;JSONPatchItem&gt;}]</span>
+   <span class="o">|</span> <span class="kc">False</span>    <span class="c1"># format: [&lt;JSONPatchItem&gt;]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>copydata</strong>:</dt>
+<dd><p class="first">Creates a copy of each resulting item.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">copydata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="n">C_DEEP</span> <span class="o">|</span> <span class="n">C_SHALLOW</span> <span class="o">|</span> <span class="n">C_REF</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := C_REF  # no copy</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>A list of the selected patch items.</dd>
+<dt>Raises:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="gettree">
+<h4>gettree<a class="headerlink" href="#gettree" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.gettree">
+<code class="descclassname">JSONPatch.</code><code class="descname">gettree</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.gettree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.gettree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the resulting logical JSON data structure
+constructed from the patch items of the current set.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>args:</dt>
+<dd><p class="first">Requested items.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">args</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+   <span class="o">&lt;</span><span class="n">item</span><span class="o">&gt;</span>
+   <span class="o">|</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span>
+   <span class="o">|</span> <span class="kc">None</span>
+<span class="p">)</span>
+<span class="n">item</span><span class="o">-</span><span class="nb">list</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">&gt;</span><span class="p">[,</span> <span class="o">&lt;</span><span class="n">item</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="n">item</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">int</span>
+   <span class="o">|</span> <span class="n">JSONPatchItem</span>
+<span class="p">)</span>
+<span class="kc">None</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;all items of the current patch list&quot;</span>
+
+<span class="nb">int</span><span class="p">:</span>           <span class="n">index</span> <span class="n">of</span> <span class="n">patch</span> <span class="n">item</span>
+<span class="n">JSONPatchItem</span><span class="p">:</span> <span class="n">the</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">patch</span> <span class="n">item</span>
+</pre></div>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>data</strong>:</dt>
+<dd><p class="first">An optional JSON data structure, when provided
+the actual data as selected by the patch list
+is returned. Else the paths only.</p>
+<p class="last">default := None</p>
+</dd>
+<dt><strong>scope</strong>:</dt>
+<dd><p class="first">Defines the source scope of the data structure.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">scope</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="s2">&quot;in&quot;</span>   <span class="c1"># input data, e.g. source for &quot;copy&quot;</span>
+   <span class="o">|</span> <span class="s2">&quot;out&quot;</span>  <span class="c1"># output data, e.g. target for &quot;copy</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := &#8220;out&#8221;</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The combined list of the selected patch items contained
+in an object JSONData.</dd>
+<dt>Raises:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="patch-export">
+<h4>patch_export<a class="headerlink" href="#patch-export" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.patch_export">
+<code class="descclassname">JSONPatch.</code><code class="descname">patch_export</code><span class="sig-paren">(</span><em>patchfile</em>, <em>schema=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.patch_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.patch_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports the current task list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>patchfile</strong>:</dt>
+<dd>JSON patch for export.</dd>
+<dt><strong>schema</strong>:</dt>
+<dd>JSON-Schema for validation of the patch list.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>validator</strong>: [default, draft3, off, ]</dt>
+<dd><p class="first">Sets schema validator for the data file.
+The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="o">=</span> <span class="n">validate</span>
+<span class="n">draft3</span>  <span class="o">=</span> <span class="n">Draft3Validator</span>
+<span class="n">off</span>     <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p class="last">default:= validate</p>
+</dd>
+<dt><strong>pretty</strong>:</dt>
+<dd>If True exports as tree format, 
+else all as one line.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="patch-import">
+<h4>patch_import<a class="headerlink" href="#patch-import" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.patch_import">
+<code class="descclassname">JSONPatch.</code><code class="descname">patch_import</code><span class="sig-paren">(</span><em>patchfile</em>, <em>schemafile=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.patch_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.patch_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a task list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>patchfile</strong>:</dt>
+<dd>JSON patch filename containing the list of patch operations.</dd>
+<dt><strong>schemafile</strong>:</dt>
+<dd>JSON-Schema filename for validation of the patch list.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>replace</strong>:</dt>
+<dd><p class="first">Replace masked characters in <em>target</em> specification.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">replace</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>    <span class="c1"># replaces rfc6901 escape sequences: ~0 and ~1</span>
+   <span class="o">|</span> <span class="kc">False</span>   <span class="c1"># omit unescaping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Match operations are proceeded literally, thus the
+escaped characters should be consistent,
+see rfc6901, Section 3.</p>
+</div>
+<p class="last">default := False</p>
+</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Sets schema validator for the data file.
+Curren release relies on <em>jsonschema</em>, which
+supports at the time of writing draft-03 and
+draft-04.</p>
+<p>The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">validator</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">MS_DRAFT3</span>           <span class="o">|</span> <span class="s1">&#39;draft3&#39;</span>
+    <span class="o">|</span> <span class="n">MS_DRAFT4</span>           <span class="o">|</span> <span class="s1">&#39;draft4&#39;</span>
+    <span class="o">|</span> <span class="n">MS_ON</span>               <span class="o">|</span> <span class="s1">&#39;on&#39;</span>
+    <span class="o">|</span> <span class="n">MS_OFF</span>              <span class="o">|</span> <span class="s1">&#39;off&#39;</span>
+    <span class="o">|</span> <span class="n">MODE_SCHEMA_DEFAULT</span> <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default:= MS_OFF</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="repr-export">
+<h4>repr_export<a class="headerlink" href="#repr-export" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.repr_export">
+<code class="descclassname">JSONPatch.</code><code class="descname">repr_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.repr_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.repr_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the export representation format of a JSON patch list.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="str-export">
+<h4>str_export<a class="headerlink" href="#str-export" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.str_export">
+<code class="descclassname">JSONPatch.</code><code class="descname">str_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.str_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.str_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty prints the export representation format of a JSON patch list.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>&#8216;()&#8217;<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__call__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>jdata</em>, <em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the related task for the provided index.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>: </dt>
+<dd>Task index.</dd>
+<dt><strong>jdata</strong>: </dt>
+<dd>JSON data the task has to be 
+applied on.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">Returns a tuple of:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">lerr</span><span class="p">):</span> 
+
+<span class="n">n</span><span class="p">:</span>    <span class="n">number</span> <span class="n">of</span> <span class="n">present</span> <span class="n">active</span> <span class="n">entries</span>
+<span class="n">lerr</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">failed</span> <span class="n">entries</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id2">
+<h4>&#8216;[]&#8217;<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__getitem__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Support of slices, for &#8216;iterator&#8217; refer to self.__iter__.</p>
+<ol class="arabic simple">
+<li>self[key]</li>
+<li>self[i:j:k]</li>
+<li>x in self</li>
+<li>for x in self</li>
+</ol>
+</dd></dl>
+
+</div>
+<div class="section" id="s-x">
+<h4>&#8216;S+x&#8217;<a class="headerlink" href="#s-x" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__add__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__add__</code><span class="sig-paren">(</span><em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and adds patch job to the task queue.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>Extension of pathc job, eithe a <em>JSONPatch</em>,
+or a <em>JSONPatchItem</em>.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Returns a patch job, or raises Exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>&#8216;S==x&#8217;<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__eq__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__eq__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><em>True</em> or <em>False</em></dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id4">
+<h4>&#8216;S+=x&#8217;<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__iadd__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__iadd__</code><span class="sig-paren">(</span><em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__iadd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds patch jobs to the task queue in place.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h4>&#8216;S-=x&#8217;<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__isub__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__isub__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__isub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__isub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the patch job from the task queue in place.</p>
+<p>Removes one of the following type(x) variants:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>int</em>:</dt>
+<dd>The patch job with given index.</dd>
+<dt><em>JSONPatchItem</em>:</dt>
+<dd>The first matching entry from 
+the task queue.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd><p class="first">Item to be removed.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">int</span>
+   <span class="o">|</span> <span class="n">JSONPatchItem</span>
+<span class="p">)</span> 
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Returns resulting list without x.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id6">
+<h4>&#8216;S!=x&#8217;<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__ne__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__ne__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><em>True</em> or <em>False</em></dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id7">
+<h4>&#8216;S-x&#8217;<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__sub__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__sub__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__sub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the patch job from the task queue.</p>
+<p>Removes one of the following type(x) variants:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>int</em>:</dt>
+<dd>The patch job with given index.</dd>
+<dt><em>JSONPatchItem</em>:</dt>
+<dd>The first matching entry from 
+the task queue.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd><p class="first">Item to be removed.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">int</span>
+   <span class="o">|</span> <span class="n">JSONPatchItem</span>
+<span class="p">)</span> 
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>Returns resulting list without x.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="len">
+<h4>len<a class="headerlink" href="#len" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__len__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of outstanding patches.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="iter">
+<h4>__iter__<a class="headerlink" href="#iter" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatch.__iter__">
+<code class="descclassname">JSONPatch.</code><code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatch.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatch.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an iterator foreseen for large amounts of in-memory patches.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="jsonpatchitem">
+<span id="patchitem"></span><h2>JSONPatchItem<a class="headerlink" href="#jsonpatchitem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.jsonpatch.JSONPatchItem">
+<em class="property">class </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONPatchItem</code><span class="sig-paren">(</span><em>op</em>, <em>target</em>, <em>param=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Record entry for list of patch tasks.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>op</strong>:</dt>
+<dd><p class="first">operations:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">add</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">test</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>target</strong>:</dt>
+<dd>JSONPointer for the modification target, see RFC6902.</dd>
+<dt><strong>value</strong>:</dt>
+<dd>Value, either a branch, or a leaf of the JSON data structure.</dd>
+<dt><strong>src</strong>:</dt>
+<dd>JSONPointer for the modification source, see RFC6902.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="id8">
+<h3>Methods<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h4>__init__<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__init__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>op</em>, <em>target</em>, <em>param=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entry for the patch list.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>op</strong>:</dt>
+<dd><p class="first">Operation:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">add</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">remove</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">test</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>target</strong>:</dt>
+<dd><p class="first">Target node.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span>
+    <span class="o">|</span> <span class="n">JSONPointer</span>
+    <span class="o">|</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">-</span><span class="n">items</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>param</strong>:</dt>
+<dd><p class="first">Specific parameter for the operation.</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">type</th>
+<th class="head">operation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>value</td>
+<td>add, replace, test</td>
+</tr>
+<tr class="row-odd"><td>src</td>
+<td>copy, move</td>
+</tr>
+<tr class="row-even"><td>param</td>
+<td>None for &#8216;remove&#8217;</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>replace</strong>:</dt>
+<dd><p class="first">Replace masked characters in <em>target</em> specification.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">replace</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>    <span class="c1"># replaces rfc6901 escape sequences: ~0 and ~1</span>
+   <span class="o">|</span> <span class="kc">False</span>   <span class="c1"># omit unescaping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Match operations are proceeded literally, thus the
+escaped characters should be consistent,
+see rfc6901, Section 3.</p>
+</div>
+<p class="last">default := False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either &#8216;False&#8217;, or
+raises an exception.
+Success is the complete addition only, thus one failure returns
+False.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchItemError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id10">
+<h4>__repr__<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__repr__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the patch string in accordance to RFC6901.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id11">
+<h4>__str__<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__str__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the patch string in accordance to RFC6901.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id12">
+<h4>apply<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.apply">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">apply</code><span class="sig-paren">(</span><em>jsondata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the present patch list on the provided JSON document.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jsondata</strong>:</dt>
+<dd>Document to be patched.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>replace</strong>:</dt>
+<dd><p class="first">Replace masked characters in <em>target</em> specification.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">replace</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="kc">True</span>    <span class="c1"># replaces rfc6901 escape sequences: ~0 and ~1</span>
+   <span class="o">|</span> <span class="kc">False</span>   <span class="c1"># omit unescaping</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Match operations are proceeded literally, thus the
+escaped characters should be consistent,
+see rfc6901, Section 3.</p>
+<p class="last">If already decoded e.g. by the constructor, than should be
+<em>FALSE</em>, is not idempotent.</p>
+</div>
+<p class="last">default := False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">When successful returns &#8216;True&#8217;, else raises an exception.
+Or returns a tuple:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">lerr</span><span class="p">):</span> 
+
+<span class="n">n</span><span class="p">:</span>    <span class="n">number</span> <span class="n">of</span> <span class="n">present</span> <span class="n">active</span> <span class="n">entries</span>
+<span class="n">lerr</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">failed</span> <span class="n">entries</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id13">
+<h4>repr_export<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.repr_export">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">repr_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.repr_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.repr_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the patch string for export in accordance to RFC6901.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id14">
+<h4>str_export<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.str_export">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">str_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.str_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.str_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty prints the patch string for export in accordance to RFC6901.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="id15">
+<h3>Operators<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h4>&#8216;()&#8217;<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__call__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>jdata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the related task for the provided data.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jdata</strong>:</dt>
+<dd>JSON data the task has to be 
+applied on.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">Returns a tuple of:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">lerr</span><span class="p">):</span> 
+
+<span class="n">n</span><span class="p">:</span>    <span class="n">number</span> <span class="n">of</span> <span class="n">present</span> <span class="n">active</span> <span class="n">entries</span>
+<span class="n">lerr</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">failed</span> <span class="n">entries</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>JSONDataPatchError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id17">
+<h4>&#8216;[]&#8217;<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__getitem__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Support of various mappings.</p>
+<ol class="arabic simple">
+<li>self[key]</li>
+<li>self[i:j:k]</li>
+<li>x in self</li>
+<li>for x in self</li>
+</ol>
+</dd></dl>
+
+</div>
+<div class="section" id="id18">
+<h4>&#8216;S==x&#8217;<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__eq__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__eq__</code><span class="sig-paren">(</span><em>x=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>x</strong>:</dt>
+<dd>A valid Pointer.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><em>True</em> or <em>False</em>.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="id19">
+<h4>&#8216;S!=x&#8217;<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItem.__ne__">
+<code class="descclassname">JSONPatchItem.</code><code class="descname">__ne__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItem.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItem.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this pointer with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><strong>x</strong>: A valid Pointer.</dd>
+<dt>Returns:</dt>
+<dd><em>True</em> or <em>False</em>.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="jsonpatchitemraw">
+<h2>JSONPatchItemRaw<a class="headerlink" href="#jsonpatchitemraw" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.jsonpatch.JSONPatchItemRaw">
+<em class="property">class </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONPatchItemRaw</code><span class="sig-paren">(</span><em>patchstring</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItemRaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItemRaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds native patch strings or an unsorted dict for RFC6902.</p>
+<p>Calls parent <em>JSONPatchItem</em>.</p>
+</dd></dl>
+
+<div class="section" id="id20">
+<h3>Methods<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id21">
+<h4>__init__<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchItemRaw.__init__">
+<code class="descclassname">JSONPatchItemRaw.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>patchstring</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchItemRaw.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchItemRaw.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a raw patch string in accordance to RFC6902.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="class-jsonpatchfilter">
+<h2>Class: JSONPatchFilter<a class="headerlink" href="#class-jsonpatchfilter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jsondata.jsonpatch.JSONPatchFilter">
+<em class="property">class </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONPatchFilter</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filtering capabilities on the entries of patch lists.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Not yet implemented.</p>
+</div>
+</dd></dl>
+
+<div class="section" id="id22">
+<h3>Methods<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id23">
+<h4>__init__<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchFilter.__init__">
+<code class="descclassname">JSONPatchFilter.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>kargs:</dt>
+<dd><p class="first">Filter parameters:</p>
+<p><strong>common</strong>:</p>
+<blockquote>
+<div><p>contain=(True|False): Contain, else equal.</p>
+<p>type=&lt;node-type&gt;: Node is of type.</p>
+</div></blockquote>
+<p><strong>paths</strong>:</p>
+<blockquote>
+<div><p>branch=&lt;branch&gt;:</p>
+<p>deep=(): Determines the depth of comparison.</p>
+<dl class="docutils">
+<dt>prefix=&lt;prefix&gt;: Any node of prefix. If prefix is</dt>
+<dd>absolute: the only and one, else None.
+relative: any node prefixed by the path fragment.</dd>
+</dl>
+</div></blockquote>
+<dl class="last docutils">
+<dt><strong>values</strong>:</dt>
+<dd>val=&lt;node-value&gt;: Node ha the value.</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError:</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="id24">
+<h3>Operators<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id25">
+<h4>&#8216;==&#8217;<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchFilter.__eq__">
+<code class="descclassname">JSONPatchFilter.</code><code class="descname">__eq__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchFilter.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="id26">
+<h4>&#8216;!=&#8217;<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsonpatch.JSONPatchFilter.__ne__">
+<code class="descclassname">JSONPatchFilter.</code><code class="descname">__ne__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsonpatch.html#JSONPatchFilter.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONPatchFilter.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="jsondata.jsonpatch.JSONDataPatchError">
+<em class="property">exception </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONDataPatchError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataPatchError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONDataPatchError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.jsonpatch.JSONDataPatchItemError">
+<em class="property">exception </em><code class="descclassname">jsondata.jsonpatch.</code><code class="descname">JSONDataPatchItemError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataPatchItemError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsonpatch.JSONDataPatchItemError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.jsonpatch&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#module-jsondata.jsonpatch">Module</a></li>
+<li><a class="reference internal" href="#constansts">Constansts</a><ul>
+<li><a class="reference internal" href="#operations-rfc-6902">Operations RFC-6902</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#getop">getOp</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatch">JSONPatch</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#str">__str__</a></li>
+<li><a class="reference internal" href="#repr">__repr__</a></li>
+<li><a class="reference internal" href="#apply">apply</a></li>
+<li><a class="reference internal" href="#getpatchitem">getpatchitem</a></li>
+<li><a class="reference internal" href="#getpatchitems">getpatchitems</a></li>
+<li><a class="reference internal" href="#gettree">gettree</a></li>
+<li><a class="reference internal" href="#patch-export">patch_export</a></li>
+<li><a class="reference internal" href="#patch-import">patch_import</a></li>
+<li><a class="reference internal" href="#repr-export">repr_export</a></li>
+<li><a class="reference internal" href="#str-export">str_export</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#id1">&#8216;()&#8217;</a></li>
+<li><a class="reference internal" href="#id2">&#8216;[]&#8217;</a></li>
+<li><a class="reference internal" href="#s-x">&#8216;S+x&#8217;</a></li>
+<li><a class="reference internal" href="#id3">&#8216;S==x&#8217;</a></li>
+<li><a class="reference internal" href="#id4">&#8216;S+=x&#8217;</a></li>
+<li><a class="reference internal" href="#id5">&#8216;S-=x&#8217;</a></li>
+<li><a class="reference internal" href="#id6">&#8216;S!=x&#8217;</a></li>
+<li><a class="reference internal" href="#id7">&#8216;S-x&#8217;</a></li>
+<li><a class="reference internal" href="#len">len</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iterators">Iterators</a><ul>
+<li><a class="reference internal" href="#iter">__iter__</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatchitem">JSONPatchItem</a><ul>
+<li><a class="reference internal" href="#id8">Methods</a><ul>
+<li><a class="reference internal" href="#id9">__init__</a></li>
+<li><a class="reference internal" href="#id10">__repr__</a></li>
+<li><a class="reference internal" href="#id11">__str__</a></li>
+<li><a class="reference internal" href="#id12">apply</a></li>
+<li><a class="reference internal" href="#id13">repr_export</a></li>
+<li><a class="reference internal" href="#id14">str_export</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">Operators</a><ul>
+<li><a class="reference internal" href="#id16">&#8216;()&#8217;</a></li>
+<li><a class="reference internal" href="#id17">&#8216;[]&#8217;</a></li>
+<li><a class="reference internal" href="#id18">&#8216;S==x&#8217;</a></li>
+<li><a class="reference internal" href="#id19">&#8216;S!=x&#8217;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsonpatchitemraw">JSONPatchItemRaw</a><ul>
+<li><a class="reference internal" href="#id20">Methods</a><ul>
+<li><a class="reference internal" href="#id21">__init__</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-jsonpatchfilter">Class: JSONPatchFilter</a><ul>
+<li><a class="reference internal" href="#id22">Methods</a><ul>
+<li><a class="reference internal" href="#id23">__init__</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id24">Operators</a><ul>
+<li><a class="reference internal" href="#id25">&#8216;==&#8217;</a></li>
+<li><a class="reference internal" href="#id26">&#8216;!=&#8217;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsondata_jsonpointer_doc.html"
+                        title="previous chapter">&#8216;jsondata.jsonpointer&#8217; - Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="index_testdata.html"
+                        title="next chapter">&#8216;testdata&#8217; - package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_jsonpatch_doc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index_testdata.html" title="‘testdata’ - package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonpointer_doc.html" title="‘jsondata.jsonpointer’ - Module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" >&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

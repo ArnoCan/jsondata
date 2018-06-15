@@ -1,0 +1,713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Modular processing of JSON data by trees and branches, pointers and patches.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">filesysobjects.userdata</span>
+<span class="kn">import</span> <span class="nn">filesysobjects.osdata</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez&quot;</span> \
+                <span class="s2">&quot; @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.21&#39;</span>
+<span class="n">__uuid__</span> <span class="o">=</span> <span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># used for default names</span>
+<span class="n">appname</span> <span class="o">=</span> <span class="s1">&#39;jsondata&#39;</span>
+
+<div class="viewcode-block" id="JSONDataError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; base Exception.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;To be replaced by derived Exceptions.</span>
+
+<span class="sd">        Fetch standard parameters and forward message to base class &#39;Exception&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch arguments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            *args:</span>
+<span class="sd">                The following order is expected:</span>
+
+<span class="sd">                0. Reason of exception.</span>
+
+<span class="sd">                1. Name of object that caused the exception.</span>
+
+<span class="sd">                2. Value of the object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cause: &lt;reason&gt;:&lt;object&gt;:&lt;value&gt;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cause with additional header text.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;ERROR::&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+<span class="c1"># Sets display for inetractive JSON/JSONschema design.</span>
+<span class="n">_interactive</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="n">V3K</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Python3.5+</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,):</span>
+    <span class="n">V3K</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">ISSTR</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,)</span>
+    <span class="sd">&quot;&quot;&quot;string and unicode&quot;&quot;&quot;</span>
+
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">ISSTR</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">,)</span>  <span class="c1"># @UndefinedVariable</span>
+    <span class="sd">&quot;&quot;&quot;string and unicode&quot;&quot;&quot;</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">JSONDataError</span><span class="p">(</span>
+        <span class="s2">&quot;Requires Python 2.7+, or 3.5+:&quot;</span> <span class="o">+</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="c1">#</span>
+<span class="c1"># generic exceptions</span>
+<span class="c1">#</span>
+
+
+<div class="viewcode-block" id="JSONDataIndexError"><a class="viewcode-back" href="../jsondata_jsondata_doc.html#jsondata.JSONDataIndexError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataIndexError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on key.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">):</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="ne">IndexError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataIndexError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataKeyError"><a class="viewcode-back" href="../jsondata_jsondata_doc.html#jsondata.JSONDataKeyError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataKeyError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on key.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">):</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="ne">KeyError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataKeyError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataPathError"><a class="viewcode-back" href="../jsondata_jsondata_doc.html#jsondata.JSONDataPathError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataPathError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on key.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">):</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">JSONDataError</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="ne">KeyError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataPathError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<span class="k">class</span> <span class="nc">JSONDataNodeError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on node, slightly different from key.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataNodeError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span>
+
+
+<div class="viewcode-block" id="JSONDataNodeTypeError"><a class="viewcode-back" href="../jsondata_jsondata_doc.html#jsondata.JSONDataNodeTypeError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataNodeTypeError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on NodeTypes.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataNodeTypeError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataParameterError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataParameterError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataParameterError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Erroneous parameters.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataParameterError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataSourceFileError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataSourceFileError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataSourceFileError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on read of a source file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataSourceFileError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataModeError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataModeError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataModeError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Type error of source file content.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataModeError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataTargetFileError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataTargetFileError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataTargetFileError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on writing a file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataTargetFileError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataValueError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataValueError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataValueError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error on a value.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataValueError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONDataAmbiguityError"><a class="viewcode-back" href="../jsondata_jsonserializer_doc.html#jsondata.JSONDataAmbiguityError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataAmbiguityError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Error ambiguity of provided parameters.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requested</span><span class="p">,</span> <span class="o">*</span><span class="n">sources</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_interactive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Ambiguious input for:</span><span class="se">\n</span><span class="s2">  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">requested</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sx</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Ambiguious input for:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">requested</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sx</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;JSONDataAmbiguityError:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="JSONPointerError"><a class="viewcode-back" href="../jsondata_jsonpointer_doc.html#jsondata.JSONPointerError">[docs]</a><span class="k">class</span> <span class="nc">JSONPointerError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Pointer error.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JSONPointerTypeError"><a class="viewcode-back" href="../jsondata_jsonpointer_doc.html#jsondata.JSONPointerTypeError">[docs]</a><span class="k">class</span> <span class="nc">JSONPointerTypeError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Pointer type error, the JSON pointer syntax does not represent a valid pointer.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<span class="k">class</span> <span class="nc">JSONTypeError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Pointer error.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">JSONDiffError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Error in JSONDiff.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">JSONSearchError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Error in JSONSearch.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="JSONDataPatchError"><a class="viewcode-back" href="../jsondata_jsonpatch_doc.html#jsondata.JSONDataPatchError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataPatchError</span><span class="p">(</span><span class="n">JSONDataError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JSONDataPatchItemError"><a class="viewcode-back" href="../jsondata_jsonpatch_doc.html#jsondata.JSONDataPatchItemError">[docs]</a><span class="k">class</span> <span class="nc">JSONDataPatchItemError</span><span class="p">(</span><span class="n">JSONDataPatchError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<span class="c1">#</span>
+<span class="c1"># mode of operations</span>
+<span class="c1">#</span>
+<span class="n">MJ_RFC4627</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: The first JSON RFC.</span>
+<span class="n">MJ_RFC7493</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: The IJSON RFC.</span>
+<span class="n">MJ_RFC7159</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: The JSON RFC by &#39;now&#39;.</span>
+<span class="n">MJ_RFC8259</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: The JSON RFC by &#39;now&#39;.</span>
+<span class="n">MJ_ECMA404</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1">#: The first JSON EMCMA standard.</span>
+<span class="n">MJ_RFC6901</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1">#: JSONPointer first IETF RFC.</span>
+<span class="n">MJ_RELPOINTERD1</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1">#: JSONPointer - relative pointer Draft-1.</span>
+<span class="n">MJ_RFC6902</span> <span class="o">=</span> <span class="mi">128</span>  <span class="c1">#: JSONPatch first IETF RFC.</span>
+<span class="n">MJ_DEFAULT</span> <span class="o">=</span> <span class="n">MJ_RFC7159</span>
+
+<span class="c1">#</span>
+<span class="c1"># validation of schemes</span>
+<span class="c1">#</span>
+<span class="n">MS_OFF</span> <span class="o">=</span> <span class="mi">40</span>  <span class="c1">#: No validation.</span>
+<span class="n">MS_DRAFT3</span> <span class="o">=</span> <span class="mi">43</span>  <span class="c1">#: The first supported JSONSchema IETF-Draft.</span>
+<span class="n">MS_DRAFT4</span> <span class="o">=</span> <span class="mi">44</span>  <span class="c1">#: The current supported JSONSchema IETF-Draft.</span>
+<span class="n">MS_ON</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>  <span class="c1">#: The current when the default is activated.</span>
+<span class="n">MODE_SCHEMA_DEFAULT</span> <span class="o">=</span> <span class="n">MS_OFF</span>  <span class="c1">#: The current default validation mode.</span>
+
+<span class="n">str2mj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;rfc4627&quot;</span><span class="p">:</span> <span class="n">MJ_RFC4627</span><span class="p">,</span>
+    <span class="s2">&quot;rfc7493&quot;</span><span class="p">:</span> <span class="n">MJ_RFC7493</span><span class="p">,</span>
+    <span class="s2">&quot;rfc7159&quot;</span><span class="p">:</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="s2">&quot;rfc8259&quot;</span><span class="p">:</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+    <span class="s2">&quot;relpointerD1&quot;</span><span class="p">:</span> <span class="n">MJ_RELPOINTERD1</span><span class="p">,</span>
+    <span class="s2">&quot;ecma404&quot;</span><span class="p">:</span> <span class="n">MJ_ECMA404</span><span class="p">,</span>
+    <span class="s2">&quot;rfc6901&quot;</span><span class="p">:</span> <span class="n">MJ_RFC6901</span><span class="p">,</span>
+    <span class="s2">&quot;rfc6902&quot;</span><span class="p">:</span> <span class="n">MJ_RFC6902</span><span class="p">,</span>
+    <span class="s2">&quot;oss&quot;</span><span class="p">:</span> <span class="n">MS_OFF</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC4627</span><span class="p">):</span> <span class="n">MJ_RFC4627</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC7493</span><span class="p">):</span> <span class="n">MJ_RFC7493</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC7159</span><span class="p">):</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC8259</span><span class="p">):</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_ECMA404</span><span class="p">):</span> <span class="n">MJ_ECMA404</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC6901</span><span class="p">):</span> <span class="n">MJ_RFC6901</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RELPOINTERD1</span><span class="p">):</span> <span class="n">MJ_RELPOINTERD1</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MJ_RFC6902</span><span class="p">):</span> <span class="n">MJ_RFC6902</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">MS_OFF</span><span class="p">):</span> <span class="n">MS_OFF</span><span class="p">,</span>
+    <span class="n">MJ_RFC4627</span><span class="p">:</span> <span class="n">MJ_RFC4627</span><span class="p">,</span>
+    <span class="n">MJ_RFC7493</span><span class="p">:</span> <span class="n">MJ_RFC7493</span><span class="p">,</span>
+    <span class="n">MJ_RFC7159</span><span class="p">:</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="n">MJ_ECMA404</span><span class="p">:</span> <span class="n">MJ_ECMA404</span><span class="p">,</span>
+    <span class="n">MJ_RFC6901</span><span class="p">:</span> <span class="n">MJ_RFC6901</span><span class="p">,</span>
+    <span class="n">MJ_RFC6902</span><span class="p">:</span> <span class="n">MJ_RFC6902</span><span class="p">,</span>
+    <span class="n">MS_OFF</span><span class="p">:</span> <span class="n">MS_OFF</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">mj2str</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">MJ_RFC4627</span><span class="p">:</span> <span class="s2">&quot;rfc4627&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RFC7493</span><span class="p">:</span> <span class="s2">&quot;rfc7493&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RFC7159</span><span class="p">:</span> <span class="s2">&quot;rfc7159&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RFC8259</span><span class="p">:</span> <span class="s2">&quot;rfc8259&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RELPOINTERD1</span><span class="p">:</span> <span class="s2">&quot;relpointerD1&quot;</span><span class="p">,</span>
+    <span class="n">MJ_ECMA404</span><span class="p">:</span> <span class="s2">&quot;ecma404&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RFC6901</span><span class="p">:</span> <span class="s2">&quot;rfc6901&quot;</span><span class="p">,</span>
+    <span class="n">MJ_RFC6902</span><span class="p">:</span> <span class="s2">&quot;rfc6902&quot;</span><span class="p">,</span>
+    <span class="n">MS_OFF</span><span class="p">:</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+
+
+<span class="c1">#</span>
+<span class="c1"># match criteria for node comparison</span>
+<span class="c1">#</span>
+<span class="n">MATCH_INSERT</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: for dicts</span>
+<span class="n">MATCH_NO</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: negates the whole set</span>
+<span class="n">MATCH_KEY</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: for dicts</span>
+<span class="n">MATCH_CHLDATTR</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">#: for dicts and lists</span>
+<span class="n">MATCH_INDEX</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: for lists</span>
+<span class="n">MATCH_MEM</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1">#: for dicts(value) and lists</span>
+<span class="n">MATCH_NEW</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1">#: If not present create a new, else ignore and keep present untouched.</span>
+<span class="n">MATCH_PRESENT</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1">#: Check all are present, else fails.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># application constraints and types for branch operations ::</span>
+<span class="c1">#   res = a OP b</span>
+<span class="c1">#</span>
+<span class="n">B_ALL</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: OP-On-Branches: process in any case.</span>
+<span class="n">B_AND</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: OP-On-Branches: process only when both present.</span>
+<span class="n">B_OR</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: OP-On-Branches: process if one at all is present.</span>
+<span class="n">B_XOR</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: OP-On-Branches: process if only one is present.</span>
+
+<span class="n">B_ADD</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1">#: OP-On-Branches: add in accordance to RFC6902</span>
+<span class="n">B_MOD</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1">#: OP-On-Branches: modulo of branches.</span>
+<span class="n">B_SUB</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1">#: OP-On-Branches: subtract branches.</span>
+
+<span class="c1">#</span>
+<span class="c1"># copy property</span>
+<span class="c1">#</span>
+<span class="n">C_REF</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: OP-Copy: Copy reference.</span>
+<span class="n">C_DEEP</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: OP-Copy: Copy deep.</span>
+<span class="n">C_SHALLOW</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: OP-Copy: Copy shallow.</span>
+<span class="n">C_DEFAULT</span> <span class="o">=</span> <span class="n">C_REF</span>  <span class="c1">#: Default value.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># application-scope</span>
+<span class="c1">#</span>
+<span class="n">SC_DATA</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: OP-Scope: the managed JSON data only</span>
+<span class="n">SC_SCHEMA</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: OP-Scope: the managed JSON schema only</span>
+<span class="n">SC_JSON</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: OP-Scope: the managed JSON data and schema only.</span>
+<span class="n">SC_OBJ</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">#: OP-Scope: the attributes of current instance.</span>
+<span class="n">SC_ALL</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: OP-Scope: the complete object, including data.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># data-scope</span>
+<span class="c1">#</span>
+<span class="n">SD_BOTH</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Apply on mixed input and output data.</span>
+<span class="n">SD_INPUT</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Apply on input data.</span>
+<span class="n">SD_OUTPUT</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Apply on output data.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># sort order</span>
+<span class="c1">#</span>
+<span class="n">S_NONE</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># no sort</span>
+<span class="n">S_SIMPLE</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># goups upper lower</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># return types</span>
+<span class="c1">#</span>
+<span class="n">R_OBJ</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Return object of type self.</span>
+<span class="n">R_DATA</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Return self.data.</span>
+<span class="n">R_JDATA</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Return object of type JSONData.</span>
+
+<span class="c1">#</span>
+<span class="c1"># types of return values</span>
+<span class="c1">#</span>
+<span class="n">RT_STR</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: string - &#39;str&#39; or &#39;unicode&#39;</span>
+<span class="n">RT_DICT</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: dict</span>
+<span class="n">RT_LST</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: list</span>
+<span class="n">RT_JSONPOINTER</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1">#: JSONPointer</span>
+<span class="n">RT_JSONPATCH</span><span class="o">=</span> <span class="mi">16</span>  <span class="c1">#: JSONPatch</span>
+<span class="n">RT_JSONDATA</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1">#: JSONData</span>
+<span class="n">RT_DEFAULT</span> <span class="o">=</span> <span class="n">RT_JSONPOINTER</span>  <span class="c1">#: default</span>
+<span class="n">rtypes2num</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;RT_DICT&#39;</span><span class="p">:</span> <span class="n">RT_DICT</span><span class="p">,</span>
+    <span class="s1">&#39;RT_JSONDATA&#39;</span><span class="p">:</span> <span class="n">RT_JSONDATA</span><span class="p">,</span>
+    <span class="s1">&#39;RT_JSONPATCH&#39;</span><span class="p">:</span> <span class="n">RT_JSONPATCH</span><span class="p">,</span>
+    <span class="s1">&#39;RT_JSONPOINTER&#39;</span><span class="p">:</span> <span class="n">RT_JSONPOINTER</span><span class="p">,</span>
+    <span class="s1">&#39;RT_LST&#39;</span><span class="p">:</span> <span class="n">RT_LST</span><span class="p">,</span>
+    <span class="s1">&#39;RT_STR&#39;</span><span class="p">:</span> <span class="n">RT_STR</span><span class="p">,</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">RT_DEFAULT</span><span class="p">,</span>
+    <span class="s1">&#39;dict&#39;</span><span class="p">:</span> <span class="n">RT_DICT</span><span class="p">,</span>
+    <span class="s1">&#39;jdata&#39;</span><span class="p">:</span> <span class="n">RT_JSONPATCH</span><span class="p">,</span>
+    <span class="s1">&#39;jpatch&#39;</span><span class="p">:</span> <span class="n">RT_JSONDATA</span><span class="p">,</span>
+    <span class="s1">&#39;jpointer&#39;</span><span class="p">:</span> <span class="n">RT_JSONPOINTER</span><span class="p">,</span>
+    <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="n">RT_LST</span><span class="p">,</span>
+    <span class="s1">&#39;str&#39;</span><span class="p">:</span> <span class="n">RT_STR</span><span class="p">,</span>
+    <span class="kc">None</span><span class="p">:</span> <span class="n">RT_DEFAULT</span><span class="p">,</span>
+    <span class="n">RT_DEFAULT</span><span class="p">:</span> <span class="n">RT_DEFAULT</span><span class="p">,</span>
+    <span class="n">RT_DICT</span><span class="p">:</span> <span class="n">RT_DICT</span><span class="p">,</span>
+    <span class="n">RT_JSONDATA</span><span class="p">:</span> <span class="n">RT_JSONDATA</span><span class="p">,</span>
+    <span class="n">RT_JSONPATCH</span><span class="p">:</span> <span class="n">RT_JSONPATCH</span><span class="p">,</span>
+    <span class="n">RT_JSONPOINTER</span><span class="p">:</span> <span class="n">RT_JSONPOINTER</span><span class="p">,</span>
+    <span class="n">RT_LST</span><span class="p">:</span> <span class="n">RT_LST</span><span class="p">,</span>
+    <span class="n">RT_STR</span><span class="p">:</span> <span class="n">RT_STR</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#</span>
+<span class="c1"># match sets</span>
+<span class="c1">#</span>
+<span class="n">M_FIRST</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: First match only.</span>
+<span class="n">M_LAST</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Last match only.</span>
+<span class="n">M_ALL</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: All matches.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># verify pointers against jsondata</span>
+<span class="c1">#</span>
+<span class="n">V_NONE</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: no checks at all</span>
+<span class="n">V_FINAL</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: checks final result only</span>
+<span class="n">V_STEPS</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1">#: checks each intermediate directory</span>
+<span class="n">V_DEFAULT</span> <span class="o">=</span> <span class="n">V_NONE</span>  <span class="c1">#: default</span>
+<span class="n">verify2num</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;V_DEFAULT&#39;</span><span class="p">:</span> <span class="n">V_DEFAULT</span><span class="p">,</span>
+    <span class="s1">&#39;V_FINAL&#39;</span><span class="p">:</span> <span class="n">V_FINAL</span><span class="p">,</span>
+    <span class="s1">&#39;V_NONE&#39;</span><span class="p">:</span> <span class="n">V_NONE</span><span class="p">,</span>
+    <span class="s1">&#39;V_STEPS&#39;</span><span class="p">:</span> <span class="n">V_STEPS</span><span class="p">,</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">V_DEFAULT</span><span class="p">,</span>
+    <span class="s1">&#39;final&#39;</span><span class="p">:</span> <span class="n">V_FINAL</span><span class="p">,</span>
+    <span class="s1">&#39;none&#39;</span><span class="p">:</span> <span class="n">V_NONE</span><span class="p">,</span>
+    <span class="s1">&#39;steps&#39;</span><span class="p">:</span> <span class="n">V_STEPS</span><span class="p">,</span>
+    <span class="kc">None</span><span class="p">:</span> <span class="n">V_DEFAULT</span><span class="p">,</span>
+    <span class="n">V_DEFAULT</span><span class="p">:</span> <span class="n">V_DEFAULT</span><span class="p">,</span>
+    <span class="n">V_FINAL</span><span class="p">:</span> <span class="n">V_FINAL</span><span class="p">,</span>
+    <span class="n">V_NONE</span><span class="p">:</span> <span class="n">V_NONE</span><span class="p">,</span>
+    <span class="n">V_STEPS</span><span class="p">:</span> <span class="n">V_STEPS</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#</span>
+<span class="c1"># display formats for JSONDiff</span>
+<span class="c1">#</span>
+<span class="n">DF_SUMUP</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># short list</span>
+<span class="n">DF_CSV</span> <span class="o">=</span> <span class="mi">1</span>     <span class="c1"># csv, for now semicolon only</span>
+<span class="n">DF_JSON</span> <span class="o">=</span> <span class="mi">3</span>    <span class="c1"># JSON struture</span>
+<span class="n">DF_TABLE</span> <span class="o">=</span> <span class="mi">4</span>   <span class="c1"># table, for now fixed</span>
+<span class="n">DF_REVIEW</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># short for quick review format</span>
+<span class="n">DF_REPR</span> <span class="o">=</span> <span class="mi">6</span>    <span class="c1"># repr() - raw string, Python syntax</span>
+<span class="n">DF_STR</span> <span class="o">=</span> <span class="mi">7</span>     <span class="c1"># str() - formatted string, Python syntax</span>
+
+<span class="n">str2df</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;sumup&#39;</span><span class="p">:</span> <span class="n">DF_SUMUP</span><span class="p">,</span>
+    <span class="s1">&#39;csv&#39;</span><span class="p">:</span> <span class="n">DF_CSV</span><span class="p">,</span>
+    <span class="s1">&#39;json&#39;</span><span class="p">:</span> <span class="n">DF_JSON</span><span class="p">,</span>
+    <span class="s1">&#39;review&#39;</span><span class="p">:</span> <span class="n">DF_REVIEW</span><span class="p">,</span>
+    <span class="s1">&#39;repr&#39;</span><span class="p">:</span> <span class="n">DF_REPR</span><span class="p">,</span>
+    <span class="s1">&#39;str&#39;</span><span class="p">:</span> <span class="n">DF_STR</span><span class="p">,</span>
+    <span class="s1">&#39;tabble&#39;</span><span class="p">:</span> <span class="n">DF_TABLE</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_SUMUP</span><span class="p">):</span> <span class="n">DF_SUMUP</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_CSV</span><span class="p">):</span> <span class="n">DF_CSV</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_JSON</span><span class="p">):</span> <span class="n">DF_JSON</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_REVIEW</span><span class="p">):</span> <span class="n">DF_REVIEW</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_REPR</span><span class="p">):</span> <span class="n">DF_REPR</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_STR</span><span class="p">):</span> <span class="n">DF_STR</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">DF_TABLE</span><span class="p">):</span> <span class="n">DF_TABLE</span><span class="p">,</span>
+    <span class="n">DF_SUMUP</span><span class="p">:</span> <span class="n">DF_SUMUP</span><span class="p">,</span>
+    <span class="n">DF_CSV</span><span class="p">:</span> <span class="n">DF_CSV</span><span class="p">,</span>
+    <span class="n">DF_JSON</span><span class="p">:</span> <span class="n">DF_JSON</span><span class="p">,</span>
+    <span class="n">DF_REVIEW</span><span class="p">:</span> <span class="n">DF_REVIEW</span><span class="p">,</span>
+    <span class="n">DF_REPR</span><span class="p">:</span> <span class="n">DF_REPR</span><span class="p">,</span>
+    <span class="n">DF_STR</span><span class="p">:</span> <span class="n">DF_STR</span><span class="p">,</span>
+    <span class="n">DF_TABLE</span><span class="p">:</span> <span class="n">DF_TABLE</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">df2str</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DF_SUMUP</span><span class="p">:</span> <span class="s1">&#39;sumup&#39;</span><span class="p">,</span>
+    <span class="n">DF_CSV</span><span class="p">:</span> <span class="s1">&#39;csv&#39;</span><span class="p">,</span>
+    <span class="n">DF_JSON</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+    <span class="n">DF_REVIEW</span><span class="p">:</span> <span class="s1">&#39;review&#39;</span><span class="p">,</span>
+    <span class="n">DF_REPR</span><span class="p">:</span> <span class="s1">&#39;repr&#39;</span><span class="p">,</span>
+    <span class="n">DF_STR</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
+    <span class="n">DF_TABLE</span><span class="p">:</span> <span class="s1">&#39;tabble&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#</span>
+<span class="c1"># display formats for JSONData</span>
+<span class="c1">#</span>
+<span class="n">PJ_TREE</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c1">#: tree view JSON syntax</span>
+<span class="n">PJ_FLAT</span> <span class="o">=</span> <span class="mi">1</span>     <span class="c1">#: flat print JSON syntax</span>
+<span class="n">PJ_PYTREE</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1">#: tree view Python syntax</span>
+<span class="n">PJ_PYFLAT</span> <span class="o">=</span> <span class="mi">3</span>   <span class="c1">#: flat print Python syntax</span>
+<span class="n">PJ_REPR</span> <span class="o">=</span> <span class="mi">4</span>     <span class="c1">#: repr() - raw string, Python syntax</span>
+<span class="n">PJ_STR</span> <span class="o">=</span> <span class="mi">5</span>      <span class="c1">#: str() - formatted string, Python syntax</span>
+<span class="n">str2pj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;tree&#39;</span><span class="p">:</span> <span class="n">PJ_TREE</span><span class="p">,</span>
+    <span class="s1">&#39;flat&#39;</span><span class="p">:</span> <span class="n">PJ_FLAT</span><span class="p">,</span>
+    <span class="s1">&#39;pytree&#39;</span><span class="p">:</span> <span class="n">PJ_PYTREE</span><span class="p">,</span>
+    <span class="s1">&#39;pyflat&#39;</span><span class="p">:</span> <span class="n">PJ_PYFLAT</span><span class="p">,</span>
+    <span class="s1">&#39;repr&#39;</span><span class="p">:</span> <span class="n">PJ_REPR</span><span class="p">,</span>
+    <span class="s1">&#39;str&#39;</span><span class="p">:</span> <span class="n">PJ_STR</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_TREE</span><span class="p">):</span> <span class="n">PJ_TREE</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_FLAT</span><span class="p">):</span> <span class="n">PJ_FLAT</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_PYTREE</span><span class="p">):</span> <span class="n">PJ_PYTREE</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_PYFLAT</span><span class="p">):</span> <span class="n">PJ_PYFLAT</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_REPR</span><span class="p">):</span> <span class="n">PJ_REPR</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">PJ_STR</span><span class="p">):</span> <span class="n">PJ_STR</span><span class="p">,</span>
+    <span class="n">PJ_TREE</span><span class="p">:</span> <span class="n">PJ_TREE</span><span class="p">,</span>
+    <span class="n">PJ_FLAT</span><span class="p">:</span> <span class="n">PJ_FLAT</span><span class="p">,</span>
+    <span class="n">PJ_PYTREE</span><span class="p">:</span> <span class="n">PJ_PYTREE</span><span class="p">,</span>
+    <span class="n">PJ_PYFLAT</span><span class="p">:</span> <span class="n">PJ_PYFLAT</span><span class="p">,</span>
+    <span class="n">PJ_REPR</span><span class="p">:</span> <span class="n">PJ_REPR</span><span class="p">,</span>
+    <span class="n">PJ_STR</span><span class="p">:</span> <span class="n">PJ_STR</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">pj2str</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">PJ_TREE</span><span class="p">:</span> <span class="s1">&#39;tree&#39;</span><span class="p">,</span>
+    <span class="n">PJ_FLAT</span><span class="p">:</span> <span class="s1">&#39;flat&#39;</span><span class="p">,</span>
+    <span class="n">PJ_PYTREE</span><span class="p">:</span> <span class="s1">&#39;pytree&#39;</span><span class="p">,</span>
+    <span class="n">PJ_PYFLAT</span><span class="p">:</span> <span class="s1">&#39;pyflat&#39;</span><span class="p">,</span>
+    <span class="n">PJ_REPR</span><span class="p">:</span> <span class="s1">&#39;repr&#39;</span><span class="p">,</span>
+    <span class="n">PJ_STR</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># Notation at the API - in/out.</span>
+<span class="c1">#</span>
+<span class="n">NOTATION_NATIVE</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: JSON notation in accordance to RFC7159</span>
+<span class="n">NOTATION_JSON</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: JSON notation in accordance to RFC7159</span>
+<span class="n">NOTATION_JSON_REL</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: JSON notation as relative pointer</span>
+<span class="n">NOTATION_HTTP_FRAGMENT</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">#: JSON notation in accordance to RFC7159 with RFC3986.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># character display</span>
+<span class="c1">#</span>
+<span class="n">CHARS_RAW</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: display character set as raw</span>
+<span class="n">CHARS_STR</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: display character set as str</span>
+<span class="n">CHARS_UTF</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: display character set as utf</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># line handling for overflow</span>
+<span class="c1">#</span>
+<span class="n">LINE_CUT</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: force line fit</span>
+<span class="n">LINE_WRAP</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: wrap line in order to fit to length</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># search parameters</span>
+<span class="c1">#</span>
+<span class="n">SEARCH_FIRST</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Break display after first match.</span>
+<span class="n">SEARCH_ALL</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: List all matches.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># pointer style</span>
+<span class="c1">#</span>
+<span class="n">PT_PATH</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Displays a list of items.</span>
+<span class="n">PT_RFC6901</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Displays rfc6901 strings.</span>
+<span class="n">PT_NODE</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Displays the node.</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># json syntax</span>
+<span class="c1">#</span>
+<span class="n">JSYN_NATIVE</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Literally in accordance to standards.</span>
+<span class="n">JSYN_PYTHON</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1">#: Python in-memory syntax representation.</span>
+
+
+
+<span class="c1"># maps match strings and enums onto match-enums</span>
+<span class="n">match2match</span> <span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;child_attr_list&#39;</span><span class="p">:</span> <span class="n">MATCH_CHLDATTR</span><span class="p">,</span>
+    <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">MATCH_INDEX</span><span class="p">,</span>
+    <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">MATCH_KEY</span><span class="p">,</span>
+    <span class="s1">&#39;mem&#39;</span><span class="p">:</span> <span class="n">MATCH_MEM</span><span class="p">,</span>
+    <span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="n">MATCH_NEW</span><span class="p">,</span>
+    <span class="s1">&#39;no&#39;</span><span class="p">:</span> <span class="n">MATCH_NO</span><span class="p">,</span>
+    <span class="s1">&#39;present&#39;</span><span class="p">:</span> <span class="n">MATCH_PRESENT</span><span class="p">,</span>
+    <span class="n">MATCH_CHLDATTR</span><span class="p">:</span> <span class="n">MATCH_CHLDATTR</span><span class="p">,</span>
+    <span class="n">MATCH_INDEX</span><span class="p">:</span> <span class="n">MATCH_INDEX</span><span class="p">,</span>
+    <span class="n">MATCH_KEY</span><span class="p">:</span> <span class="n">MATCH_KEY</span><span class="p">,</span>
+    <span class="n">MATCH_MEM</span><span class="p">:</span> <span class="n">MATCH_MEM</span><span class="p">,</span>
+    <span class="n">MATCH_NEW</span><span class="p">:</span> <span class="n">MATCH_NEW</span><span class="p">,</span>
+    <span class="n">MATCH_NO</span><span class="p">:</span> <span class="n">MATCH_NO</span><span class="p">,</span>
+    <span class="n">MATCH_PRESENT</span><span class="p">:</span> <span class="n">MATCH_PRESENT</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># maps mode strings and enums onto mde-enums</span>
+<span class="n">mode2mj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="s1">&#39;ecma404&#39;</span><span class="p">:</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+    <span class="s1">&#39;rfc4627&#39;</span><span class="p">:</span> <span class="n">MJ_RFC4627</span><span class="p">,</span>
+    <span class="s1">&#39;rfc7159&#39;</span><span class="p">:</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="s1">&#39;rfc7493&#39;</span><span class="p">:</span> <span class="n">MJ_RFC7493</span><span class="p">,</span>
+    <span class="s1">&#39;rfc8259&#39;</span><span class="p">:</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+    <span class="n">MJ_ECMA404</span><span class="p">:</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+    <span class="n">MJ_RFC4627</span><span class="p">:</span> <span class="n">MJ_RFC4627</span><span class="p">,</span>
+    <span class="n">MJ_RFC7159</span><span class="p">:</span> <span class="n">MJ_RFC7159</span><span class="p">,</span>
+    <span class="n">MJ_RFC7493</span><span class="p">:</span> <span class="n">MJ_RFC7493</span><span class="p">,</span>
+    <span class="n">MJ_RFC8259</span><span class="p">:</span> <span class="n">MJ_RFC8259</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># maps validator strings and enums onto validator-enums</span>
+<span class="n">validator2ms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">MS_DRAFT4</span><span class="p">,</span>
+    <span class="s1">&#39;draft3&#39;</span><span class="p">:</span> <span class="n">MS_DRAFT3</span><span class="p">,</span>
+    <span class="s1">&#39;off&#39;</span><span class="p">:</span> <span class="n">MS_OFF</span><span class="p">,</span>
+    <span class="n">MS_DRAFT3</span><span class="p">:</span> <span class="n">MS_DRAFT3</span><span class="p">,</span>
+    <span class="n">MS_DRAFT4</span><span class="p">:</span> <span class="n">MS_DRAFT4</span><span class="p">,</span>
+    <span class="n">MS_OFF</span><span class="p">:</span> <span class="n">MS_OFF</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># maps copy strings and enums onto copy-enums</span>
+<span class="n">copy2c</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;deep&#39;</span><span class="p">:</span> <span class="n">C_DEEP</span><span class="p">,</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="n">C_REF</span><span class="p">,</span>
+    <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="n">C_REF</span><span class="p">,</span>
+    <span class="s1">&#39;shallow&#39;</span><span class="p">:</span> <span class="n">C_SHALLOW</span><span class="p">,</span>
+    <span class="n">C_DEEP</span><span class="p">:</span> <span class="n">C_DEEP</span><span class="p">,</span>
+    <span class="n">C_REF</span><span class="p">:</span> <span class="n">C_REF</span><span class="p">,</span>
+    <span class="n">C_SHALLOW</span><span class="p">:</span> <span class="n">C_SHALLOW</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># for now hard-coded</span>
+<span class="c1">#</span>
+<span class="n">consolewidth</span> <span class="o">=</span> <span class="mi">80</span>
+
+<span class="c1">#</span>
+<span class="c1"># misc</span>
+<span class="c1">#</span>
+<span class="n">_verbose</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># common verbose variable</span>
+<span class="n">_debug</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># common verbose variable</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

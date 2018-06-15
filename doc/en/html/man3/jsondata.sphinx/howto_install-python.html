@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Install Python - CPython &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="install-python-cpython">
+<h1>Install Python - CPython<a class="headerlink" href="#install-python-cpython" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install Python - CPython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#os-x">OS-X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#freebsd-and-openbsd">FreeBSD and OpenBSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solaris">Solaris</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raspberrypi-arm">RaspberryPI - ARM</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>Standard procedure,
+see <a class="reference external" href="https://www.python.org/downloads/">Python.org</a>,
+<a class="reference external" href="https://docs.python.org/2/using/unix.html">Python2</a>,
+and
+<a class="reference external" href="https://docs.python.org/3/using/unix.html">Python3</a>.</p>
+<p>The package expects eventuall custom build Python interpreters
+located at the path:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>   /opt/python/python-&lt;version&gt;
+</pre></div>
+</td></tr></table></div>
+<p>The runtime routinesexpand the version suffix in case of partial numbers to
+the highest available completion.
+This includes the Python convention.</p>
+<p>For the available versions</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>     [acue@lap001 syscalls]$ ls /opt/python/
+     python-2.6.6  python-2.6.9   python-2.7.12  python-3.3.6  python-3.5.2  python-3.6.2
+     python-2.6.8  python-2.7.11  python-2.7.13  python-3.4.6  python-3.5.3
+</pre></div>
+</td></tr></table></div>
+<p>the following examples apply:</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span>python2        =&gt; python-2.7.13
+python2.7      =&gt; python-2.7.13
+python3        =&gt; python-3.6.2
+
+python-2       =&gt; python-2.7.13
+python-2.7     =&gt; python-2.7.13
+python-2.7.11  =&gt; python-2.7.11
+python-3.5     =&gt; python-3.5.3
+python-3       =&gt; python-3.6.2
+python-2.6     =&gt; python-2.6.9
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>Standard procedure, with expected defaults:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="29%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Python</th>
+<th class="head">Drive</th>
+<th class="head">Path</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Python2.7</td>
+<td>C: E: F:</td>
+<td>\Python2.7</td>
+</tr>
+<tr class="row-odd"><td>Python3.5</td>
+<td>C: E: F:</td>
+<td>\Python3.5</td>
+</tr>
+<tr class="row-even"><td>Python3.6</td>
+<td>C: E: F:</td>
+<td>\Python3.6</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="https://www.python.org/downloads/">Python.org</a>.</p>
+</div>
+<div class="section" id="os-x">
+<h2>OS-X<a class="headerlink" href="#os-x" title="Permalink to this headline">¶</a></h2>
+<p>Standard procedure with some &#8220;quirks&#8221;.</p>
+<ul>
+<li><p class="first"><em>homebrew</em></p>
+<p>The &#8220;almost formally correct&#8221; use of <em>brew</em>,
+when it works proper - from the box.</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span> brew install python
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p class="first">Install with <em>installer</em></p>
+<p>In case of difficulties, e.g. with the <em>git</em> error,
+the on-board utilities approach may help.</p>
+<div class="highlight-script"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>installer -pkg python-3.5.3-macosx10.6.pkg -target /
+installer -pkg python-3.6.2-macosx10.6.pkg -target /
+</pre></div>
+</td></tr></table></div>
+</li>
+</ul>
+<p>See <a class="reference external" href="https://www.python.org/downloads/">Python.org</a>.</p>
+</div>
+<div class="section" id="freebsd-and-openbsd">
+<h2>FreeBSD and OpenBSD<a class="headerlink" href="#freebsd-and-openbsd" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://docs.python.org/2/using/unix.html">Python2</a>,
+and
+<a class="reference external" href="https://docs.python.org/3/using/unix.html">Python3</a>.</p>
+</div>
+<div class="section" id="solaris">
+<h2>Solaris<a class="headerlink" href="#solaris" title="Permalink to this headline">¶</a></h2>
+<p>a.s.a.p.</p>
+</div>
+<div class="section" id="raspberrypi-arm">
+<h2>RaspberryPI - ARM<a class="headerlink" href="#raspberrypi-arm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="raspbian">
+<h3>Raspbian<a class="headerlink" href="#raspbian" title="Permalink to this headline">¶</a></h3>
+<p>a.s.a.p.</p>
+</div>
+<div class="section" id="freebsd">
+<h3>FreeBSD<a class="headerlink" href="#freebsd" title="Permalink to this headline">¶</a></h3>
+<p>a.s.a.p.</p>
+</div>
+<div class="section" id="kali-linux">
+<h3>Kali-Linux<a class="headerlink" href="#kali-linux" title="Permalink to this headline">¶</a></h3>
+<p>a.s.a.p.</p>
+</div>
+<div class="section" id="openwrt">
+<h3>OpenWRT<a class="headerlink" href="#openwrt" title="Permalink to this headline">¶</a></h3>
+<p>a.s.a.p.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Install Python - CPython</a><ul>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#os-x">OS-X</a></li>
+<li><a class="reference internal" href="#freebsd-and-openbsd">FreeBSD and OpenBSD</a></li>
+<li><a class="reference internal" href="#solaris">Solaris</a></li>
+<li><a class="reference internal" href="#raspberrypi-arm">RaspberryPI - ARM</a><ul>
+<li><a class="reference internal" href="#raspbian">Raspbian</a></li>
+<li><a class="reference internal" href="#freebsd">FreeBSD</a></li>
+<li><a class="reference internal" href="#kali-linux">Kali-Linux</a></li>
+<li><a class="reference internal" href="#openwrt">OpenWRT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_install-python.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

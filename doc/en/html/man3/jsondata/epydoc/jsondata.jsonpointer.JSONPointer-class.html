@@ -1,0 +1,2668 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.jsonpointer.JSONPointer</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        <a href="jsondata.jsonpointer-module.html">Module&nbsp;jsonpointer</a> ::
+        Class&nbsp;JSONPointer
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.jsonpointer.JSONPointer-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JSONPointer</h1><p class="nomargin-top">[<span class="codelink"><a href="../jsonpointer.html#jsonpointer" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_jsondata_47" name="uml_class_diagram_for_jsondata_47">
+<area shape="rect" id="node1_30" href="jsondata.jsonpointer.JSONPointer-class.html#VALID_INDEX" title="Regular expression for valid numerical index." alt="" coords="17,383,428,401"/>
+<area shape="rect" id="node1_31" href="jsondata.jsonpointer.JSONPointer-class.html#__init__" title="Normalizes and stores a JSONPointer." alt="" coords="17,404,428,423"/>
+<area shape="rect" id="node1_32" href="jsondata.jsonpointer.JSONPointer-class.html#__add__" title="Appends a Pointer to self." alt="" coords="17,423,428,441"/>
+<area shape="rect" id="node1_33" href="jsondata.jsonpointer.JSONPointer-class.html#__call__" title="Evaluates the pointer value on the document." alt="" coords="17,441,428,460"/>
+<area shape="rect" id="node1_34" href="jsondata.jsonpointer.JSONPointer-class.html#__delattr__" title="x.__delattr__(&#39;name&#39;) &lt;==&gt; del x.name" alt="" coords="17,460,428,479"/>
+<area shape="rect" id="node1_35" href="jsondata.jsonpointer.JSONPointer-class.html#__eq__" title="Compares this pointer with x." alt="" coords="17,479,428,497"/>
+<area shape="rect" id="node1_36" href="jsondata.jsonpointer.JSONPointer-class.html#__ge__" title="Checks containment(&gt;=) of another pointer within this." alt="" coords="17,497,428,516"/>
+<area shape="rect" id="node1_37" href="jsondata.jsonpointer.JSONPointer-class.html#__gt__" title="Checks containment(&gt;) of another pointer or object within this." alt="" coords="17,516,428,535"/>
+<area shape="rect" id="node1_38" href="jsondata.jsonpointer.JSONPointer-class.html#__iadd__" title="Add in place x to self, appends a path." alt="" coords="17,535,428,553"/>
+<area shape="rect" id="node1_39" href="jsondata.jsonpointer.JSONPointer-class.html#__le__" title="Checks containment(&lt;=) of this pointer within another." alt="" coords="17,553,428,572"/>
+<area shape="rect" id="node1_40" href="jsondata.jsonpointer.JSONPointer-class.html#__lt__" title="Checks containment(&lt;) of this pointer within another." alt="" coords="17,572,428,591"/>
+<area shape="rect" id="node1_41" href="jsondata.jsonpointer.JSONPointer-class.html#__ne__" title="Compares this pointer with x." alt="" coords="17,591,428,609"/>
+<area shape="rect" id="node1_42" href="jsondata.jsonpointer.JSONPointer-class.html#__radd__" title="Adds itself as the right&#45;side&#45;argument to the left." alt="" coords="17,609,428,628"/>
+<area shape="rect" id="node1_43" href="jsondata.jsonpointer.JSONPointer-class.html#__repr__" title="Returns the attribute self.__raw, which is the raw input JSONPointer." alt="" coords="17,628,428,647"/>
+<area shape="rect" id="node1_44" href="jsondata.jsonpointer.JSONPointer-class.html#iter_path_subpathdata" title="Successive iterator for the resulting sub&#45;paths and the corresponding nodes." alt="" coords="17,665,428,684"/>
+<area shape="rect" id="node1" href="jsondata.jsonpointer.JSONPointer-class.html" title="Represents exactly one JSONPointer in compliance with IETF RFC6901 and relative&#45;pointer/draft&#45;1/2018" alt="" coords="5,358,440,690"/>
+<area shape="rect" id="node2_45" href="javascript:void(0);" title="hash(x)" alt="" coords="84,31,360,49"/>
+<area shape="rect" id="node2_46" href="javascript:void(0);" title="y in x" alt="" coords="84,52,360,71"/>
+<area shape="rect" id="node2_47" href="javascript:void(0);" title="del x[y]" alt="" coords="84,71,360,89"/>
+<area shape="rect" id="node2_48" href="javascript:void(0);" title="del x[i:j]" alt="" coords="84,89,360,108"/>
+<area shape="rect" id="node2_49" href="javascript:void(0);" title="x.__getattribute__(&#39;name&#39;) &lt;==&gt; x.name" alt="" coords="84,108,360,127"/>
+<area shape="rect" id="node2_50" href="javascript:void(0);" title="x[y]" alt="" coords="84,127,360,145"/>
+<area shape="rect" id="node2_51" href="javascript:void(0);" title="x[i:j]" alt="" coords="84,145,360,164"/>
+<area shape="rect" id="node2_52" href="javascript:void(0);" title="x*=y" alt="" coords="84,164,360,183"/>
+<area shape="rect" id="node2_53" href="javascript:void(0);" title="iter(x)" alt="" coords="84,183,360,201"/>
+<area shape="rect" id="node2_54" href="javascript:void(0);" title="len(x)" alt="" coords="84,201,360,220"/>
+<area shape="rect" id="node2_55" href="javascript:void(0);" title="x*n" alt="" coords="84,220,360,239"/>
+<area shape="rect" id="node2_56" href="javascript:void(0);" title="list.__new__" alt="" coords="84,239,360,257"/>
+<area shape="rect" id="node2_57" href="javascript:void(0);" title="return a reverse iterator over the list" alt="" coords="84,257,360,276"/>
+<area shape="rect" id="node2_58" href="javascript:void(0);" title="n*x" alt="" coords="84,276,360,295"/>
+<area shape="rect" id="node2_59" href="javascript:void(0);" title="stable sort *IN PLACE*; cmp(x, y) &#45;&gt; &#45;1, 0, 1" alt="" coords="84,313,360,332"/>
+<area shape="rect" id="node2" href="javascript:void(0);" title="list() &#45;&gt; new empty list list(iterable) &#45;&gt; new list initialized from iterable&#39;s items" alt="" coords="71,6,371,338"/>
+</map>
+  <img src="uml_class_diagram_for_jsondata_47.png" alt='' usemap="#uml_class_diagram_for_jsondata_47" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<p>Represents exactly one JSONPointer in compliance with IETF RFC6901 and
+  relative-pointer/draft-1/2018</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">new empty list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ptr</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Normalizes and stores a JSONPointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__add__" class="summary-sig-name">__add__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Appends a Pointer to self.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__add__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__call__" class="summary-sig-name">__call__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Evaluates the pointer value on the document.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__call__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__delattr__" class="summary-sig-name">__delattr__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>)</span><br />
+      x.__delattr__('name') &lt;==&gt; del x.name</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__delattr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__delattr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__eq__" class="summary-sig-name">__eq__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this pointer with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__eq__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__ge__" class="summary-sig-name">__ge__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Checks containment(&gt;=) of another pointer within this.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__ge__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__ge__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__gt__" class="summary-sig-name">__gt__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Checks containment(&gt;) of another pointer or object within this.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__gt__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__gt__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__iadd__" class="summary-sig-name">__iadd__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Add in place x to self, appends a path.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__iadd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__iadd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__le__" class="summary-sig-name">__le__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Checks containment(&lt;=) of this pointer within another.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__le__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__le__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__lt__" class="summary-sig-name">__lt__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Checks containment(&lt;) of this pointer within another.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__lt__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__lt__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__ne__" class="summary-sig-name">__ne__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this pointer with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__ne__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__radd__" class="summary-sig-name">__radd__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Adds itself as the right-side-argument to the left.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__radd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__radd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the attribute self.__raw, which is the raw input JSONPointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__repr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__setattr__" class="summary-sig-name">__setattr__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">value</span>)</span><br />
+      x.__setattr__('name', value) &lt;==&gt; x.name = value</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__setattr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__setattr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the string for the processed path.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__str__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#check_node_or_value" class="summary-sig-name">check_node_or_value</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Checks the existence of the corresponding node
+within the JSON document.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.check_node_or_value" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.check_node_or_value">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#copy" class="summary-sig-name">copy</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Creates a copy of self.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.copy" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.copy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#copy_path_list" class="summary-sig-name">copy_path_list</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Returns a deep copy of the objects pointer path list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.copy_path_list" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.copy_path_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__deepcopy__"></a><span class="summary-sig-name">__deepcopy__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">memo</span>)</span></td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__deepcopy__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__deepcopy__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getattr__"></a><span class="summary-sig-name">__getattr__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>)</span></td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__getattr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__getattr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_key" class="summary-sig-name">get_key</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Get the resulting key for the pointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_key">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_node_and_child" class="summary-sig-name">get_node_and_child</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>)</span><br />
+      Returns a tuple containing the parent node and self as the child.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_and_child" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_and_child">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_node_and_key" class="summary-sig-name">get_node_and_key</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>)</span><br />
+      Returns a tuple containing the parent node and the key of current.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_and_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_and_key">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_node_value" class="summary-sig-name">get_node_value</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">cp</span>=<span class="summary-sig-default">2</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Gets the copy of the corresponding node.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_value" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_value">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_node" class="summary-sig-name">get_node</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>)</span><br />
+      Returns the existing node for the pointer,
+calls transparently *JSONPointer.__call__*.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_node_exist" class="summary-sig-name">get_node_exist</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Returns two parts, the exisitng node for valid part of
+the pointer, and the remaining part of the pointer for
+the non-existing sub-path.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_exist" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_exist">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_path_list" class="summary-sig-name">get_path_list</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets for the corresponding path list of the object pointer for
+in-memory access on the data of the 'json' package.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_path_list" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_path_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_path_list_and_key" class="summary-sig-name">get_path_list_and_key</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets for the corresponding path list of the object pointer for in-memory access on the data of the 'json' package.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_path_list_and_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_path_list_and_key">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_pointer" class="summary-sig-name">get_pointer</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Gets the object pointer in compliance to RFC6901
+or relative pointer/draft-01/2018.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_pointer" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_pointer">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_pointer_and_key"></a><span class="summary-sig-name">get_pointer_and_key</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Get the resulting pointer and key from the processing of the pointer 
+      and the optional starting node *stratrel*.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_pointer_and_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_pointer_and_key">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_pointer_str" class="summary-sig-name">get_pointer_str</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Gets the objects pointer string in compliance to RFC6901
+or relative pointer/draft-01/2018.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_pointer_str" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_pointer_str">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#get_raw" class="summary-sig-name">get_raw</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the objects raw 6901-pointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_raw" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_raw">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_relupidx"></a><span class="summary-sig-name">get_relupidx</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the resulting integer prefix.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_relupidx" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_relupidx">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_start"></a><span class="summary-sig-name">get_start</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the resulting start pointer after the application of the 
+      integer prefix.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_start" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_start">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_startrel"></a><span class="summary-sig-name">get_startrel</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the raw start pointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_startrel" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_startrel">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#evaluate" class="summary-sig-name">evaluate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Gets the value resulting from the current pointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.evaluate" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.evaluate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isfragment"></a><span class="summary-sig-name">isfragment</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Checks whether a http fragment.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.isfragment" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.isfragment">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isrelpathrequest"></a><span class="summary-sig-name">isrelpathrequest</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Checks whether a path request.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.isrelpathrequest" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.isrelpathrequest">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isrel"></a><span class="summary-sig-name">isrel</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Checks whether a relative pointer.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.isrel" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.isrel">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isvalid_nodetype"></a><span class="summary-sig-name">isvalid_nodetype</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Checks valid node types of in-memory JSON data.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.isvalid_nodetype" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.isvalid_nodetype">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isvalrequest"></a><span class="summary-sig-name">isvalrequest</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Checks whether a value request.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.isvalrequest" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.isvalrequest">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#iter_path" class="summary-sig-name">iter_path</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Iterator for the elements of the path pointer itself.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#iter_path_nodes" class="summary-sig-name">iter_path_nodes</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">rev</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterator for the elements the path pointer points to.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_nodes" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_nodes">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#iter_path_subpaths" class="summary-sig-name">iter_path_subpaths</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">rev</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Successive iterator for the resulting sub-paths the
+path pointer itself.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_subpaths" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_subpaths">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpointer.JSONPointer-class.html#iter_path_subpathdata" class="summary-sig-name">iter_path_subpathdata</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">parent</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">rev</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Successive iterator for the resulting sub-paths and the
+corresponding nodes.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_subpathdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_subpathdata">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>list</code></b>:
+      <code>__contains__</code>,
+      <code>__delitem__</code>,
+      <code>__delslice__</code>,
+      <code>__getattribute__</code>,
+      <code>__getitem__</code>,
+      <code>__getslice__</code>,
+      <code>__imul__</code>,
+      <code>__iter__</code>,
+      <code>__len__</code>,
+      <code>__mul__</code>,
+      <code>__new__</code>,
+      <code>__reversed__</code>,
+      <code>__rmul__</code>,
+      <code>__setitem__</code>,
+      <code>__setslice__</code>,
+      <code>__sizeof__</code>,
+      <code>append</code>,
+      <code>count</code>,
+      <code>extend</code>,
+      <code>index</code>,
+      <code>insert</code>,
+      <code>pop</code>,
+      <code>remove</code>,
+      <code>reverse</code>,
+      <code>sort</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="VALID_INDEX"></a><span class="summary-name">VALID_INDEX</span> = <code title="re.compile(r'0|[1-9][0-9]*$')">re.compile(r'0<code class="re-op">|</code><code class="re-group">[</code>1<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-group">[</code>0<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op">*</code>$')</code><br />
+      Regular expression for valid numerical index.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>list</code></b>:
+      <code>__hash__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE VARIABLES ==================== -->
+<a name="section-InstanceVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__isrel"></a><span class="summary-name">__isrel</span><br />
+      marks a relative pointer
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__isfragment"></a><span class="summary-name">__isfragment</span><br />
+      marks a uri fragment
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">ptr</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Normalizes and stores a JSONPointer. The internal
+representation depends on the type.
+
+* absolute path:
+
+  A list of ordered items representing
+  the path items.
+
+* relative path:
+
+  Relative paths in addition provide
+  a positive numeric offset of outer
+  containers [RELPOINTER]_.
+
+Processes the ABNF of a JSON Pointer from RFC6901
+and/or a relative JSON Pointer(draft 2018).
+
+Attributes:
+    For details see manuals.
+
+    * *isfragment*
+    * *isrel*
+    * *raw*
+    * *start*
+    * *startrel*
+
+Args:
+    **ptr**:
+        A JSONPointer to be represented by this object. The
+        supported formats are:
+
+        .. parsed-literal::
+
+           ptr := (
+               JSONPointer                  # [RFC6901]_ or [RELPOINTER]_
+               | &lt;rfc6901-string&gt;           # [RFC6901]_
+               | &lt;relative-pointer-string&gt;  # [RELPOINTER]_
+               | &lt;pointer-items-list&gt;       # non-URI-fragment pointer path items of [RFC6901]_
+               )
+
+        JSONPointer:
+            A valid object, is copied into this object,
+            see 'deep'. Supports *rfc6901* [RFC6901]_
+            and *relative* pointers [RELPOINTER]_.
+
+        *rfc6901-string*:
+            A string i accordance to RFC6901 [RFC6901]_.
+
+        *relative-pointer-string*:
+            Draft standard, currently
+            experimental [RELPOINTER]_.
+
+        *pointer-items-list*:
+            Expects a path list, where each item
+            is processed for escape and unquote.
+            Supports *rfc6901* pointers [RFC6901]_.
+
+        Containing:
+
+        * absolute JSON Pointer
+        * relative JSON Pointer, requires the
+          keyword argument *startrel*
+
+    kargs:
+
+        **debug**:
+            Enable debugging.
+
+        **deep**:
+            Applies for copy operations on structured data
+            'deep' when 'True', else 'shallow' only.
+            Flat data types are copied by value in any case.
+
+        **node**:
+            Force to set the pointed node in the internal cache.
+
+        **replace**:
+            Replace masked characters, is applied onto the *ptr*
+            parameter only. For the replacement of *startrel*
+            create and pass an object *JSONPointer*. ::
+
+               replace := (
+                    True    # replaces rfc6901 escape sequences: ~0 and ~1
+                  | False   # omit unescaping
+               )
+
+            .. note::
+
+               Match operations on address strings are proceeded literally,
+               thus the escaped characters should be consistent,
+               see rfc6901, Section 3.
+
+            default := False
+
+        **startrel**:
+            Start node for relative JSON Pointers. Is evaluated
+            only in combination with a relative path, else
+            ignored. ::
+
+               startrel := (
+                    JSONPointer           # supports [RFC6901]_ and [RELPOINTER]_
+                  | &lt;rfc6901-string&gt;      # supports [RFC6901]_
+                  | &lt;rel-pointer-string&gt;  # supports only relative to whole-document '0/...'
+               )
+
+            default := &quot;&quot;  # whole document
+
+Returns:
+    When successful returns *True*, else returns either *False*, or
+    raises an exception.
+    Success is the complete addition only, thus one failure returns
+    *False*.
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Returns: new empty list</dt>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__add__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__add__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__add__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__add__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Appends a Pointer to self.
+
+Args:
+    **x**:
+        A valid JSONPointer of type: ::
+
+           x := (
+              JSONPointer - fragment
+              | JSONPointer - relative-pointer
+              | relative pointer
+              )
+
+Returns:
+    A new object of JSONPointer
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__add__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__call__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__call__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+    <br /><em class="fname">(Call operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__call__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Evaluates the pointer value on the document.
+
+Args:
+    **x**:
+        A valid JSON document.
+
+Returns:
+    The resulting pointer value.
+
+Raises:
+    JSONPointerError
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__delattr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__delattr__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__delattr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__delattr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x.__delattr__('name') &lt;==&gt; del x.name</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__delattr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__eq__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__eq__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Equality operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__eq__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this pointer with x.
+
+Args:
+    **x**:
+        A JSONPointer object.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__eq__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__ge__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__ge__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Greater-than-or-equals operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__ge__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__ge__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks containment(&gt;=) of another pointer within this.
+
+The weight of contained entries is the criteria, though
+the shorter is the bigger. This is true only in case of
+a containment relation.
+
+The number of equal path pointer items is compared.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__ge__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__gt__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__gt__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Greater-than operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__gt__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__gt__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks containment(&gt;) of another pointer or object within this.
+
+The number of equal items is compared.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__gt__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__iadd__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__iadd__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__iadd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__iadd__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Add in place x to self, appends a path.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    'self' with updated pointer attributes
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__iadd__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__le__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__le__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Less-than-or-equals operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__le__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__le__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks containment(&lt;=) of this pointer within another.
+
+The number of equal items is compared.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__le__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__lt__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__lt__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Less-than operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__lt__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__lt__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks containment(&lt;) of this pointer within another.
+
+The number of equal items is compared.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__lt__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__ne__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__ne__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__ne__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this pointer with x.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        list.__ne__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__radd__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__radd__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Right-side addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__radd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__radd__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Adds itself as the right-side-argument to the left.
+
+This method appends 'self' to a path fragment on the left.
+Therefore it adds the path separator on it's left side only.
+The left side path fragment has to maintain to be in
+accordance to RFC6901 by itself.
+
+Once 'self' is added to the left side, it terminates it's
+life cycle. Thus another simultaneous add operation is
+handled by the resulting other element.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    The updated input of type 'x' as 'x+S(x)'
+
+Raises:
+    JSONPointerError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__repr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns the attribute self.__raw, which is the raw input JSONPointer.
+
+Args:
+    None
+
+Attributes:
+    Evaluates *self.__isrel*
+
+Returns:
+    For relative paths: ::
+       (&lt;start-offset&gt;, &lt;pointer&gt;)
+
+       start-offset := [&lt;self.startrel&gt;]
+       pointer := [&lt;self&gt;]
+
+    For RFC6901 paths: ::
+
+       &lt;pointer&gt;
+
+       pointer := [&lt;self&gt;]
+
+Raises:
+    pass-through
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__setattr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__setattr__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">value</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__setattr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__setattr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x.__setattr__('name', value) &lt;==&gt; x.name = value</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__setattr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.__str__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns the string for the processed path.
+
+Args:
+    None
+
+Attributes:
+    Evaluates *self.__isrel*
+
+Returns:
+    For relative paths: ::
+       (&lt;start-offset&gt;, &lt;pointer&gt;)
+
+       start-offset := [&lt;self.startrel&gt;]
+       pointer := [&lt;self&gt;]
+
+    For RFC6901 paths: ::
+
+       &lt;pointer&gt;
+
+       pointer := [&lt;self&gt;]
+
+Raises:
+    pass-through
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="check_node_or_value"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">check_node_or_value</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.check_node_or_value" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.check_node_or_value">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Checks the existence of the corresponding node
+within the JSON document.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+    **parent**:
+        If *True* returns the parent node of the pointed value.
+
+Returns:
+    True or False
+
+Raises:
+    JSONPointerError:
+
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="copy"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">copy</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.copy" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.copy">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Creates a copy of self.
+
+Args:
+    None
+
+    kargs:
+        **deep**:
+            When *True* creates a deep copy,
+            else shallow.
+
+Returns:
+    A copy of self.
+
+Raises:
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="copy_path_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">copy_path_list</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.copy_path_list" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.copy_path_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns a deep copy of the objects pointer path list.
+
+Args:
+    **parent**:
+        The parent node of the pointer path.
+
+Returns:
+    A copy of the path list.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_key"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_key</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_key">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the resulting key for the pointer. In case of a relative pointer 
+  as resulting from the processing of the relative pointer and the starting
+  node.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_node_and_child"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_node_and_child</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_and_child" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_and_child">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns a tuple containing the parent node and self as the child.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+Returns:
+    The the tuple: ::
+
+       (p, c):
+          p: Node reference to parent container.
+          c: Node reference to self as the child.
+
+Raises:
+    JSONPointerError:
+
+    pass=through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_node_and_key"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_node_and_key</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_and_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_and_key">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns a tuple containing the parent node and the key of current.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+Returns:
+    The the tuple: ::
+
+       (n, k):
+          n: Node reference to parent container.
+          k: Key for self as the child entry:
+
+             k := (
+                  &lt;list-index&gt;
+                | &lt;dict-key&gt;
+                | None
+             )
+
+             list-index: 'int'
+             dict-key: 'UTF-8'
+             None: &quot;for root-node&quot;
+
+Raises:
+    JSONPointerError:
+
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_node_value"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_node_value</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">cp</span>=<span class="sig-default">2</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_value" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_value">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the copy of the corresponding node.
+Relies on the standard package 'json'.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+    **cp**:
+        Type of returned copy. ::
+
+           cp := (
+                C_DEEP
+              | C_REF
+              | C_SHALLOW
+           )
+
+    kargs:
+        **valtype**:
+            Type of requested value.
+
+Returns:
+    The copy of the node, see option *copy*.
+
+Raises:
+    JSONPointerError
+
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_node"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_node</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns the existing node for the pointer,
+calls transparently *JSONPointer.__call__*.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+Returns:
+    The node reference.
+
+Raises:
+    JSONPointerError:
+
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_node_exist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_node_exist</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_node_exist" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_node_exist">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Returns two parts, the exisitng node for valid part of
+the pointer, and the remaining part of the pointer for
+the non-existing sub-path.
+
+This method works similar to the 'evaluate' method, whereas it
+handles partial valid path pointers, which may also include
+a '-' in accordance to RFC6902.
+
+Therefore the non-ambiguous part of the pointer is resolved,
+and returned with the remaining part for a newly create.
+Thus this method is in particular foreseen to support the
+creation of new sub data structures.
+
+The 'evaluate' method therefore returns a list of two elements,
+the first is the node reference, the second the list of the
+remaining path pointer components. The latter may be empty in
+case of a fully valid pointer.
+
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+    **parent**:
+        Return the parent node of the pointed value.
+
+Returns:
+    The node reference, and the remaining part.
+    ret:=(node, [&lt;remaining-path-components-list&gt;])
+
+Raises:
+    JSONPointerError:
+    forwarded from json
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_path_list"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_path_list</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_path_list" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_path_list">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets for the corresponding path list of the object pointer for
+in-memory access on the data of the 'json' package.
+
+Args:
+    none
+
+Returns:
+    The path list.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_path_list_and_key"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_path_list_and_key</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_path_list_and_key" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_path_list_and_key">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets for the corresponding path list of the object pointer for in-memory access on the data of the 'json' package.
+
+Args:
+    none
+
+Returns:
+    The path list.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_pointer"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_pointer</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_pointer" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_pointer">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the object pointer in compliance to RFC6901
+or relative pointer/draft-01/2018.
+
+The result is by default the assigned pointer itself without
+verification. Similar in case of a relative pointer the start
+offset is ignored by default and no verification is performed.
+
+The following options modify this behaviour:
+
+* superpose - superposes the *startrel* offset with the pointer
+* verify - verifies the actual existence of the nodes and/or
+  intermediate nodes
+
+The options could be applied combined.
+
+Args:
+    kargs:
+        **returntype**:
+            Defines the return type. ::
+
+               returntype := (
+                    RT_DEFAULT     | 'default'
+                  | RT_LST         | 'list'      | list
+                  | RT_JSONPOINTER | 'jpointer'
+               )
+
+        **superpose**:
+            Is only relevant for relative paths. Superposes the offset
+            *startrel* with the pointer into the resulting final pointer.
+            By default nodes are not verified, see *verify* parameter.
+
+            default := True
+
+        **verify**:
+            Verifies the &quot;road&quot; of the superposed pointers. ::
+
+               verify := (
+                    V_DEFAULT | 'default'
+                  | V_NONE    | 'none'    | None    # no checks at all
+                  | V_FINAL   | 'final'             # checks final result only
+                  | V_STEPS   | 'steps'             # checks each intermediate directory
+               )
+
+            default := None
+Returns:
+    The new pointer in a choosen format, see *returntype*.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_pointer_str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_pointer_str</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_pointer_str" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_pointer_str">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the objects pointer string in compliance to RFC6901
+or relative pointer/draft-01/2018.
+
+The result is by default the assigned pointer itself without
+verification. Similar in case of a relative pointer the start
+offset is ignored by default and no verification is performed.
+
+The following options modify this behaviour:
+
+* superpose - superposes the *startrel* offset with the pointer
+* verify - verifies the actual existence of the nodes and/or
+  intermediate nodes
+
+The options could be applied combined.
+
+Args:
+    kargs:
+        **forcenotation**:
+            Force the output notation for string representation to: ::
+
+               forcenotation := (
+                    NOTATION_NATIVE           # original format with unescape
+                  | NOTATION_JSON             # transform to resulting pointer
+                  | NOTATION_HTTP_FRAGMENT    # return a fragment with encoding
+                  | NOTATION_JSON_REL         # resulting relative pointer
+                  | NOTATION_RAW              # raw input
+               )
+
+               default := NOTATION_NATIVE
+
+            **REMINDER**: Applicable for return type string only.
+
+        **superpose**:
+            Is only relevant for relative paths. Superposes the offset
+            *startrel* with the pointer into the resulting final pointer.
+            By default nodes are not verified, see *verify* parameter.
+
+Returns:
+    The new pointer in a choosen format, see *returntype*.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_raw"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_raw</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.get_raw" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.get_raw">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the objects raw 6901-pointer.
+
+Args:
+    none
+
+Returns:
+    The raw path.
+
+Raises:
+    none
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="evaluate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">evaluate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.evaluate" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.evaluate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the value resulting from the current pointer.
+
+Args:
+    **jsondata**:
+        A JSON data node. ::
+
+           jsondata := (
+               JSONData
+               | list
+               | dict
+               )
+
+    **parent**:
+        Return the parent node of the pointed value.
+        When parent is selected, the pointed child node
+        is not verified.
+
+Returns:
+    The referenced value.
+
+Raises:
+    JSONPointerError:
+
+    pass-through
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="iter_path"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">iter_path</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Iterator for the elements of the path pointer itself.
+
+Args:
+    **jsondata**:
+        If provided a valid JSON data node, the
+        path components are successively verified on
+        the provided document.
+
+    kargs:
+        **parent**:
+            Uses the path pointer to parent node.
+
+        **rev**:
+            Reverse the order, start with last.
+
+        **superpose**:
+            Is only relevant for relative paths, for *rfc6901* defined
+            paths the parameter is ignored. When *True* superposes
+            the offset *startrel* with the pointer into the resulting
+            final pointer. By default nodes are not verified,
+            see *verify* parameter. ::
+
+               superpose := (
+                    True   # iterates resulting paths from *startrel*
+                  | False  # iterates the path only
+               )
+
+
+            default := True
+
+Returns:
+    Yields the iterator for the current path pointer
+    components.
+
+Raises:
+    JSONPointerError:
+    forwarded from json
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="iter_path_nodes"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">iter_path_nodes</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">rev</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_nodes" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_nodes">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Iterator for the elements the path pointer points to.
+
+Args:
+    **jsondata**:
+        A valid JSON data node.
+
+    **parent**:
+        Uses the path pointer to parent node.
+
+    **rev**:
+        Reverse the order, start with last.
+
+Returns:
+    Yields the iterator of the current node reference.
+
+Raises:
+    JSONPointerError:
+    forwarded from json
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="iter_path_subpaths"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">iter_path_subpaths</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">rev</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_subpaths" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_subpaths">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Successive iterator for the resulting sub-paths the
+path pointer itself.
+
+Args:
+    **jsondata**:
+        If provided a valid JSON data node, the
+        path components are successively verified on
+        the provided document.
+
+    **parent**:
+        Uses the path pointer to parent node.
+
+    **rev**:
+        Reverse the order, start with last.
+
+Returns:
+    Yields the iterator for the copy of the current
+    slice of the path pointer.
+
+Raises:
+    JSONPointerError:
+    forwarded from json
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="iter_path_subpathdata"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">iter_path_subpathdata</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">parent</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">rev</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpointer.html#jsonpointer.iter_path_subpathdata" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpointer-pysrc.html#JSONPointer.iter_path_subpathdata">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Successive iterator for the resulting sub-paths and the
+corresponding nodes.
+
+Args:
+    **jsondata**:
+        If provided a valid JSON data node, the
+        path components are successively verified on
+        the provided document.
+
+    **parent**:
+        Uses the path pointer to parent node.
+
+    **rev**:
+        Reverse the order, start with last.
+
+Returns:
+    Yields the iterator for the tuple of the current
+    slice of the path pointer and the reference of the
+    corresponding node. ::
+
+       (&lt;path-item&gt;, &lt;sub-path&gt;, &lt;node&gt;)
+
+       path-item: copy of the item
+       sub-path:  copy of the current subpath
+       node:      reference to the corresponding node
+
+Raises:
+    JSONPointerError:
+    forwarded from json
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:25 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

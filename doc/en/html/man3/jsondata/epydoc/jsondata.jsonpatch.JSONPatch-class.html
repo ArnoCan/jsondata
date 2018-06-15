@@ -1,0 +1,1372 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jsondata.jsonpatch.JSONPatch</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="jsondata-module.html">Package&nbsp;jsondata</a> ::
+        <a href="jsondata.jsonpatch-module.html">Module&nbsp;jsonpatch</a> ::
+        Class&nbsp;JSONPatch
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="jsondata.jsonpatch.JSONPatch-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JSONPatch</h1><p class="nomargin-top">[<span class="codelink"><a href="../jsonpatch.html#jsonpatch" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_jsondata_43" name="uml_class_diagram_for_jsondata_43">
+<area shape="rect" id="node1_15" href="jsondata.jsonpatch.JSONPatch-class.html#deep" title="Defines copy operations, True:=deep, False:=swallow" alt="" coords="17,31,203,49"/>
+<area shape="rect" id="node1_16" href="jsondata.jsonpatch.JSONPatch-class.html#__init__" title="List of patch tasks." alt="" coords="17,52,203,71"/>
+<area shape="rect" id="node1_17" href="jsondata.jsonpatch.JSONPatch-class.html#__add__" title="Creates and adds patch job to the task queue." alt="" coords="17,71,203,89"/>
+<area shape="rect" id="node1_18" href="jsondata.jsonpatch.JSONPatch-class.html#__call__" title="Evaluates the related task for the provided index." alt="" coords="17,89,203,108"/>
+<area shape="rect" id="node1_19" href="jsondata.jsonpatch.JSONPatch-class.html#__eq__" title="Compares this pointer with x." alt="" coords="17,108,203,127"/>
+<area shape="rect" id="node1_20" href="jsondata.jsonpatch.JSONPatch-class.html#__getitem__" title="Support of slices, for &#39;iterator&#39; refer to self.__iter__." alt="" coords="17,127,203,145"/>
+<area shape="rect" id="node1_21" href="jsondata.jsonpatch.JSONPatch-class.html#__iadd__" title="Adds patch jobs to the task queue in place." alt="" coords="17,145,203,164"/>
+<area shape="rect" id="node1_22" href="jsondata.jsonpatch.JSONPatch-class.html#__isub__" title="Removes the patch job from the task queue in place." alt="" coords="17,164,203,183"/>
+<area shape="rect" id="node1_23" href="jsondata.jsonpatch.JSONPatch-class.html#__iter__" title="Provides an iterator foreseen for large amounts of in&#45;memory patches." alt="" coords="17,183,203,201"/>
+<area shape="rect" id="node1_24" href="jsondata.jsonpatch.JSONPatch-class.html#__len__" title="The number of outstanding patches." alt="" coords="17,201,203,220"/>
+<area shape="rect" id="node1_25" href="jsondata.jsonpatch.JSONPatch-class.html#__ne__" title="Compares this pointer with x." alt="" coords="17,220,203,239"/>
+<area shape="rect" id="node1_26" href="jsondata.jsonpatch.JSONPatch-class.html#__radd__" title="Adds a copy of xto the task queue." alt="" coords="17,239,203,257"/>
+<area shape="rect" id="node1_27" href="jsondata.jsonpatch.JSONPatch-class.html#__repr__" title="Prints the representation format of a JSON patch list." alt="" coords="17,257,203,276"/>
+<area shape="rect" id="node1_28" href="jsondata.jsonpatch.JSONPatch-class.html#__str__" title="Prints the display format." alt="" coords="17,276,203,295"/>
+<area shape="rect" id="node1_29" href="jsondata.jsonpatch.JSONPatch-class.html#str_export" title="Pretty prints the export representation format of a JSON patch list." alt="" coords="17,313,203,332"/>
+<area shape="rect" id="node1" href="jsondata.jsonpatch.JSONPatch-class.html" title="Representation of a JSONPatch task list for RFC6902." alt="" coords="5,6,214,338"/>
+</map>
+  <img src="uml_class_diagram_for_jsondata_43.png" alt='' usemap="#uml_class_diagram_for_jsondata_43" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<pre class="literalblock">
+Representation of a JSONPatch task list for RFC6902.
+
+Contains the defined methods from standards:
+
+* add
+* remove
+* replace
+* move
+* copy
+* test
+
+Attributes:
+    **patch**:
+        List of patch items.
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">p</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      List of patch tasks.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__add__" class="summary-sig-name">__add__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates and adds patch job to the task queue.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__add__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__call__" class="summary-sig-name">__call__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jdata</span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Evaluates the related task for the provided index.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__call__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__eq__" class="summary-sig-name">__eq__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this pointer with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__eq__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span><br />
+      Support of slices, for 'iterator' refer to self.__iter__.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__getitem__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iadd__"></a><span class="summary-sig-name">__iadd__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Adds patch jobs to the task queue in place.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__iadd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__iadd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__isub__" class="summary-sig-name">__isub__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Removes the patch job from the task queue in place.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__isub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__isub__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Provides an iterator foreseen for large amounts of in-memory patches.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__iter__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__iter__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      The number of outstanding patches.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__len__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__ne__" class="summary-sig-name">__ne__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Compares this pointer with x.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__ne__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__radd__"></a><span class="summary-sig-name">__radd__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Adds a copy of xto the task queue.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__radd__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__radd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Prints the representation format of a JSON patch list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__repr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Prints the display format.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__str__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#__sub__" class="summary-sig-name">__sub__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span><br />
+      Removes the patch job from the task queue.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__sub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__sub__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#apply" class="summary-sig-name">apply</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">jsondata</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Applies the JSONPatch task.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.apply" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.apply">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#getpatchitem" class="summary-sig-name">getpatchitem</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Gets the reference to a single patch item.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.getpatchitem" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.getpatchitem">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#getpatchitems" class="summary-sig-name">getpatchitems</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Gets a list of references of patch items.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.getpatchitems" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.getpatchitems">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#gettree" class="summary-sig-name">gettree</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Gets the resulting logical JSON data structure
+constructed from the patch items of the current set.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.gettree" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.gettree">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#patch_export" class="summary-sig-name">patch_export</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">patchfile</span>,
+        <span class="summary-sig-arg">schema</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Exports the current task list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.patch_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.patch_export">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="jsondata.jsonpatch.JSONPatch-class.html#patch_import" class="summary-sig-name">patch_import</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">patchfile</span>,
+        <span class="summary-sig-arg">schemafile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kargs</span>)</span><br />
+      Imports a task list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.patch_import" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.patch_import">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="repr_export"></a><span class="summary-sig-name">repr_export</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Prints the export representation format of a JSON patch list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.repr_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.repr_export">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="str_export"></a><span class="summary-sig-name">str_export</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Pretty prints the export representation format of a JSON patch list.</td>
+          <td align="right" valign="top">
+            [<span class="codelink"><a href="../jsonpatch.html#jsonpatch.str_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.str_export">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE VARIABLES ==================== -->
+<a name="section-InstanceVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="deep"></a><span class="summary-name">deep</span><br />
+      Defines copy operations, True:=deep, False:=swallow
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">p</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__init__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+List of patch tasks.
+
+Args:
+    **p**:
+        Patch list. ::
+
+           p := (
+                JSONPatch
+              | &lt;list-of-patch-items&gt;
+           )
+
+    kargs:
+        **replace**:
+            Replace masked characters in *target* specification. ::
+
+               replace := (
+                    True    # replaces rfc6901 escape sequences: ~0 and ~1
+                  | False   # omit unescaping
+               )
+
+            .. note::
+            
+               Match operations are proceeded literally, thus the
+               escaped characters should be consistent,
+               see rfc6901, Section 3.
+
+            default := False
+
+Returns:
+    self.
+
+Raises:
+    pass-through
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__add__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__add__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__add__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__add__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Creates and adds patch job to the task queue.
+
+Args:
+    **x**:
+        Extension of pathc job, eithe a *JSONPatch*,
+        or a *JSONPatchItem*.
+
+Returns:
+    Returns a patch job, or raises Exception. 
+
+Raises:
+    JSONDataPatchError
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__call__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__call__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jdata</span>,
+        <span class="sig-arg">x</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Call operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__call__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__call__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Evaluates the related task for the provided index.
+
+Args:
+    **x**: 
+        Task index.
+
+    **jdata**: 
+        JSON data the task has to be 
+        applied on.
+
+Returns:
+    Returns a tuple of: ::
+
+       (n, lerr): 
+
+       n:    number of present active entries
+       lerr: list of failed entries
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__eq__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__eq__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Equality operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__eq__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__eq__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this pointer with x.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    *True* or *False*
+
+Raises:
+    JSONPointerError
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__getitem__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__getitem__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Support of slices, for 'iterator' refer to self.__iter__.</p>
+  <p>#. self[key]</p>
+  <p>#. self[i:j:k]</p>
+  <p>#. x in self</p>
+  <p>#. for x in self</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__isub__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__isub__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__isub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__isub__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Removes the patch job from the task queue in place. 
+
+Removes one of the following type(x) variants:
+
+    *int*:
+        The patch job with given index.
+
+    *JSONPatchItem*:
+        The first matching entry from 
+        the task queue. 
+
+Args:
+    **x**:
+        Item to be removed. ::
+
+           x := (
+                int
+              | JSONPatchItem
+           ) 
+
+Returns:
+    Returns resulting list without x.
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__ne__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__ne__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__ne__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__ne__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Compares this pointer with x.
+
+Args:
+    **x**:
+        A valid Pointer.
+
+Returns:
+    *True* or *False*
+
+Raises:
+    JSONPointerError
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__repr__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Prints the representation format of a JSON patch list.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__str__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Prints the display format.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__sub__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__sub__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>)</span>
+    <br /><em class="fname">(Subtraction operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.__sub__" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.__sub__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Removes the patch job from the task queue. 
+
+Removes one of the following type(x) variants:
+
+    *int*:
+        The patch job with given index.
+
+    *JSONPatchItem*:
+        The first matching entry from 
+        the task queue. 
+
+Args:
+    **x**:
+        Item to be removed. ::
+
+           x := (
+                int
+              | JSONPatchItem
+           ) 
+
+Returns:
+    Returns resulting list without x.
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="apply"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">apply</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">jsondata</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.apply" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.apply">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Applies the JSONPatch task.
+
+Args:
+    **jsondata**:
+        JSON data the joblist has to be applied on.
+
+Returns:
+    Returns a tuple of: ::
+
+       (n, lerr): 
+
+       n:    number of present active entries
+       lerr: list of failed entries
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getpatchitem"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getpatchitem</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">x</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.getpatchitem" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.getpatchitem">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the reference to a single patch item.
+
+Args:
+    **x**:
+        Requested item. ::
+
+           x := (
+                int
+              | JSONPatchItem
+           ) 
+
+           int:           index of patch item
+           JSONPatchItem: the reference to the patch item
+    
+Returns:
+    The selected patch item.
+
+Raises:
+    None
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getpatchitems"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getpatchitems</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.getpatchitems" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.getpatchitems">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets a list of references of patch items.
+
+Args:
+    args:
+        Requested items. ::
+
+           *args := (
+              &lt;item&gt;
+              | &lt;item-list&gt;
+              | None
+           )
+           item-list := &lt;item&gt;[, &lt;item-list&gt;]
+           item := (
+                int
+              | JSONPatchItem
+           )
+           None := &quot;all items of the current patch list&quot;
+
+           int:           index of patch item
+           JSONPatchItem: the reference to the patch item
+    
+    kargs:
+        **idxlist**:
+            Print with index: ::
+
+               idxlist := (
+                    True     # format: [{&lt;index&gt;: &lt;JSONPatchItem&gt;}]
+                  | False    # format: [&lt;JSONPatchItem&gt;]
+               )
+
+        **copydata**:
+            Creates a copy of each resulting item. ::
+
+               copydata := (C_DEEP | C_SHALLOW | C_REF)
+
+            default := C_REF  # no copy
+        
+Returns:
+    A list of the selected patch items.
+
+Raises:
+    None
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="gettree"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">gettree</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.gettree" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.gettree">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Gets the resulting logical JSON data structure
+constructed from the patch items of the current set.
+
+Args:
+    args:
+        Requested items. ::
+
+           *args := (
+              &lt;item&gt;
+              | &lt;item-list&gt;
+              | None
+           )
+           item-list := &lt;item&gt;[, &lt;item-list&gt;]
+           item := (
+                int
+              | JSONPatchItem
+           )
+           None := &quot;all items of the current patch list&quot;
+
+           int:           index of patch item
+           JSONPatchItem: the reference to the patch item
+    
+    kargs:
+        **data**:
+            An optional JSON data structure, when provided
+            the actual data as selected by the patch list
+            is returned. Else the paths only.
+
+            default := None
+
+        **scope**:
+            Defines the source scope of the data structure. ::
+
+               scope := (
+                    &quot;in&quot;   # input data, e.g. source for &quot;copy&quot;
+                  | &quot;out&quot;  # output data, e.g. target for &quot;copy
+               )
+
+            default := &quot;out&quot;
+
+Returns:
+    The combined list of the selected patch items contained
+    in an object JSONData.
+
+Raises:
+    None
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="patch_export"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">patch_export</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">patchfile</span>,
+        <span class="sig-arg">schema</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.patch_export" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.patch_export">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Exports the current task list.
+
+Args:
+    **patchfile**:
+        JSON patch for export.
+
+    **schema**:
+        JSON-Schema for validation of the patch list.
+
+    kargs:
+        **validator**: [default, draft3, off, ]
+            Sets schema validator for the data file.
+            The values are: ::
+
+               default = validate
+               draft3  = Draft3Validator
+               off     = None
+
+            default:= validate
+
+        **pretty**:
+            If True exports as tree format, 
+            else all as one line.
+
+Returns:
+    When successful returns 'True', else raises an exception.
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="patch_import"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">patch_import</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">patchfile</span>,
+        <span class="sig-arg">schemafile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >[<span class="codelink"><a href="../jsonpatch.html#jsonpatch.patch_import" target="_top">api</a></span>]&nbsp;<span class="codelink"><a href="jsondata.jsonpatch-pysrc.html#JSONPatch.patch_import">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Imports a task list.
+
+Args:
+    **patchfile**:
+        JSON patch filename containing the list of patch operations.
+
+    **schemafile**:
+        JSON-Schema filename for validation of the patch list.
+
+    kargs:
+        **replace**:
+            Replace masked characters in *target* specification. ::
+
+               replace := (
+                    True    # replaces rfc6901 escape sequences: ~0 and ~1
+                  | False   # omit unescaping
+               )
+
+            .. note::
+            
+               Match operations are proceeded literally, thus the
+               escaped characters should be consistent,
+               see rfc6901, Section 3.
+
+            default := False
+
+        **validator**:
+            Sets schema validator for the data file.
+            Curren release relies on *jsonschema*, which
+            supports at the time of writing draft-03 and
+            draft-04.
+
+            The values are: ::
+
+                validator := (
+                      MS_DRAFT3           | 'draft3'
+                    | MS_DRAFT4           | 'draft4'
+                    | MS_ON               | 'on'
+                    | MS_OFF              | 'off'
+                    | MODE_SCHEMA_DEFAULT | 'default'
+                )
+
+            default:= MS_OFF
+
+Returns:
+    When successful returns 'True', else raises an exception.
+
+Raises:
+    JSONDataPatchError:
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="jsondata-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://pypi.python.org/pypi/jsondata">jsondata - API-Documentation</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 4.0.0 on Fri Jun 15 17:45:25 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jsondata.JSONTree &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="../../index.html" />
+    <link rel="up" title="jsondata" href="../jsondata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" accesskey="U">jsondata</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jsondata.JSONTree</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="sd">&quot;&quot;&quot;The JSONTree module provides features for in-memory JSON structures.</span>
+
+<span class="sd">The provided features comprise:</span>
+
+<span class="sd">* The construction and printout of tree formatted </span>
+<span class="sd">  structures for screen analysis.</span>
+<span class="sd">* Comparison of JSON strings as tree structures.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Arno-Can Uestuensoez&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;Artistic-License-2.0 + Forced-Fairplay-Constraints&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright (C) 2015-2016 Arno-Can Uestuensoez @Ingenieurbuero Arno-Can Uestuensoez&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.2.18&#39;</span>
+<span class="n">__uuid__</span><span class="o">=</span><span class="s1">&#39;63b597d6-4ada-4880-9f99-f5e0961351fb&#39;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">.</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">version</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;2.6&#39;</span><span class="p">,</span><span class="s1">&#39;2.7&#39;</span><span class="p">,):</span> <span class="c1"># pragma: no cover</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Requires Python-2.6.* or higher&quot;</span><span class="p">)</span>
+<span class="c1"># if version &lt; &#39;2.7&#39;: # pragma: no cover</span>
+<span class="c1">#     raise Exception(&quot;Requires Python-2.7.* or higher&quot;)</span>
+
+<span class="c1">#import re</span>
+<span class="c1">#import json, jsonschema</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">myjson</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ujson&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">myjson</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span> <span class="k">as</span> <span class="nn">myjson</span>
+
+<span class="c1"># default</span>
+<span class="n">_appname</span> <span class="o">=</span> <span class="s2">&quot;jsonpatch&quot;</span>
+<span class="sd">&quot;&quot;&quot;Sets display for inetractive JSON/JSONschema design.&quot;&quot;&quot;</span>
+
+<span class="n">_interactive</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="sd">&quot;&quot;&quot;Activates interactive mode.&quot;&quot;&quot;</span>
+
+<span class="n">DIFF_FIRST</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd">&quot;&quot;&quot;break display of diff after first&quot;&quot;&quot;</span>
+
+<span class="n">DIFF_ALL</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;list all diffs&quot;&quot;&quot;</span>
+
+<span class="n">CHARS_RAW</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd">&quot;&quot;&quot;display character set as raw&quot;&quot;&quot;</span>
+
+<span class="n">CHARS_STR</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;display character set as str&quot;&quot;&quot;</span>
+
+<span class="n">CHARS_UTF</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="sd">&quot;&quot;&quot;display character set as utf&quot;&quot;&quot;</span>
+
+<span class="n">LINE_CUT</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="sd">&quot;&quot;&quot;force line fit&quot;&quot;&quot;</span>
+
+<span class="n">LINE_WRAP</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;wrap line in order to fit to length&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="JSONTreeException"><a class="viewcode-back" href="../../jsondata_m_tree.html#jsondata.JSONTree.JSONTreeException">[docs]</a><span class="k">class</span> <span class="nc">JSONTreeException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Error in JSONTree.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JSONTree"><a class="viewcode-back" href="../../jsondata_m_tree.html#jsondata.JSONTree.JSONTree">[docs]</a><span class="k">class</span> <span class="nc">JSONTree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="JSONTree.__init__"><a class="viewcode-back" href="../../jsondata_m_tree.html#jsondata.JSONTree.JSONTree.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an object for the tree representation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kargs: Parameter specific for the operation,</span>
+
+<span class="sd">                scope:</span>
+<span class="sd">                </span>
+<span class="sd">                    * all: Display all diffs.</span>
+<span class="sd">                    * first: Display first diff only.</span>
+<span class="sd">                    </span>
+<span class="sd">                    default:=first</span>
+<span class="sd">            </span>
+<span class="sd">                charset:</span>
+<span class="sd">                </span>
+<span class="sd">                    * raw: Use &#39;raw&#39;.</span>
+<span class="sd">                    * str: Use &#39;str&#39;.</span>
+<span class="sd">                    * utf: Use &#39;utf&#39;.</span>
+<span class="sd">                    </span>
+<span class="sd">                    default:=raw</span>
+<span class="sd">    </span>
+<span class="sd">                debug:</span>
+
+<span class="sd">                    Add developer information.</span>
+
+<span class="sd">                linefit:</span>
+<span class="sd">                    </span>
+<span class="sd">                    * cut: Cut lines to length.</span>
+<span class="sd">                    * wrap: Split lines to length.</span>
+<span class="sd">    </span>
+<span class="sd">                    default:=wrap</span>
+<span class="sd">    </span>
+<span class="sd">                indent=#numchars:</span>
+
+<span class="sd">                    Number of characters for indentation.</span>
+<span class="sd">    </span>
+<span class="sd">                linewidth=#numchars:</span>
+
+<span class="sd">                    Length of lines.</span>
+
+<span class="sd">                verbose:</span>
+
+<span class="sd">                    Add progress and status dialogue output.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns &#39;True&#39;, else raises an exception.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            passed through exceptions:</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">=</span> <span class="n">DIFF_ALL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">=</span> <span class="n">LINE_WRAP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span> <span class="o">=</span> <span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">CHARS_RAW</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="mi">4</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">DIFF_ALL</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">=</span> <span class="n">DIFF_ALL</span>
+                <span class="k">elif</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="n">DIFF_FIRST</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">=</span> <span class="n">DIFF_FIRST</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">=</span> <span class="n">DIFF_FIRST</span>
+        
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;charset&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="n">CHARS_RAW</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">CHARS_RAW</span>
+                <span class="k">elif</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="n">CHARS_STR</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">CHARS_STR</span>
+                <span class="k">elif</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;utf&#39;</span><span class="p">,</span> <span class="n">CHARS_UTF</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">CHARS_UTF</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">CHARS_RAW</span>
+
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;linefit&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;cut&#39;</span><span class="p">,</span> <span class="n">LINE_CUT</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">=</span> <span class="n">LINE_CUT</span>
+                <span class="k">elif</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;wrap&#39;</span><span class="p">,</span> <span class="n">LINE_WRAP</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">=</span> <span class="n">LINE_WRAP</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">=</span> <span class="n">LINE_WRAP</span>
+
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;indent&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="n">v</span>
+
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;linewidth&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span> <span class="o">=</span> <span class="n">v</span>
+
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;verbose&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+            
+            <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span></div>
+    
+<div class="viewcode-block" id="JSONTree.printDiff"><a class="viewcode-back" href="../../jsondata_m_tree.html#jsondata.JSONTree.JSONTree.printDiff">[docs]</a>    <span class="k">def</span> <span class="nf">printDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints out the resulting list of differences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">             ffs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When successful returns tree represantation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            passed through exceptions:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="n">_i</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span>
+        
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">w</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">==</span> <span class="n">LINE_CUT</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;path=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">_i</span><span class="o">+</span><span class="s2">&quot;n0&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n0&#39;</span><span class="p">])</span> 
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">line</span><span class="p">[:</span><span class="n">w</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">line</span>  <span class="o">=</span> <span class="n">_i</span><span class="o">+</span><span class="s2">&quot;n1&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n1&#39;</span><span class="p">])</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="n">line</span><span class="p">[:</span><span class="n">w</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">elif</span> <span class="n">w</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">linefit</span> <span class="o">==</span> <span class="n">LINE_WRAP</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;path=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">_i</span><span class="o">+</span><span class="s2">&quot;n0&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n0&#39;</span><span class="p">])</span> 
+                <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="n">line</span><span class="p">[:</span><span class="n">w</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">w</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">+=</span> <span class="n">_i</span><span class="o">*</span><span class="mi">2</span>
+                <span class="n">line</span>  <span class="o">=</span> <span class="n">_i</span><span class="o">+</span><span class="s2">&quot;n1&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n1&#39;</span><span class="p">])</span>
+                <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">ret</span> <span class="o">+=</span> <span class="n">line</span><span class="p">[:</span><span class="n">w</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">w</span><span class="p">:]</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">ret</span> <span class="o">+=</span> <span class="n">_i</span><span class="o">*</span><span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;path=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  n0&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n0&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">ret</span> <span class="o">+=</span> <span class="s2">&quot;  n1&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;n1&#39;</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+<div class="viewcode-block" id="JSONTree.fetchDiff"><a class="viewcode-back" href="../../jsondata_m_tree.html#jsondata.JSONTree.JSONTree.fetchDiff">[docs]</a>    <span class="k">def</span> <span class="nf">fetchDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n0</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[],</span> <span class="n">dl</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Recursive tree compare for Python trees as used for the package &#39;json&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Finds diff in native Python trees assembled by the standard package &#39;json&#39;</span>
+<span class="sd">        and compatible, e.g. &#39;ujson&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        * leveltop</span>
+<span class="sd">        * levelbottom</span>
+<span class="sd">        * delta (for containers)</span>
+<span class="sd">        * scope(all, first)</span>
+<span class="sd">        * linewidth</span>
+<span class="sd">        * displaycharset (str,utf)</span>
+<span class="sd">        * pathonly</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+
+<span class="sd">            n0:</span>
+
+<span class="sd">                JSON string of type &#39;str&#39;, or &#39;unicode&#39;</span>
+
+<span class="sd">            n1:</span>
+
+<span class="sd">                JSON string of type &#39;str&#39;, or &#39;unicode&#39;</span>
+
+<span class="sd">            p=[]:</span>
+
+
+<span class="sd">                Result entries for each difference:</span>
+<span class="sd">                    ::</span>
+
+<span class="sd">                        {&#39;n0&#39;:n0,&#39;n1&#39;:n1,&#39;dl&#39;:dl,&#39;p&#39;:p[:]}</span>
+
+<span class="sd">                    #. first JSON data</span>
+<span class="sd">                    #. second JSON data</span>
+<span class="sd">                    #. diff count increment value</span>
+<span class="sd">                    #. current diff including path</span>
+
+<span class="sd">                List of differences as of:</span>
+<span class="sd">                </span>
+<span class="sd">                #. non equal types are different: type(n0) != type(n1)</span>
+<span class="sd">                #. equal types, both list: type(n0) is list</span>
+
+<span class="sd">                    #. length is different: len(n0.keys()) != len(n1.keys())</span>
+<span class="sd">                    #. at leats one item is different: n1.get(ni) and v != n1[ni]</span>
+
+<span class="sd">                #. equal types, both dict: type(n0) is dict and type(n1) is dict </span>
+
+<span class="sd">                    #. length is different: len(n0.keys()) != len(n1.keys())</span>
+<span class="sd">                    #. at leats one item is different: n1.get(ni) and v != n1[ni]</span>
+
+<span class="sd">                default:=0</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When no diffs returns True, else False or raises an exception.</span>
+<span class="sd">            The resulting differences are contained in the provided </span>
+<span class="sd">            list parameter &#39;p&#39;. When not provided the resulting list </span>
+<span class="sd">            is suppressed. </span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            passed through exceptions:</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">leveltop</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levelbottom</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pathonly</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+        <span class="c1"># assure JSON strings</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">n0</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span>
+        
+        <span class="n">dl</span> <span class="o">+=</span><span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">n1</span><span class="p">):</span> <span class="c1"># non equal types are different</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="s1">&#39;type:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">n0</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39; != &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">n1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">,</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]})</span>
+            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+    
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span> <span class="c1"># equal types, both list</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span> <span class="s1">&#39;len:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n0</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39; != &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n1</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">,</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]})</span>
+                <span class="n">ret</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ni</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">n0</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">:</span>
+                        <span class="n">pni</span><span class="o">=</span><span class="p">[</span><span class="n">ni</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pni</span><span class="o">=</span><span class="n">p</span><span class="p">[:]</span>
+                        <span class="n">pni</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span>
+                    <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetchDiff</span><span class="p">(</span><span class="n">n0</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="n">pni</span><span class="p">,</span><span class="n">dl</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">==</span> <span class="n">DIFF_FIRST</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">:</span>
+                            <span class="k">break</span>
+    
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">n0</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n0</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">n1</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span> <span class="s1">&#39;len:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n0</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">+</span><span class="s1">&#39; != &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n1</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">,</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]})</span>
+                <span class="n">ret</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ni</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">n0</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">:</span>
+                        <span class="n">pni</span><span class="o">=</span><span class="p">[</span><span class="n">ni</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pni</span><span class="o">=</span><span class="n">p</span><span class="p">[:]</span>
+                        <span class="n">pni</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">n1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                            <span class="nb">print</span> <span class="s1">&#39;item(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ni</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;):&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; != &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
+                            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetchDiff</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="n">pni</span><span class="p">,</span><span class="n">dl</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;ni&#39;</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]})</span>
+                            <span class="n">ret</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scope</span> <span class="o">==</span> <span class="n">DIFF_FIRST</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">:</span>
+                                <span class="k">break</span>
+
+                    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">ret</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetchDiff</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">n1</span><span class="p">[</span><span class="n">ni</span><span class="p">],</span><span class="n">pni</span><span class="p">,</span><span class="n">dl</span><span class="p">)</span>
+    
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># invalid types may have been eliminated already</span>
+            <span class="k">if</span> <span class="n">n0</span> <span class="o">!=</span> <span class="n">n1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">difflist</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;n0&#39;</span><span class="p">:</span><span class="n">n0</span><span class="p">,</span><span class="s1">&#39;n1&#39;</span><span class="p">:</span><span class="n">n1</span><span class="p">,</span><span class="s1">&#39;dl&#39;</span><span class="p">:</span><span class="n">dl</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[:]})</span>
+                <span class="n">ret</span> <span class="o">&amp;=</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../jsondata.html" >jsondata</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

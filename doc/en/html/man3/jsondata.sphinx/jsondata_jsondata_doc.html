@@ -1,0 +1,1750 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.jsondata’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="‘jsondata’ - package" href="index_jsondata.html" />
+    <link rel="next" title="‘jsondata.jsondataserializer’ - Module" href="jsondata_jsonserializer_doc.html" />
+    <link rel="prev" title="jsondata.__init__" href="jsondata_init_doc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonserializer_doc.html" title="‘jsondata.jsondataserializer’ - Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_init_doc.html" title="jsondata.__init__"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" accesskey="U">&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-jsondata-module">
+<h1>&#8216;jsondata.jsondata&#8217; - Module<a class="headerlink" href="#jsondata-jsondata-module" title="Permalink to this headline">¶</a></h1>
+<p>Core features for the processing of structured JSON based in-memory data.
+This comprises the load of a master model from a JSON file - which could
+be initally empty, and the incremental addition and removal of branches
+by loading additional JSON modules into the master model.
+The resulting data could be saved for later reuse.
+The implementation is based on the standard packages <em>json</em> <a class="reference internal" href="references.html#json" id="id1">[json]</a>,
+<em>ujson</em> <a class="reference internal" href="references.html#ujson" id="id2">[ujson]</a>, and &#8216;jsonschema&#8217; <a class="reference internal" href="references.html#jsonschema" id="id3">[jsonschema]</a>.</p>
+<p>Additional modification of the data is supported the module <a class="reference external" href="jsondata_jsonpatch_doc.html">jsonpatch</a>
+analysis and comparison by the module <a class="reference external" href="jsondata_jsondiff_doc.html">jsondatadiff</a>.</p>
+<div class="section" id="module-jsondata.jsondata">
+<span id="module"></span><h2>Module<a class="headerlink" href="#module-jsondata.jsondata" title="Permalink to this headline">¶</a></h2>
+<p>Core features for the processing of JSON based structures of in-memory data.
+Supports RFC4627 and RCF7159, addresses of in-memory-nodes and RFC6901, 
+relative pointer-draft.</p>
+</div>
+<div class="section" id="jsondata">
+<h2>JSONData<a class="headerlink" href="#jsondata" title="Permalink to this headline">¶</a></h2>
+<p>This class provides for the handling of the in-memory data
+by the main hooks &#8216;data&#8217;, and &#8216;schema&#8217;. This includes generic
+methods for the advanced management of arbitrary &#8216;branches&#8217;
+in extension to RCF6902, and additional methods strictly
+compliant to RFC6902.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>data</strong>: The data tree of JSON based objects provided</dt>
+<dd>by the module &#8216;json&#8217;.</dd>
+<dt><strong>schema</strong>: The validator for &#8216;data&#8217; provided by</dt>
+<dd>the module &#8216;jsonschema&#8217;.</dd>
+</dl>
+</dd>
+<dt>Common call parameters provided by the methods of this class are:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>targetnode</strong> := <em>addressreference</em></dt>
+<dd>The target node of called method. The &#8216;targetnode&#8217; in general
+represents the target of the called method. In most cases this
+has to be a reference to a container for the modification
+and/or insertion of resulting elements. The methods require
+the change of contained items, which involves the application
+of a &#8216;key&#8217; pointing to the hook in point of the reference
+to the modification.</dd>
+<dt><strong>key</strong> := <em>key-value</em></dt>
+<dd>The hook-in point for references of modified entries within
+the targetnode container. The following values are supported:</dd>
+<dt><strong>sourcenode</strong> := <em>addressreference</em></dt>
+<dd>The in-memory node address of the source branch for the method,
+e.g. &#8216;copy&#8217; or &#8216;move&#8217; operation.</dd>
+</dl>
+</dd>
+</dl>
+<p>The address references supported in this class refer the resulting
+in-memory representation of a pointer path. The target is a node
+within a Python data representation as provided by the package
+&#8216;<strong>json</strong>&#8216; and compatible packages, e.g. &#8216;<strong>ujson</strong>&#8216;. The supported input
+syntax is one of the following interchangeable formats:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># The reference to a in-memory-node.</span>
+<span class="n">addressreference</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">nodereference</span>
+    <span class="o">|</span> <span class="n">addressreference</span><span class="o">-</span><span class="n">source</span>
+<span class="p">)</span>
+
+<span class="n">nodereference</span><span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="ow">in</span><span class="o">-</span><span class="n">memory</span><span class="o">&gt;</span>
+    <span class="o">|</span> <span class="s1">&#39;&#39;</span>
+<span class="p">)</span>
+
+<span class="o">&lt;</span><span class="ow">in</span><span class="o">-</span><span class="n">memory</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Memory representation of a JSON node, a &#39;dict&#39;</span>
+                <span class="ow">or</span> <span class="n">a</span> <span class="s1">&#39;list&#39;</span><span class="o">.</span> <span class="n">The</span> <span class="ow">in</span><span class="o">-</span><span class="n">memory</span> <span class="n">Python</span> <span class="n">node</span> <span class="n">reference</span>
+                <span class="n">has</span> <span class="n">to</span> <span class="n">be</span> <span class="n">located</span> <span class="n">within</span> <span class="n">the</span> <span class="n">document</span><span class="p">,</span> <span class="n">due</span> <span class="n">to</span>
+                <span class="n">performance</span> <span class="n">reasons</span> <span class="n">this</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">verified</span> <span class="n">by</span> <span class="n">default</span><span class="o">.</span>
+
+               <span class="n">The</span> <span class="s1">&#39;nodereference&#39;</span> <span class="n">could</span> <span class="n">be</span> <span class="n">converted</span> <span class="kn">from</span> <span class="nn">the</span>
+               <span class="s1">&#39;addressreference-source&#39;</span> <span class="n">representation</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="s1">&#39;&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Represents the whole document in accordance to RFC6901.</span>
+       <span class="n">Same</span> <span class="k">as</span> <span class="s1">&#39;self.data&#39;</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="c1"># The source of the syntax for the description of the reference</span>
+<span class="c1"># pointer path to a node. This is applicable on paths to be created.</span>
+<span class="n">addressreference</span><span class="o">-</span><span class="n">source</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+    <span class="n">JSONPointer</span>
+<span class="p">)</span>
+
+<span class="n">JSONPointer</span><span class="p">:</span><span class="o">=</span><span class="s2">&quot;A JSONPointer object in accordance to RFC6901.</span>
+              <span class="k">for</span> <span class="n">additional</span> <span class="n">information</span> <span class="n">on</span> <span class="nb">input</span> <span class="n">formats</span> <span class="n">refer</span>
+              <span class="n">to</span> <span class="n">the</span> <span class="k">class</span> <span class="nc">documentation</span><span class="o">.</span>
+              <span class="n">This</span> <span class="k">class</span> <span class="nc">provides</span> <span class="n">a</span> <span class="n">fully</span> <span class="n">qualified</span> <span class="n">path</span> <span class="n">pointer</span><span class="p">,</span>
+              <span class="n">which</span> <span class="n">could</span> <span class="n">be</span> <span class="n">converted</span> <span class="n">into</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">required</span> <span class="n">representations</span><span class="o">.</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For hooks by &#8216;key-value&#8217; within addressed containers:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">key</span><span class="o">-</span><span class="n">value</span><span class="p">:</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="o">|&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="o">&gt;|&lt;</span><span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">)</span>
+
+<span class="kc">None</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;When the &#39;key&#39; parameter is &#39;None&#39;, the action</span>
+        <span class="n">optionally</span> <span class="n">could</span> <span class="n">be</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">keys</span> <span class="n">of</span> <span class="n">the</span> <span class="s1">&#39;sourcenode&#39;</span><span class="o">.</span>
+        <span class="n">The</span> <span class="n">contents</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span> <span class="n">replace</span> <span class="n">the</span> <span class="n">node</span> <span class="n">contents</span>
+        <span class="n">when</span> <span class="n">the</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span> <span class="n">matches</span> <span class="n">the</span> <span class="n">hook</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="o">&gt;</span><span class="p">:</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">|</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span><span class="o">=</span><span class="s2">&quot;Valid for a &#39;dict&#39; only, sets key/value pair,</span>
+             <span class="n">where</span> <span class="n">present</span> <span class="ow">is</span> <span class="n">replace</span><span class="p">,</span> <span class="n">new</span> <span class="ow">is</span> <span class="n">created</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="s1">&#39;-&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Valid for a &#39;list&#39; only, appends to present.&quot;</span>
+
+<span class="nb">int</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Valid for a &#39;list&#39; only, replaces present when</span>
+        <span class="mi">0</span> <span class="o">&lt;</span> <span class="c1">#int &lt; len(Node).&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In the parameter lists of methods used term &#8216;pointer&#8217; is either
+an object of class &#8216;JSONPointer&#8217;, or a list of pointer path
+entries.</p>
+<p>The JSON types &#8216;object&#8217; and &#8216;array&#8217; behave in Python slightly
+different in accordance to RFC6902. The main difference arise
+from the restrictions on applicable key values. Whereas the
+ranges are limited logically by the actual container sizes,
+the object types provide free and unlimited keys. The limit
+is set by type restriction to unicode and &#8216;non-nil&#8217; only
+for keys.</p>
+<dl class="class">
+<dt id="jsondata.jsondata.JSONData">
+<em class="property">class </em><code class="descclassname">jsondata.jsondata.</code><code class="descname">JSONData</code><span class="sig-paren">(</span><em>jdata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a JSON based object data tree.</p>
+<p>The common node address parameters are defined as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sourcenode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">commonnode</span><span class="o">&gt;|&lt;</span><span class="n">indata</span><span class="o">&gt;</span> <span class="c1"># depends on the interface</span>
+
+<span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>              <span class="c1"># target within the represented</span>
+                                    <span class="c1"># JSON structure</span>
+
+<span class="n">commonnode</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="n">anydata</span> <span class="o">|</span> <span class="n">indata</span><span class="p">)</span>
+
+<span class="n">anydata</span>  <span class="p">:</span><span class="o">=</span> <span class="p">(</span>                       <span class="c1"># any data hook - within</span>
+                                    <span class="c1"># self.data or external</span>
+    <span class="n">JSONData</span>                        <span class="c1"># - adds to the contained data</span>
+                                    <span class="c1">#   of the reference</span>
+  <span class="o">|</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="n">array</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span>               <span class="c1"># - adds to JSON array</span>
+  <span class="o">|</span> <span class="o">&lt;</span><span class="n">json</span><span class="o">-</span><span class="nb">object</span><span class="o">-</span><span class="nb">dict</span><span class="o">&gt;</span>              <span class="c1"># - adds to JSON object</span>
+<span class="p">)</span>
+
+<span class="n">indata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>                         <span class="c1"># within self.data</span>
+    <span class="n">JSONPointer</span>                     <span class="c1"># - adds to the node within</span>
+                                    <span class="c1">#   self.data [RFC6901]_</span>
+  <span class="o">|</span> <span class="o">&lt;</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span>                <span class="c1"># - pointer string within self.data [RFC6901]_</span>
+  <span class="o">|</span> <span class="o">&lt;</span><span class="n">relative</span><span class="o">-</span><span class="n">pointer</span><span class="o">-</span><span class="n">string</span><span class="o">&gt;</span><span class="p">)</span>      <span class="c1"># - relative pointer within self.data [RELPOINTER]_</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>REMARK</strong>:</dt>
+<dd>The RFC7159 permits any JSON type as a node, while the RFC4627
+permits array and object as node reference only.</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><em>JSONData.data</em></p>
+<p>JSON object data tree.
+The data tree of JSON based objects provided
+by the module <em>json</em>/<em>ujson</em>.</p>
+</li>
+<li><p class="first"><em>JSONData.schema</em></p>
+<p>JSONschema object data tree.
+The validator for &#8216;data&#8217; provided by
+the module <em>jsonschema</em>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="common-call-parameters">
+<h3>Common Call Parameters<a class="headerlink" href="#common-call-parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Common call parameters provided by most methods of this class are:</dt>
+<dd><p class="first"><strong>targetnode</strong> := <em>addressreference</em></p>
+<blockquote>
+<div>The target node of the called method. The <em>targetnode</em> in general
+represents the target of the called method. In most cases this
+has to be a reference to a container for the modification
+and/or insertion of resulting elements. The methods require
+the change of contained items, which involves the application
+of a <em>key</em> pointing to the hook-in point of the reference
+for modification.</div></blockquote>
+<p><strong>key</strong> := <em>key-value</em></p>
+<blockquote>
+<div>The hook-in point for references of modified entries within
+the <em>targetnode</em> container.</div></blockquote>
+<p><strong>sourcenode</strong> := <em>addressreference</em></p>
+<blockquote class="last">
+<div>The in-memory node address of the source branch for the method,
+e.g. for the  <em>copy</em> and <em>move</em> operation.</div></blockquote>
+</dd>
+</dl>
+<p>The address references supported in this class refer the resulting
+in-memory representation of a pointer path. The target is a node
+within a Python data representation as provided by the package
+&#8216;<strong>json</strong>&#8216; and compatible packages, e.g. &#8216;<strong>ujson</strong>&#8216;. The supported input
+syntax is one of the following interchangeable formats:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># The reference to a in-memory-node.</span>
+<span class="n">addressreference</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">nodereference</span>
+   <span class="o">|</span> <span class="n">addressreference</span><span class="o">-</span><span class="n">source</span>
+<span class="p">)</span>
+
+<span class="n">nodereference</span><span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="ow">in</span><span class="o">-</span><span class="n">memory</span><span class="o">&gt;</span>
+    <span class="o">|</span> <span class="s1">&#39;&#39;</span>
+<span class="p">)</span>
+
+<span class="o">&lt;</span><span class="ow">in</span><span class="o">-</span><span class="n">memory</span><span class="o">&gt;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Memory representation of a JSON node, a &#39;dict&#39;</span>
+                <span class="ow">or</span> <span class="n">a</span> <span class="s1">&#39;list&#39;</span><span class="o">.</span> <span class="n">The</span> <span class="ow">in</span><span class="o">-</span><span class="n">memory</span> <span class="n">Python</span> <span class="n">node</span> <span class="n">reference</span>
+                <span class="n">has</span> <span class="n">to</span> <span class="n">be</span> <span class="n">located</span> <span class="n">within</span> <span class="n">the</span> <span class="n">document</span><span class="p">,</span> <span class="n">due</span> <span class="n">to</span>
+                <span class="n">performance</span> <span class="n">reasons</span> <span class="n">this</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">verified</span> <span class="n">by</span> <span class="n">default</span><span class="o">.</span>
+
+                <span class="n">The</span> <span class="s1">&#39;nodereference&#39;</span> <span class="n">could</span> <span class="n">be</span> <span class="n">converted</span> <span class="kn">from</span> <span class="nn">the</span>
+                <span class="s1">&#39;addressreference-source&#39;</span> <span class="n">representation</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="s1">&#39;&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Represents the whole document in accordance to RFC6901.</span>
+       <span class="n">Same</span> <span class="k">as</span> <span class="s1">&#39;self.data&#39;</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="c1"># The source of the syntax for the description of the reference</span>
+<span class="c1"># pointer path to a node. This is applicable on paths to be created.</span>
+<span class="n">addressreference</span><span class="o">-</span><span class="n">source</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+    <span class="n">JSONPointer</span>
+<span class="p">)</span>
+
+<span class="n">JSONPointer</span><span class="p">:</span><span class="o">=</span><span class="s2">&quot;A JSONPointer object in accordance to RFC6901.</span>
+             <span class="k">for</span> <span class="n">additional</span> <span class="n">information</span> <span class="n">on</span> <span class="nb">input</span> <span class="n">formats</span> <span class="n">refer</span>
+             <span class="n">to</span> <span class="n">the</span> <span class="k">class</span> <span class="nc">documentation</span><span class="o">.</span>
+             <span class="n">This</span> <span class="k">class</span> <span class="nc">provides</span> <span class="n">a</span> <span class="n">fully</span> <span class="n">qualified</span> <span class="n">path</span> <span class="n">pointer</span><span class="p">,</span>
+             <span class="n">which</span> <span class="n">could</span> <span class="n">be</span> <span class="n">converted</span> <span class="n">into</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">required</span>
+             <span class="n">representations</span><span class="o">.</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For hooks by &#8216;key-value&#8217; within addressed containers:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">key</span><span class="o">-</span><span class="n">value</span><span class="p">:</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="o">|&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="o">&gt;|&lt;</span><span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">)</span>
+
+<span class="kc">None</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;When the &#39;key&#39; parameter is &#39;None&#39;, the action</span>
+        <span class="n">optionally</span> <span class="n">could</span> <span class="n">be</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">keys</span> <span class="n">of</span> <span class="n">the</span> <span class="s1">&#39;sourcenode&#39;</span><span class="o">.</span>
+        <span class="n">The</span> <span class="n">contents</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span> <span class="n">replace</span> <span class="n">the</span> <span class="n">node</span> <span class="n">contents</span>
+        <span class="n">when</span> <span class="n">the</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span> <span class="n">matches</span> <span class="n">the</span> <span class="n">hook</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">index</span><span class="o">&gt;</span><span class="p">:</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">|</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="nb">dict</span><span class="o">-</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span><span class="o">=</span><span class="s2">&quot;Valid for a &#39;dict&#39; only, sets key/value pair,</span>
+             <span class="n">where</span> <span class="n">present</span> <span class="ow">is</span> <span class="n">replace</span><span class="p">,</span> <span class="n">new</span> <span class="ow">is</span> <span class="n">created</span><span class="o">.</span><span class="s2">&quot;</span>
+
+<span class="s1">&#39;-&#39;</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Valid for a &#39;list&#39; only, appends to present.&quot;</span>
+
+<span class="nb">int</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Valid for a &#39;list&#39; only, replaces present when</span>
+       <span class="mi">0</span> <span class="o">&lt;</span> <span class="c1">#int &lt; len(Node).&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In the parameter lists of methods used term &#8216;pointer&#8217; is either
+an object of class &#8216;JSONPointer&#8217;, or a list of pointer path
+entries.</p>
+<p>The JSON types &#8216;object&#8217; and &#8216;array&#8217; behave in Python slightly
+different in accordance to RFC6902. The main difference arise
+from the restrictions on applicable key values. Whereas the
+ranges are limited logically by the actual container sizes,
+the object types provide free and unlimited keys. The limit
+is set by type restriction to unicode and &#8216;non-nil&#8217; only
+for keys.</p>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__init__">
+<code class="descclassname">JSONData.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>jdata</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and validates a new object from the provided JSON data.
+Arbitrary additional JSON data could be added as branches.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>jdata</strong>:</dt>
+<dd><p class="first">The initial data of current instance. The accepted formats
+are in-memory representation of JSON data compatible with
+the standard library <em>json</em> <a class="reference internal" href="references.html#json" id="id8">[json]</a>. The permitted input
+types vary in accordance to the selected operations mode
+of either <em>RFC4627</em> or <em>RFC7159</em>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="nb">list</span><span class="p">,</span>       <span class="c1"># json-array</span>
+   <span class="o">|</span> <span class="nb">dict</span><span class="p">,</span>       <span class="c1"># json-object</span>
+   <span class="o">|</span> <span class="n">JSONData</span>    <span class="c1"># copy constructor</span>
+   <span class="o">|</span> <span class="nb">int</span>         <span class="c1"># RFC7159 only</span>
+   <span class="o">|</span> <span class="nb">float</span>       <span class="c1"># RFC7159 only</span>
+   <span class="o">|</span> <span class="n">unicode</span>     <span class="c1"># RFC7159 only</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Further branches could be added to json-objects,
+and json-arrays only, while values in RFC7159 and RFC8259
+mode permit replacement only. Objects support string indexes,
+arrays integer indexes.</p>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><p class="first">For the complete set of call parameters refer to
+the method <strong>JSONData.setkargs()</strong>.</p>
+<dl class="last docutils">
+<dt><strong>mode</strong>:</dt>
+<dd><p class="first">The mode of JSON processing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">MJ_RFC4627</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7493</span>  <span class="c1"># currently not supported, mapped to RFC7159</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7159</span>
+   <span class="o">|</span> <span class="n">MJ_RFC8259</span>
+   <span class="o">|</span> <span class="n">MJ_ECMA404</span>  <span class="c1"># same as RFC8259</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := MJ_RFC7159</p>
+</dd>
+<dt><strong>schema</strong>:</dt>
+<dd><p class="first">A valid in-memory JSONschema.</p>
+<p class="last">default:= None</p>
+</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Sets schema validator for the data file.
+Curren release relies on <em>jsonschema</em>, which
+supports at the time of writing draft-03 and
+draft-04.</p>
+<p>The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">validator</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">MS_DRAFT3</span>           <span class="o">|</span> <span class="s1">&#39;draft3&#39;</span>
+    <span class="o">|</span> <span class="n">MS_DRAFT4</span>           <span class="o">|</span> <span class="s1">&#39;draft4&#39;</span>
+    <span class="o">|</span> <span class="n">MS_ON</span>               <span class="o">|</span> <span class="s1">&#39;on&#39;</span>
+    <span class="o">|</span> <span class="n">MS_OFF</span>              <span class="o">|</span> <span class="s1">&#39;off&#39;</span>
+    <span class="o">|</span> <span class="n">MODE_SCHEMA_DEFAULT</span> <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default:= MS_OFF</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div>Results in an initialized object.</div></blockquote>
+<p>Raises:</p>
+<blockquote>
+<div><p>NameError</p>
+<p>JSONDataValueError</p>
+<p>jsonschema.ValidationError</p>
+<p>jsonschema.SchemaError</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="repr">
+<h4>__repr__<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__repr__">
+<code class="descclassname">JSONData.</code><code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="str">
+<h4>__str__<a class="headerlink" href="#str" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__str__">
+<code class="descclassname">JSONData.</code><code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps data by pretty print.</p>
+<p>The data representation is controlled by the
+variable &#8216;self.jsonsyn&#8217;</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">JSONData</span><span class="o">.</span><span class="n">jsonscope</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="n">JSYN_NATIVE</span> <span class="o">|</span> <span class="n">JSYN_PYTHON</span><span class="p">)</span>
+
+<span class="n">JSYN_NATIVE</span><span class="p">:</span> <span class="s2">&quot;Literally in accordance to standards.&quot;</span>
+<span class="n">JSYN_PYTHON</span><span class="p">:</span> <span class="s2">&quot;Python in-memory syntax representation.&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-add">
+<h4>branch_add<a class="headerlink" href="#branch-add" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_add">
+<code class="descclassname">JSONData.</code><code class="descname">branch_add</code><span class="sig-paren">(</span><em>sourcenode</em>, <em>targetnode=''</em>, <em>key=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a complete branch into a target structure of type object.
+Present branches are replaced, non-existent branches are
+added.</p>
+<p>The parent of the insertion point has to exist by default,
+see <a class="reference internal" href="references.html#rfc6902" id="id9">[RFC6902]</a>. If the target is an array, the source is either
+appended, or inserted <a class="reference internal" href="references.html#rfc6902" id="id10">[RFC6902]</a>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Source branch to be inserted into the target tree.
+Either from within self-data, or an external source:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">sourcenode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">commonnode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Target node within self-data, where the branch is to be inserted.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>           <span class="c1"># see class header</span>
+</pre></div>
+</div>
+<p class="last">default := &#8216;&#8217;                      # the top of the &#8216;whole document&#8217;</p>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd><p class="first">Hook for the insertion within the target node. If not
+provided the contents of the target node itself are
+replaced by the source node.</p>
+<p class="last">default := None</p>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>copydata</strong>:</dt>
+<dd><p class="first">The type of creation of the added branch.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">copydata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">C_REF</span>        <span class="c1"># copy the reference only</span>
+    <span class="o">|</span> <span class="n">C_DEEP</span>       <span class="c1"># call copy.deepcopy()</span>
+    <span class="o">|</span> <span class="n">C_SHALLOW</span>    <span class="c1"># call copy.copy()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := C_DEEP</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns
+either <em>False</em>, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><dl class="first last docutils">
+<dt>JSONDataNodeError:</dt>
+<dd>The target node is not contained in current object.</dd>
+<dt>JSONDataNodeTypeError:</dt>
+<dd>The types mismatch.</dd>
+<dt>JSONDataKeyError:</dt>
+<dd>Key mismatch.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-copy">
+<h4>branch_copy<a class="headerlink" href="#branch-copy" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_copy">
+<code class="descclassname">JSONData.</code><code class="descname">branch_copy</code><span class="sig-paren">(</span><em>sourcenode</em>, <em>targetnode='/'</em>, <em>key=None</em>, <em>force=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the source branch to the target node.
+The <em>branch_copy</em> is internally mapped to the call <em>branch_add</em>,
+thus shares basically the same parameters and behavior.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Source branch to be copied into target tree.
+Either from within self-data, or an external source:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">sourcenode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">commonnode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Target node for the branch. Either from within self-data,
+or an external source:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>           <span class="c1"># see class header</span>
+</pre></div>
+</div>
+<p class="last">default := &#8216;/&#8217;</p>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd>Optional key for the insertion point within target
+node, if not provided the target node itself.</dd>
+<dt><strong>force</strong>:</dt>
+<dd><p class="first">If true present are replaced, else only non-present
+targets are copied.</p>
+<p class="last">default := True</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns either <em>False</em>,
+or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataError</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-create">
+<h4>branch_create<a class="headerlink" href="#branch-create" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_create">
+<code class="descclassname">JSONData.</code><code class="descname">branch_create</code><span class="sig-paren">(</span><em>branchpath</em>, <em>targetnode=None</em>, <em>padding_value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an abitrary relative branch from a path description
+located at <em>targetnode</em>. Intermediate nodes are created automatically
+when missing.</p>
+<p>The requested branch is created as the relative child branch
+of the provided <em>targetnode</em>. The <em>targetnode</em> must exist,
+while the child node - <em>branchpath[0]</em> - must not.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>branchpath</strong>:</dt>
+<dd><p class="first">New branch to be created in the target node.
+A Pointer address path relative to the <em>targetnode</em>.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">branchpath</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">commonnode</span><span class="o">&gt;</span>           <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Base node for the created branch, must exist
+and located within the data tree of current object.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>           <span class="c1"># see class header</span>
+</pre></div>
+</div>
+<p class="last">default := &#8220;/&#8221;</p>
+</dd>
+<dt><strong>padding_value</strong>:</dt>
+<dd><p class="first">Optional default value, either an atomic type or a sub-branch
+itself. This value is only used for a new leaf, in case of
+an existent node the value is ignored.</p>
+<p class="last">default := &#8220;null&#8221; / <em>None</em></p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns the created node, else returns
+either <em>None</em>, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataError</p>
+<p>JSONDataKeyError</p>
+<p>JSONDataNodeTypeError</p>
+<p>JSONDataParameterError</p>
+<p class="last">JSONDataPathError</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-move">
+<h4>branch_move<a class="headerlink" href="#branch-move" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_move">
+<code class="descclassname">JSONData.</code><code class="descname">branch_move</code><span class="sig-paren">(</span><em>sourcenode</em>, <em>targetnode=None</em>, <em>key=None</em>, <em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves a branch to the target node.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Source branch to be moved into the target node.
+Must be member of the self-data structure, else use
+either <em>branch_add</em> or <em>branch_copy</em>.
+Either from within self-data, or an external source:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">sourcenode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Target node for the branch.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+<p class="last">default := &#8216;/&#8217;</p>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd>Optional key for the insertion point within target
+node, if not provided the target node itself.</dd>
+<dt><strong>force</strong>:</dt>
+<dd><p class="first">If true present are replaced, else only non-present
+are copied.</p>
+<p class="last">default := True</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns either
+<em>None</em>, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataError</p>
+<p class="last">JSONDataKeyError</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-remove">
+<h4>branch_remove<a class="headerlink" href="#branch-remove" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_remove">
+<code class="descclassname">JSONData.</code><code class="descname">branch_remove</code><span class="sig-paren">(</span><em>targetnode</em>, <em>key=None</em>, <em>rfc6902=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a branch from a contained data in self.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Container with item to be removed.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd>Key of insertion point within target node, if not
+provided the target node itself.</dd>
+<dt><strong>rfc6902</strong>:</dt>
+<dd>If <em>True</em> the removed element has to be present,
+else non-present is simply ignored.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns
+either <em>False</em>, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataKeyError</p>
+<p class="last">JSONDataNodeTypeError</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-replace">
+<h4>branch_replace<a class="headerlink" href="#branch-replace" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_replace">
+<code class="descclassname">JSONData.</code><code class="descname">branch_replace</code><span class="sig-paren">(</span><em>sourcenode</em>, <em>targetnode</em>, <em>key=None</em>, <em>rfc6902=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the value of the target node by the copy
+of the source branch.</p>
+<p>Requires in order to RFC6902, all items to be replaced
+has to be present. Thus fails by default if at least one
+is missing.</p>
+<p>Internally the &#8216;branch_add()&#8217; call is used with a deep copy.
+When a swallow copy is required the &#8216;branch_move()&#8217; has to be used.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Source branch to be inserted into target tree.
+Either from within self-data, or an external source:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">sourcenode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">commonnode</span><span class="o">&gt;</span>   <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Target where the branch is inserted.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd>Key of insertion point within target node, if not
+provided the target node itself.</dd>
+<dt><strong>rfc6902</strong>:</dt>
+<dd>If <em>True</em> the removed element has to be present,
+else non-present is simply ignored.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns <em>True</em>, else returns
+either <em>False</em>, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-superpose">
+<h4>branch_superpose<a class="headerlink" href="#branch-superpose" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_superpose">
+<code class="descclassname">JSONData.</code><code class="descname">branch_superpose</code><span class="sig-paren">(</span><em>sourcenode</em>, <em>targetnode=None</em>, <em>key=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_superpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_superpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Superposes a branch recursively on to the current data tree 
+<em>self.data</em> with defined constraints. Provides partial mapping 
+in dependence of parameters and data entries of source and/or 
+target.</p>
+<p>The processing is controlled by logic operations on node 
+structures, which maps a logical tree of JSON nodes from the
+source node onto the subtree of JSON nodes defined by the target
+target node. The provided logic operators are related to structure,
+though the types of nodes, not the contents.</p>
+<p>For the provided logic operators refer to parameter <em>map</em>.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>sourcenode</strong>:</dt>
+<dd><p class="first">Value struct to be inserted.</p>
+<p class="last">default := None</p>
+</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Data node within current document to be superposed.</p>
+<p class="last">default := None  # whole document <em>self.data</em></p>
+</dd>
+<dt><strong>key</strong>:</dt>
+<dd><p class="first">Hook selector within the data tree spanned by the targetnode .</p>
+<p class="last">default := None  # top of the targetnode</p>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>copy</strong>:</dt>
+<dd><p class="first">Create a copy of the sourcenode.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">copy</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">C_DEEP</span>      <span class="c1"># insert from copy.deepcopy() </span>
+   <span class="o">|</span> <span class="n">C_SHALLOW</span>   <span class="c1"># insert from copy.copy()</span>
+   <span class="o">|</span> <span class="n">C_REF</span>       <span class="c1"># insert from the provided parameter</span>
+   <span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := C_REF  # no copy, work on input</p>
+</dd>
+<dt><strong>depth</strong>: </dt>
+<dd><p class="first">Sets the default behavior for the operators
+on the data branches. Controls, whether the hook
+only or the complete branch is processed in 
+depth node-by-node.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="p">:</span>  <span class="n">the</span> <span class="n">hook</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span>
+<span class="c1">#n: the level of the branch as integer, the </span>
+    <span class="n">remaining</span> <span class="n">sub</span><span class="o">-</span><span class="n">branch</span> <span class="ow">is</span> <span class="n">treated</span> <span class="n">by</span> <span class="n">it</span><span class="s1">&#39;s hook</span>
+<span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">the</span> <span class="n">complete</span> <span class="n">branch</span>
+</pre></div>
+</div>
+<p class="last">default:= 0</p>
+</dd>
+<dt><strong>ignore</strong>:</dt>
+<dd><p class="first">Ignores attributes including subtrees contained 
+in the list.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ignore</span> <span class="p">:</span><span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">path</span><span class="o">-</span><span class="n">items</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>map</strong>:</dt>
+<dd><p class="first">Sets the default behavior for the mapping of
+branches by operators. This is also influenced 
+by the parameter &#8216;op_depth&#8217;.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">B_AND</span><span class="p">:</span>  <span class="n">replace</span> <span class="n">corresponding</span> <span class="n">leafs</span> <span class="n">only</span> <span class="n">when</span> <span class="nb">any</span> <span class="n">target</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">present</span>
+<span class="n">B_OR</span><span class="p">:</span>   <span class="n">replace</span> <span class="n">corresponding</span> <span class="n">items</span> <span class="n">of</span> <span class="n">source</span> <span class="n">leafs</span>
+<span class="n">B_XOR</span><span class="p">:</span>  <span class="n">insert</span> <span class="n">only</span> <span class="n">when</span> <span class="n">no</span> <span class="n">target</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">present</span>
+</pre></div>
+</div>
+<p class="last">default:= B_OR</p>
+</dd>
+<dt><strong>use</strong>:</dt>
+<dd><p class="first">Considers the listed attributes only as white list.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">use</span> <span class="p">:</span><span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="nb">list</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">rfc6901</span><span class="o">-</span><span class="n">path</span><span class="o">-</span><span class="n">items</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><em>True</em> for success, else <em>False</em> or raises exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataError</p>
+<p>JSONDataIndexError</p>
+<p class="last">pass-through</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="branch-test">
+<h4>branch_test<a class="headerlink" href="#branch-test" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.branch_test">
+<code class="descclassname">JSONData.</code><code class="descname">branch_test</code><span class="sig-paren">(</span><em>targetnode</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.branch_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.branch_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests match in accordance to RFC6902.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>targetnode</strong>:</dt>
+<dd><p class="first">Node to be compared with the value. Due to
+ambiguity the automated conversion is not
+reliable, thus it has to be valid.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">targetnode</span> <span class="p">:</span><span class="o">=</span> <span class="o">&lt;</span><span class="n">innode</span><span class="o">&gt;</span>       <span class="c1"># see class header</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>value</strong>:</dt>
+<dd>Expected value for the given node.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns &#8216;False&#8217;.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="clear">
+<h4>clear<a class="headerlink" href="#clear" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.clear">
+<code class="descclassname">JSONData.</code><code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the contained data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="copy">
+<h4>copy<a class="headerlink" href="#copy" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.copy">
+<code class="descclassname">JSONData.</code><code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a shallow copy of self.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="deepcopy">
+<h4>deepcopy<a class="headerlink" href="#deepcopy" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.deepcopy">
+<code class="descclassname">JSONData.</code><code class="descname">deepcopy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.deepcopy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.deepcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a deep copy of self, including referenced data.
+The schema is kept as a shared reference.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get">
+<h4>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.get">
+<code class="descclassname">JSONData.</code><code class="descname">get</code><span class="sig-paren">(</span><em>key</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transparently passes the &#8216;get()&#8217; call to &#8216;self.data&#8217;.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-canonical-value">
+<h4>get_canonical_value<a class="headerlink" href="#get-canonical-value" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.get_canonical_value">
+<code class="descclassname">JSONData.</code><code class="descname">get_canonical_value</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.get_canonical_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.get_canonical_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches a copy of the canonical value represented by
+the node. The actual value could be either an atomic value,
+a node representing a branch, or a reference to
+an atomic value.
+Creates a deep copy, thus references are no longer
+valid.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>value</strong>:</dt>
+<dd><p class="first">Value pointer to be evaluated to the actual
+value. Valid input types are:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>int,str,unicode:</dt>
+<dd>Integer, kept as an atomic integer
+value.</dd>
+<dt>dict,list:</dt>
+<dd>Assumed to be a valid node for &#8216;json&#8217;
+package, used by reference.</dd>
+<dt>JSONPointer:</dt>
+<dd>A JSON pointer in accordance to
+RFC6901.</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns the value, else returns
+either &#8216;False&#8217;, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>JSONDataError</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-data">
+<h4>get_data<a class="headerlink" href="#get-data" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.get_data">
+<code class="descclassname">JSONData.</code><code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the reference to data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-schema">
+<h4>get_schema<a class="headerlink" href="#get-schema" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.get_schema">
+<code class="descclassname">JSONData.</code><code class="descname">get_schema</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.get_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.get_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the reference to schema.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="pop">
+<h4>pop<a class="headerlink" href="#pop" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.pop">
+<code class="descclassname">JSONData.</code><code class="descname">pop</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transparently passes the &#8216;pop()&#8217; call to &#8216;self.data&#8217;.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="dump-data">
+<h4>dump_data<a class="headerlink" href="#dump-data" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.dump_data">
+<code class="descclassname">JSONData.</code><code class="descname">dump_data</code><span class="sig-paren">(</span><em>pretty=0</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.dump_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.dump_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints structured data.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>pretty</strong>:</dt>
+<dd><p class="first">Activates pretty printer, else flat.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="nb">format</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">PJ_TREE</span>    <span class="c1"># tree view JSON syntax</span>
+   <span class="o">|</span> <span class="n">PJ_FLAT</span>    <span class="c1"># flat print JSON syntax</span>
+   <span class="o">|</span> <span class="n">PJ_PYTREE</span>  <span class="c1"># tree view Python syntax</span>
+   <span class="o">|</span> <span class="n">PJ_PYFLAT</span>  <span class="c1"># flat print Python syntax</span>
+   <span class="o">|</span> <span class="n">PJ_REPR</span>    <span class="c1"># repr() - raw string, Python syntax</span>
+   <span class="o">|</span> <span class="n">PJ_STR</span>     <span class="c1"># str() - formatted string, Python syntax</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>source</strong>:</dt>
+<dd><p class="first">Prints data within &#8216;source&#8217;.</p>
+<p class="last">default:=self.data</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either
+&#8216;False&#8217;, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>pass-through</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="dump-schema">
+<h4>dump_schema<a class="headerlink" href="#dump-schema" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.dump_schema">
+<code class="descclassname">JSONData.</code><code class="descname">dump_schema</code><span class="sig-paren">(</span><em>pretty=True</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.dump_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.dump_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints structured schema.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>pretty</strong>:</dt>
+<dd>Activates pretty printer for treeview,
+else flat.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>source</strong>:</dt>
+<dd><p class="first">Prints schema within &#8216;source&#8217;.</p>
+<p class="last">default:=self.schema</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns
+either &#8216;False&#8217;, or raises an exception.</dd>
+<dt>Raises:</dt>
+<dd>pass-through</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="set-schema">
+<h4>set_schema<a class="headerlink" href="#set-schema" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.set_schema">
+<code class="descclassname">JSONData.</code><code class="descname">set_schema</code><span class="sig-paren">(</span><em>schemafile=None</em>, <em>targetnode=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.set_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.set_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets schema or inserts a new branch into the current
+assigned schema.</p>
+<p>The main schema(targetnode==None) is the schema related
+to the current instance. Additional branches could be added
+by importing the specific schema definitions into the main
+schema. These could either kept volatile as a temporary
+runtime extension, or stored into a new schema file in order
+as extension of the original for later combined reuse.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>schemafile</strong>:</dt>
+<dd>JSON-Schema filename for validation of the
+subtree/branch. See also <a href="#id11"><span class="problematic" id="id12">**</span></a>kargs[&#8216;schema&#8217;].</dd>
+<dt><strong>targetnode</strong>:</dt>
+<dd>Target container hook for the inclusion of
+the loaded branch.</dd>
+<dt>kargs:</dt>
+<dd><dl class="first last docutils">
+<dt><strong>schema</strong>:</dt>
+<dd><p class="first">In-memory JSON-Schema as an alternative
+to schemafile. When provided the &#8216;schemafile&#8217;
+is ignored.</p>
+<p class="last">default:=None</p>
+</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Sets schema validator for the data file.
+The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">validator</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">default</span> <span class="o">=</span> <span class="n">validate</span><span class="p">,</span>
+   <span class="o">|</span> <span class="n">draft3</span>  <span class="o">=</span> <span class="n">Draft3Validator</span><span class="p">,</span>
+   <span class="o">|</span> <span class="n">off</span>     <span class="o">=</span> <span class="kc">None</span><span class="o">.</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default:= validate</p>
+</dd>
+<dt><strong>persistent</strong>:</dt>
+<dd><p class="first">Stores the &#8216;schema&#8217; persistently into &#8216;schemafile&#8217;
+after completion of update including addition of
+branches. Requires valid &#8216;schemafile&#8217;.</p>
+<p class="last">default:=False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns either
+&#8216;False&#8217;, or raises an exception.</dd>
+</dl>
+<p>Raises:</p>
+<blockquote>
+<div><p>JSONDataError</p>
+<p>JSONDataSourceFileError</p>
+<p>JSONDataValueError</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="setkargs">
+<h4>setkargs<a class="headerlink" href="#setkargs" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.setkargs">
+<code class="descclassname">JSONData.</code><code class="descname">setkargs</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.setkargs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.setkargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets key arguments.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>kargs:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>copydata</strong>:</dt>
+<dd><p class="first">Controls the assignment policy for JSON data.
+The schema is copied by reference only, once
+read.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">copydata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">C_REF</span>       <span class="c1"># by reference</span>
+   <span class="o">|</span> <span class="n">C_DEEP</span>      <span class="c1"># by copy.deepcopy()</span>
+   <span class="o">|</span> <span class="n">C_SHALLOW</span>   <span class="c1"># by copy.copy()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>debug</strong>:</dt>
+<dd>Displays extended state data for developers.
+Requires __debug__==True.</dd>
+<dt><strong>depth</strong>:</dt>
+<dd><p class="first">Sets the default behavior for the operators.
+Controls, whether the hook only or the complete
+branch is processed in depth node-by-node.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="p">:</span>  <span class="n">the</span> <span class="n">hook</span> <span class="n">of</span> <span class="n">the</span> <span class="n">branch</span>
+<span class="c1">#n: the level of the branch as integer, the</span>
+    <span class="n">remaining</span> <span class="n">sub</span><span class="o">-</span><span class="n">branch</span> <span class="ow">is</span> <span class="n">treated</span> <span class="n">by</span> <span class="n">it</span><span class="s1">&#39;s hook</span>
+<span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">the</span> <span class="n">complete</span> <span class="n">branch</span>
+</pre></div>
+</div>
+<p class="last">default:= 0</p>
+</dd>
+<dt><strong>indent_str</strong>:</dt>
+<dd><p class="first">Defied the indentation of &#8216;str&#8217;.</p>
+<p class="last">default:= 4</p>
+</dd>
+<dt><strong>jsonsyntax</strong>:</dt>
+<dd><p class="first">The display syntax for JSON data with
+<em>__str__</em>.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">jsonsyntax</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">JSYN_NATIVE</span> <span class="o">|</span> <span class="s1">&#39;json&#39;</span>
+   <span class="o">|</span> <span class="n">JSYN_PYTHON</span> <span class="o">|</span> <span class="s1">&#39;python&#39;</span>
+<span class="p">)</span>
+
+<span class="n">JSYN_NATIVE</span><span class="p">:</span> <span class="n">Native</span> <span class="n">standards</span> <span class="n">syntax</span><span class="o">.</span>
+<span class="n">JSYN_PYTHON</span><span class="p">:</span> <span class="n">Python</span> <span class="ow">in</span><span class="o">-</span><span class="n">memory</span> <span class="n">syntax</span><span class="o">.</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>mode</strong>:</dt>
+<dd><p class="first">The mode of JSON processing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">MJ_RFC4627</span> <span class="o">|</span> <span class="s1">&#39;rfc4627&#39;</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7493</span> <span class="o">|</span> <span class="s1">&#39;rfc7493&#39;</span>  <span class="c1"># currently not supported, mapped to RFC7159</span>
+   <span class="o">|</span> <span class="n">MJ_RFC7159</span> <span class="o">|</span> <span class="s1">&#39;rfc7159&#39;</span>
+   <span class="o">|</span> <span class="n">MJ_RFC8259</span> <span class="o">|</span> <span class="s1">&#39;rfc8259&#39;</span>
+   <span class="o">|</span> <span class="n">MJ_ECMA404</span> <span class="o">|</span> <span class="s1">&#39;ecma404&#39;</span>  <span class="c1"># same as RFC8259</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := MJ_RFC7159</p>
+</dd>
+<dt><strong>rtype</strong>:</dt>
+<dd><p class="first">Sets the data type of the returned result.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rtype</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">data</span>    <span class="c1"># returns the data record only - self.data</span>
+   <span class="o">|</span> <span class="n">jdata</span>   <span class="c1"># returns an object of class JSONData</span>
+   <span class="o">|</span> <span class="n">obj</span>     <span class="c1"># returns an object of own class</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := obj</p>
+</dd>
+<dt><strong>saveContext</strong>:</dt>
+<dd><p class="first">Saves and restores the defined context
+parameters when entering a context call.</p>
+<p class="last">default:= True</p>
+</dd>
+<dt><strong>schema</strong>:</dt>
+<dd><p class="first">A valid in-memory JSONschema.</p>
+<p class="last">default:= None</p>
+</dd>
+<dt><strong>sortstr</strong>:</dt>
+<dd><p class="first">Sort display of &#8216;str()&#8217; by key.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sortstr</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="kc">True</span> <span class="o">|</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := True</p>
+</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Sets schema validator for the data file.
+Curren release relies on <em>jsonschema</em>, which
+supports at the time of writing draft-03 and
+draft-04.</p>
+<p>The values are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">validator</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+      <span class="n">MS_DRAFT3</span>           <span class="o">|</span> <span class="s1">&#39;draft3&#39;</span>
+    <span class="o">|</span> <span class="n">MS_DRAFT4</span>           <span class="o">|</span> <span class="s1">&#39;draft4&#39;</span>
+    <span class="o">|</span> <span class="n">MS_ON</span>               <span class="o">|</span> <span class="s1">&#39;on&#39;</span>
+    <span class="o">|</span> <span class="n">MS_OFF</span>              <span class="o">|</span> <span class="s1">&#39;off&#39;</span>
+    <span class="o">|</span> <span class="n">MODE_SCHEMA_DEFAULT</span> <span class="o">|</span> <span class="s1">&#39;default&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default:= MS_OFF</p>
+</dd>
+<dt><strong>verbose</strong>:</dt>
+<dd>Extends the amount of the display of
+processing data.</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>instance/None</dd>
+</dl>
+<p>Raises:</p>
+<blockquote>
+<div><p>NameError:</p>
+<p>JSONDataValueError</p>
+<p>jsonschema.ValidationError:</p>
+<p>jsonschema.SchemaError:</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="validate">
+<h4>validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.validate">
+<code class="descclassname">JSONData.</code><code class="descname">validate</code><span class="sig-paren">(</span><em>data</em>, <em>schema</em>, <em>validator=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate data with schema by selected validator.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>data</strong>:</dt>
+<dd>JSON-Data.</dd>
+<dt><strong>schema</strong>:</dt>
+<dd>JSON-Schema for validation.</dd>
+<dt><strong>validator</strong>:</dt>
+<dd><p class="first">Validator to be applied, current supported:</p>
+<blockquote>
+<div><p>schema:</p>
+<blockquote>
+<div><p>In-memory JSON-Schema as an alternative
+to schemafile. When provided the &#8216;schemafile&#8217;
+is ignored.</p>
+<p>default:=None</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="last docutils">
+<dt><strong>validator</strong>: [default, draft3, draft4, off, on, ]</dt>
+<dd><p class="first">Sets schema validator for the data file.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>default|MS_ON:</dt>
+<dd>The current default.</dd>
+<dt>draft3|MS_DRAFT3:</dt>
+<dd>The first supported JSONSchema IETF-Draft.</dd>
+<dt>draft4|MS_DRAFT4:</dt>
+<dd>The current supported JSONSchema IETF-Draft.</dd>
+<dt>off|MS_OFF:</dt>
+<dd>No validation.</dd>
+</dl>
+</div></blockquote>
+<p class="last">default:= MS_DRAFT4</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>When successful returns &#8216;True&#8217;, else returns
+either &#8216;False&#8217;, or raises an exception.</dd>
+</dl>
+<p>Raises:</p>
+<blockquote>
+<div><p>JSONDataValidationError</p>
+<p>JSONDataSchemaError</p>
+<p>JSONDataValueError</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="comparison">
+<h4>Comparison<a class="headerlink" href="#comparison" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="s-x">
+<h5>S==x<a class="headerlink" href="#s-x" title="Permalink to this headline">¶</a></h5>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__eq__">
+<code class="descclassname">JSONData.</code><code class="descname">__eq__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this JSONData.data with x.</p>
+<p>The operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">S</span> <span class="o">==</span> <span class="n">x</span>
+</pre></div>
+</div>
+<p>Returns the result of comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span> <span class="n">S</span> <span class="o">==</span> <span class="n">x</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Args:</p>
+<blockquote>
+<div>x: A valid JSONData.</div></blockquote>
+<p>Context Parameters:</p>
+<blockquote>
+<div>See setargs.</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div>True or False</div></blockquote>
+<p>Raises:</p>
+<blockquote>
+<div>JSONDataError</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="id13">
+<h5>S!=x<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__ne__">
+<code class="descclassname">JSONData.</code><code class="descname">__ne__</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares this JSONData with x.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>x:</dt>
+<dd>Valid JSONData.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>True or False</dd>
+<dt>Raises:</dt>
+<dd>JSONDataError</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h4>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="s">
+<h5>S()<a class="headerlink" href="#s" title="Permalink to this headline">¶</a></h5>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__call__">
+<code class="descclassname">JSONData.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the pointed value from the document.</p>
+<p>The operation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">S</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns the top node referenced by the JSON-Pointer &#8216;x&#8217; in accordance to RFC6901:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span> <span class="n">S</span> <span class="o">=&gt;</span> <span class="n">x</span> <span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first"><a href="#id14"><span class="problematic" id="id15">*</span></a>args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>args[0]:</dt>
+<dd><p class="first">An optional valid JSONPointer.</p>
+<p class="last">default:=&#8217;&#8217; =&gt; top, see <a class="reference internal" href="references.html#rfc6901" id="id16">[RFC6901]</a></p>
+</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id17"><span class="problematic" id="id18">**</span></a>kargs:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt><strong>copydata</strong>:</dt>
+<dd><p class="first">Use of input parameters for processing.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">copydata</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span>
+     <span class="n">C_DEEP</span>     <span class="o">|</span> <span class="s1">&#39;deep&#39;</span>
+   <span class="o">|</span> <span class="n">C_REF</span>      <span class="o">|</span> <span class="s1">&#39;ref&#39;</span>
+   <span class="o">|</span> <span class="n">C_SHALLOW</span>  <span class="o">|</span> <span class="s1">&#39;shallow&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">default := C_REF</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt>
+<dd>The pointed value, or None.</dd>
+<dt>Raises:</dt>
+<dd>JSONPointerError</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<p>The iterator is based on pre-set parameters for data processing.</p>
+<div class="section" id="s-k">
+<h4>S[k]<a class="headerlink" href="#s-k" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__getitem__">
+<code class="descclassname">JSONData.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an  entry of <em>self.data</em>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>sel:</dt>
+<dd>Selector, either a key, or an index.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The entry at the location,
+or raises en exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataKeyError(KeyError)</p>
+<p class="last">JSONDataIndexError(IndexError)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="iter">
+<h4>__iter__<a class="headerlink" href="#iter" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__iter__">
+<code class="descclassname">JSONData.</code><code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an iterator for contained native data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="get-data-items">
+<h4>get_data_items<a class="headerlink" href="#get-data-items" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.get_data_items">
+<code class="descclassname">JSONData.</code><code class="descname">get_data_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.get_data_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.get_data_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary for objects as well as arrays.
+Arrays are returned as a <em>dict</em> with interger indexes as keys,
+while objects - <em>dict</em> - are returned by the native <em>items()</em>
+call.</p>
+<p>If required else use the attributes directly.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="conxtext-manager">
+<h3>Conxtext Manager<a class="headerlink" href="#conxtext-manager" title="Permalink to this headline">¶</a></h3>
+<p>The context manager provides setting specific parameters for the data processing,
+which is reset to the state before after finishing.</p>
+<div class="section" id="enter">
+<h4>__enter__<a class="headerlink" href="#enter" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__enter__">
+<code class="descclassname">JSONData.</code><code class="descname">__enter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__enter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__enter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context for processing of specific parameter setups.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Context Parameters:</dt>
+<dd><p class="first">See setargs.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">copy</span><span class="p">,</span> <span class="n">rtype</span><span class="p">,</span> <span class="n">saveContext</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<p>Returns:</p>
+<p>Raises:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="exit">
+<h4>__exit__<a class="headerlink" href="#exit" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__exit__">
+<code class="descclassname">JSONData.</code><code class="descname">__exit__</code><span class="sig-paren">(</span><em>exc_type</em>, <em>exc_value</em>, <em>traceback</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__exit__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__exit__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the context to the parameter setup before the last call of &#8216;enter&#8217;.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="miscellaneous-operators">
+<h3>Miscellaneous Operators<a class="headerlink" href="#miscellaneous-operators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="delitem">
+<h4>__delitem__<a class="headerlink" href="#delitem" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__delitem__">
+<code class="descclassname">JSONData.</code><code class="descname">__delitem__</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__delitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an item of <em>self.data</em>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>k:</dt>
+<dd>Key or index of <em>self.data</em>.
+If <em>None</em> the <em>self.data</em> is assigned <em>None</em>.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataKeyError</p>
+<p class="last">IndexError</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="getitem">
+<h4>__getitem__<a class="headerlink" href="#getitem" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt>
+<code class="descclassname">JSONData.</code><code class="descname">__getitem__</code><span class="sig-paren">(</span><em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__getitem__"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Gets an  entry of <em>self.data</em>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>sel:</dt>
+<dd>Selector, either a key, or an index.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>The entry at the location,
+or raises en exception.</dd>
+<dt>Raises:</dt>
+<dd><p class="first">JSONDataKeyError(KeyError)</p>
+<p class="last">JSONDataIndexError(IndexError)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="setitem">
+<h4>__setitem__<a class="headerlink" href="#setitem" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="jsondata.jsondata.JSONData.__setitem__">
+<code class="descclassname">JSONData.</code><code class="descname">__setitem__</code><span class="sig-paren">(</span><em>k</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata/jsondata.html#JSONData.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.jsondata.JSONData.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns a value to an item of <em>self.data</em>.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="jsondata.JSONDataError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>base Exception.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataIndexError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataIndexError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataIndexError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataIndexError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataKeyError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataKeyError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataKeyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataKeyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataNodeTypeError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataNodeTypeError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataNodeTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataNodeTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on NodeTypes.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataParameterError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataParameterError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataParameterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataParameterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erroneous parameters.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataPathError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataPathError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataPathError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataPathError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on key.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataSourceFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataSourceFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataSourceFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataSourceFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on read of a source file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataTargetFileError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataTargetFileError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataTargetFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataTargetFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on writing a file.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="jsondata.JSONDataValueError">
+<em class="property">exception </em><code class="descclassname">jsondata.</code><code class="descname">JSONDataValueError</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jsondata.html#JSONDataValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jsondata.JSONDataValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error on a value.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.jsondata&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#module-jsondata.jsondata">Module</a></li>
+<li><a class="reference internal" href="#jsondata">JSONData</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#common-call-parameters">Common Call Parameters</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#repr">__repr__</a></li>
+<li><a class="reference internal" href="#str">__str__</a></li>
+<li><a class="reference internal" href="#branch-add">branch_add</a></li>
+<li><a class="reference internal" href="#branch-copy">branch_copy</a></li>
+<li><a class="reference internal" href="#branch-create">branch_create</a></li>
+<li><a class="reference internal" href="#branch-move">branch_move</a></li>
+<li><a class="reference internal" href="#branch-remove">branch_remove</a></li>
+<li><a class="reference internal" href="#branch-replace">branch_replace</a></li>
+<li><a class="reference internal" href="#branch-superpose">branch_superpose</a></li>
+<li><a class="reference internal" href="#branch-test">branch_test</a></li>
+<li><a class="reference internal" href="#clear">clear</a></li>
+<li><a class="reference internal" href="#copy">copy</a></li>
+<li><a class="reference internal" href="#deepcopy">deepcopy</a></li>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#get-canonical-value">get_canonical_value</a></li>
+<li><a class="reference internal" href="#get-data">get_data</a></li>
+<li><a class="reference internal" href="#get-schema">get_schema</a></li>
+<li><a class="reference internal" href="#pop">pop</a></li>
+<li><a class="reference internal" href="#dump-data">dump_data</a></li>
+<li><a class="reference internal" href="#dump-schema">dump_schema</a></li>
+<li><a class="reference internal" href="#set-schema">set_schema</a></li>
+<li><a class="reference internal" href="#setkargs">setkargs</a></li>
+<li><a class="reference internal" href="#validate">validate</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#comparison">Comparison</a><ul>
+<li><a class="reference internal" href="#s-x">S==x</a></li>
+<li><a class="reference internal" href="#id13">S!=x</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#miscellaneous">Miscellaneous</a><ul>
+<li><a class="reference internal" href="#s">S()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iterators">Iterators</a><ul>
+<li><a class="reference internal" href="#s-k">S[k]</a></li>
+<li><a class="reference internal" href="#iter">__iter__</a></li>
+<li><a class="reference internal" href="#get-data-items">get_data_items</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conxtext-manager">Conxtext Manager</a><ul>
+<li><a class="reference internal" href="#enter">__enter__</a></li>
+<li><a class="reference internal" href="#exit">__exit__</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#miscellaneous-operators">Miscellaneous Operators</a><ul>
+<li><a class="reference internal" href="#delitem">__delitem__</a></li>
+<li><a class="reference internal" href="#getitem">__getitem__</a></li>
+<li><a class="reference internal" href="#setitem">__setitem__</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jsondata_init_doc.html"
+                        title="previous chapter">jsondata.__init__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsondata_jsonserializer_doc.html"
+                        title="next chapter">&#8216;jsondata.jsondataserializer&#8217; - Module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_jsondata_doc.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_jsonserializer_doc.html" title="‘jsondata.jsondataserializer’ - Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="jsondata_init_doc.html" title="jsondata.__init__"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index_jsondata.html" >&#8216;jsondata&#8217; - package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

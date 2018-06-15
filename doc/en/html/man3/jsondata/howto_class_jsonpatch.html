@@ -1,0 +1,1281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JSONPatch - RFC6902 &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Howto" href="howto.html" />
+    <link rel="next" title="HowTo JSONPointer - RFC6901" href="howto_class_jsonpointer.html" />
+    <link rel="prev" title="JSONDataSerializer - JSON Persistency" href="howto_class_jsondataserializer.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpointer.html" title="HowTo JSONPointer - RFC6901"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsondataserializer.html" title="JSONDataSerializer - JSON Persistency"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" accesskey="U">Howto</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsonpatch-rfc6902">
+<h1>JSONPatch - RFC6902<a class="headerlink" href="#jsonpatch-rfc6902" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="standards-operations">
+<h2>Standards Operations<a class="headerlink" href="#standards-operations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-add">
+<h3>Create,Add<a class="headerlink" href="#create-add" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="simple">
+<h4>Simple<a class="headerlink" href="#simple" title="Permalink to this headline">¶</a></h4>
+<p>Create a JSON document
+[<a class="reference external" href="_static/examples/jsonpatch_howto_example_create_000.py">download</a>].</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON in-memory document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span>
+        <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># the same as native Pyhton data</span>
+<span class="n">rdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="c1"># compare contained raw data by Python type</span>
+<span class="k">assert</span> <span class="n">D</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">rdata</span>
+
+<span class="c1"># compare data as JSONData object, see JSONData.__eq__</span>
+<span class="k">assert</span> <span class="n">D</span> <span class="o">==</span> <span class="n">rdata</span>
+
+<span class="c1"># print structure</span>
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="complex">
+<h3>Complex<a class="headerlink" href="#complex" title="Permalink to this headline">¶</a></h3>
+<p>Create a JSON document, add and create branches
+[<a class="reference external" href="_static/examples/jsonpatch_howto_example_create_001.py">download</a>].</p>
+<div class="highlight-Python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondata</span> <span class="kn">import</span> <span class="n">JSONData</span>
+<span class="kn">from</span> <span class="nn">jsondata.jsonpointer</span> <span class="kn">import</span> <span class="n">JSONPointer</span>
+
+<span class="c1"># JSON document</span>
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="c1"># JSON branch with array</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[]</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="c1"># Branch elements for array</span>
+<span class="n">ai0</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">}</span>
+<span class="n">ai1</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}</span>
+
+
+<span class="c1"># JSON branch with object</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;ox&#39;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="c1"># Branch elements for object</span>
+<span class="n">l0</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;o0&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+<span class="n">l1</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;o1&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+
+
+<span class="c1"># JSON in-memory document</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">JSONData</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+
+
+<span class="c1"># Add a branch with an array</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">),</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="n">arr</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">])</span>
+
+<span class="c1"># Add a items to the new array</span>
+<span class="c1"># Remark: for &#39;-&#39; refer to RFC6901 - array-index</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/e/lx&#39;</span><span class="p">),</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">ai0</span><span class="p">)</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/e/lx&#39;</span><span class="p">),</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">ai1</span><span class="p">)</span>
+
+
+<span class="c1"># Add a branch with an object</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">),</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">])</span>
+
+<span class="c1"># Add an item to the new object, from an object</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/f/ox&#39;</span><span class="p">),</span><span class="s1">&#39;v0&#39;</span><span class="p">,</span><span class="n">ai0</span><span class="p">[</span><span class="s1">&#39;v0&#39;</span><span class="p">])</span>
+
+<span class="c1"># Add an item to the new object</span>
+<span class="n">ai1v1</span> <span class="o">=</span> <span class="n">ai1</span><span class="p">[</span><span class="s1">&#39;v1&#39;</span><span class="p">]</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_add</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/f/ox&#39;</span><span class="p">),</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span><span class="n">ai1v1</span><span class="p">)</span>
+
+
+<span class="n">nodex</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_create</span><span class="p">(</span><span class="n">nodex</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="p">{})</span>
+
+<span class="n">ret</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="n">ret</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">33</span>
+
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_create</span><span class="p">(</span><span class="n">nodex</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;xlst&#39;</span><span class="p">],</span> <span class="p">[])</span>
+
+<span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
+<span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;second&#39;</span><span class="p">)</span>
+
+<span class="n">rdata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lx&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+  <span class="p">{</span><span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}]},</span>
+  <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">u&#39;g&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">u&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+  <span class="s1">u&#39;xlst&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">]}},</span>
+  <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;ox&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;v0&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;v1&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}}}}</span>
+<span class="p">}</span>
+<span class="k">assert</span> <span class="n">D</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="n">rdata</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="nt">&quot;e&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;lx&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;f&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;ox&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;v0&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+                    <span class="nt">&quot;v1&quot;</span><span class="p">:</span> <span class="mi">200</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;g&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;x0&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+                    <span class="nt">&quot;x1&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+                    <span class="nt">&quot;xlst&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;second&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="access-values">
+<h3>Access values<a class="headerlink" href="#access-values" title="Permalink to this headline">¶</a></h3>
+<p>Various access to values
+[<a class="reference external" href="_static/examples/jsonpatch_howto_example_access_001.py">download</a>].</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">D</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+
+<span class="k">print</span> <span class="n">D</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">))</span>
+
+<span class="k">print</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">px</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">fetch_pointerpath</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">px</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">D</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="n">px</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<span class="mi">2</span>
+<span class="mi">2</span>
+<span class="mi">2</span>
+<span class="mi">2</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="move">
+<h3>Move<a class="headerlink" href="#move" title="Permalink to this headline">¶</a></h3>
+<p>Move a branch.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">D</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">)</span>
+<span class="n">n</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">77</span>
+
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">target</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="n">source</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">.</span><span class="n">branch_move</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="s1">&#39;new&#39;</span><span class="p">,</span> <span class="n">sourcenode</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">D</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="c1"># check new position</span>
+<span class="k">assert</span> <span class="n">D</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">==</span> <span class="mi">77</span>
+
+<span class="c1"># validate old position</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/c&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">JSONPointerError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="k">raise</span>
+</pre></div>
+</td></tr></table></div>
+<p>prints the result:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="mi">2</span>
+<span class="mi">77</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="remove">
+<h3>Remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
+<p>Remove a branch.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># get a pointer</span>
+<span class="n">target</span>     <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)</span>
+
+<span class="c1"># get the parent node for the pointer</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">target</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># verify existence</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">77</span>
+
+<span class="c1"># remove item</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_remove</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="s1">&#39;new&#39;</span><span class="p">)</span>
+
+<span class="c1"># validate old position</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">JSONPointerError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="k">raise</span>
+<span class="k">pass</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="replace">
+<h3>Replace<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
+<p>Replace a branch.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># does not verify childnode, when &#39;parent=True&#39; &lt;=&gt; &#39;new&#39; does no longer exist</span>
+<span class="n">targetnode</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/new&#39;</span><span class="p">)(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># new item</span>
+<span class="n">sourcenode</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alternate&#39;</span><span class="p">:</span> <span class="mi">4711</span> <span class="p">}</span>
+
+<span class="c1"># replace old by new item</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_replace</span><span class="p">(</span><span class="n">targetnode</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">sourcenode</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># verify new item</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="s1">&#39;/a/b/f/alternate&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">4711</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="test">
+<h3>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
+<p>Test value.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># variant 0</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_test</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/f/alternate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_node_value</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">4711</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># variant 1</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_test</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/f/alternate&#39;</span><span class="p">)(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">4711</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+
+<span class="c1"># variant 2</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b/f/alternate&#39;</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">branch_test</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">4711</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="bp">True</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="copy">
+<h3>Copy<a class="headerlink" href="#copy" title="Permalink to this headline">¶</a></h3>
+<p>Copy branch.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># JSON branch with array</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;cpy&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;cx&#39;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">]</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="c1"># Copy a branch with an array</span>
+<span class="n">D</span><span class="o">.</span><span class="n">branch_copy</span><span class="p">(</span><span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/a/b&#39;</span><span class="p">),</span><span class="s1">&#39;cpy&#39;</span><span class="p">,</span><span class="n">arr</span><span class="p">[</span><span class="s1">&#39;cpy&#39;</span><span class="p">])</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="patch-set-algebra">
+<h2>Patch-Set Algebra<a class="headerlink" href="#patch-set-algebra" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="rfc6902-examples">
+<h2>RFC6902 Examples<a class="headerlink" href="#rfc6902-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="section-3">
+<h3>Section 3<a class="headerlink" href="#section-3" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 3. Document Structure</p>
+<p>The following is an example JSON Patch document, transferred in an</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span>HTTP PATCH request:
+PATCH /my/data HTTP/1.1
+Host: example.org
+Content-Length: 326
+Content-Type: application/json-patch+json
+If-Match: &quot;abc123&quot;
+[
+   {&quot;op&quot;: &quot;test&quot;,    &quot;path&quot;: &quot;/a/b/c&quot;, &quot;value&quot;: &quot;foo&quot;            },
+   {&quot;op&quot;: &quot;remove&quot;,  &quot;path&quot;: &quot;/a/b/c&quot;                            },
+   {&quot;op&quot;: &quot;add&quot;,     &quot;path&quot;: &quot;/a/b/c&quot;, &quot;value&quot;: [ &quot;foo&quot;, &quot;bar&quot; ] },
+   {&quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/a/b/c&quot;, &quot;value&quot;: 42               },
+   {&quot;op&quot;: &quot;move&quot;,    &quot;from&quot;: &quot;/a/b/c&quot;, &quot;path&quot;: &quot;/a/b/d&quot;          },
+   {&quot;op&quot;: &quot;copy&quot;,    &quot;from&quot;: &quot;/a/b/d&quot;, &quot;path&quot;: &quot;/a/b/e&quot;          }
+]
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4">
+<h3>Section 4<a class="headerlink" href="#section-4" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4. Operations</p>
+<p>Note that the ordering of members in JSON objects is not significant;
+therefore, the following operation objects are equivalent:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-1">
+<h3>Section 4.1<a class="headerlink" href="#section-4-1" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.1 add</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-2">
+<h3>Section 4.2<a class="headerlink" href="#section-4-2" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.2 remove</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-3">
+<h3>Section 4.3<a class="headerlink" href="#section-4-3" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.3 replace</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">42</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-4">
+<h3>Section 4.4<a class="headerlink" href="#section-4-4" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.4 move</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/d&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-5">
+<h3>Section 4.5<a class="headerlink" href="#section-4-5" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.5 copy</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span> <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/e&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-4-6">
+<h3>Section 4.6<a class="headerlink" href="#section-4-6" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 4.6 test</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="section-5">
+<h3>Section 5<a class="headerlink" href="#section-5" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section 5. Error Handling</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">42</span> <span class="p">},</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/a/b/c&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-1">
+<h3>Appendix A.1.<a class="headerlink" href="#appendix-a-1" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.1 Adding an Object Member</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-2">
+<h3>Appendix A.2.<a class="headerlink" href="#appendix-a-2" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.2 Adding an Array Element</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/1&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-3">
+<h3>Appendix A.3.<a class="headerlink" href="#appendix-a-3" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.3 Removing an Object Member</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-4">
+<h3>Appendix A.4.<a class="headerlink" href="#appendix-a-4" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.4 Removing an Object Member</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/1&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-5">
+<h3>Appendix A.5.<a class="headerlink" href="#appendix-a-5" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.5 Replacing a Value</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;boo&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;boo&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-6">
+<h3>Appendix A.6.<a class="headerlink" href="#appendix-a-6" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.6 5 Replacing a Value</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;bar&quot;</span><span class="p">:</span> <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;waldo&quot;</span><span class="p">:</span> <span class="s2">&quot;fred&quot;</span>
+   <span class="p">},</span>
+   <span class="nt">&quot;qux&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;corge&quot;</span><span class="p">:</span> <span class="s2">&quot;grault&quot;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/waldo&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/qux/thud&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;bar&quot;</span><span class="p">:</span> <span class="s2">&quot;baz&quot;</span>
+   <span class="p">},</span>
+   <span class="nt">&quot;qux&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;corge&quot;</span><span class="p">:</span> <span class="s2">&quot;grault&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;thud&quot;</span><span class="p">:</span> <span class="s2">&quot;fred&quot;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-7">
+<h3>Appendix A.7.<a class="headerlink" href="#appendix-a-7" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.7 Moving an Array Element</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;grass&quot;</span><span class="p">,</span> <span class="s2">&quot;cows&quot;</span><span class="p">,</span> <span class="s2">&quot;eat&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="nt">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/1&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/3&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;cows&quot;</span><span class="p">,</span> <span class="s2">&quot;eat&quot;</span><span class="p">,</span> <span class="s2">&quot;grass&quot;</span> <span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-8">
+<h3>Appendix A.8.<a class="headerlink" href="#appendix-a-8" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.8 Testing a Value: Success</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span> <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document that will result in successful evaluation:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span> <span class="p">},</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/1&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">2</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-9">
+<h3>Appendix A.9.<a class="headerlink" href="#appendix-a-9" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.9 Testing a Value: Error</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document that will result in successful evaluation:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-10">
+<h3>Appendix A.10.<a class="headerlink" href="#appendix-a-10" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.10 Testing a Value: Error</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/child&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;grandchild&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;child&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;grandchild&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-11">
+<h3>Appendix A.11.<a class="headerlink" href="#appendix-a-11" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.11 0 Testing a Value: Error</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span> <span class="nt">&quot;xyz&quot;</span><span class="p">:</span> <span class="mi">123</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;baz&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-12">
+<h3>Appendix A.12.<a class="headerlink" href="#appendix-a-12" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.12 Adding to a Nonexistent Target</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz/bat&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p class="last">This JSON Patch document, applied to the target JSON document above,
+would result in an error (therefore, it would not be applied),
+because the &#8220;add&#8221; operation’s target location that references neither
+the root of the document, nor a member of an existing object, nor a
+member of an existing array.</p>
+</div>
+</div>
+<div class="section" id="appendix-a-13">
+<h3>Appendix A.13.<a class="headerlink" href="#appendix-a-13" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.13 Invalid JSON Patch Document</p>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/baz&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;qux&quot;</span><span class="p">,</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;remove&quot;</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p class="last">This JSON Patch document cannot be treated as an &#8220;add&#8221; operation,
+because it contains a later &#8220;op&#8221;:&#8221;remove&#8221; element. JSON requires
+that object member names be unique with a &#8220;SHOULD&#8221; requirement, and
+there is no standard error handling for duplicates.</p>
+</div>
+</div>
+<div class="section" id="appendix-a-14">
+<h3>Appendix A.14.<a class="headerlink" href="#appendix-a-14" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.14  ̃ Escape Ordering</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;/&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+   <span class="nt">&quot; ̃1&quot;</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span><span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/ ̃01&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;/&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+   <span class="nt">&quot; ̃1&quot;</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="appendix-a-15">
+<h3>Appendix A.15.<a class="headerlink" href="#appendix-a-15" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.15 Comparing Strings and Numbers</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;/&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+   <span class="nt">&quot; ̃1&quot;</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span><span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/ ̃01&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p class="last">This results in an error, because the test fails. The document value
+is numeric, whereas the value being tested for is a string.</p>
+</div>
+</div>
+<div class="section" id="appendix-a-16">
+<h3>Appendix A.16.<a class="headerlink" href="#appendix-a-16" title="Permalink to this headline">¶</a></h3>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6902 - section A.16 Adding an Array Value</p>
+<p>An example target JSON document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>A JSON Patch document:</p>
+<div class="highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span> <span class="nt">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/foo/-&quot;</span><span class="p">,</span> <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;abc&quot;</span><span class="p">,</span> <span class="s2">&quot;def&quot;</span><span class="p">]</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>The resulting JSON document:</p>
+<div class="last highlight-JSON"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;abc&quot;</span><span class="p">,</span> <span class="s2">&quot;def&quot;</span><span class="p">]]</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JSONPatch - RFC6902</a><ul>
+<li><a class="reference internal" href="#standards-operations">Standards Operations</a><ul>
+<li><a class="reference internal" href="#create-add">Create,Add</a><ul>
+<li><a class="reference internal" href="#simple">Simple</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#complex">Complex</a></li>
+<li><a class="reference internal" href="#access-values">Access values</a></li>
+<li><a class="reference internal" href="#move">Move</a></li>
+<li><a class="reference internal" href="#remove">Remove</a></li>
+<li><a class="reference internal" href="#replace">Replace</a></li>
+<li><a class="reference internal" href="#test">Test</a></li>
+<li><a class="reference internal" href="#copy">Copy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#patch-set-algebra">Patch-Set Algebra</a></li>
+<li><a class="reference internal" href="#rfc6902-examples">RFC6902 Examples</a><ul>
+<li><a class="reference internal" href="#section-3">Section 3</a></li>
+<li><a class="reference internal" href="#section-4">Section 4</a></li>
+<li><a class="reference internal" href="#section-4-1">Section 4.1</a></li>
+<li><a class="reference internal" href="#section-4-2">Section 4.2</a></li>
+<li><a class="reference internal" href="#section-4-3">Section 4.3</a></li>
+<li><a class="reference internal" href="#section-4-4">Section 4.4</a></li>
+<li><a class="reference internal" href="#section-4-5">Section 4.5</a></li>
+<li><a class="reference internal" href="#section-4-6">Section 4.6</a></li>
+<li><a class="reference internal" href="#section-5">Section 5</a></li>
+<li><a class="reference internal" href="#appendix-a-1">Appendix A.1.</a></li>
+<li><a class="reference internal" href="#appendix-a-2">Appendix A.2.</a></li>
+<li><a class="reference internal" href="#appendix-a-3">Appendix A.3.</a></li>
+<li><a class="reference internal" href="#appendix-a-4">Appendix A.4.</a></li>
+<li><a class="reference internal" href="#appendix-a-5">Appendix A.5.</a></li>
+<li><a class="reference internal" href="#appendix-a-6">Appendix A.6.</a></li>
+<li><a class="reference internal" href="#appendix-a-7">Appendix A.7.</a></li>
+<li><a class="reference internal" href="#appendix-a-8">Appendix A.8.</a></li>
+<li><a class="reference internal" href="#appendix-a-9">Appendix A.9.</a></li>
+<li><a class="reference internal" href="#appendix-a-10">Appendix A.10.</a></li>
+<li><a class="reference internal" href="#appendix-a-11">Appendix A.11.</a></li>
+<li><a class="reference internal" href="#appendix-a-12">Appendix A.12.</a></li>
+<li><a class="reference internal" href="#appendix-a-13">Appendix A.13.</a></li>
+<li><a class="reference internal" href="#appendix-a-14">Appendix A.14.</a></li>
+<li><a class="reference internal" href="#appendix-a-15">Appendix A.15.</a></li>
+<li><a class="reference internal" href="#appendix-a-16">Appendix A.16.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto_class_jsondataserializer.html"
+                        title="previous chapter">JSONDataSerializer - JSON Persistency</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_class_jsonpointer.html"
+                        title="next chapter">HowTo JSONPointer - RFC6901</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_class_jsonpatch.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpointer.html" title="HowTo JSONPointer - RFC6901"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsondataserializer.html" title="JSONDataSerializer - JSON Persistency"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" >Howto</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

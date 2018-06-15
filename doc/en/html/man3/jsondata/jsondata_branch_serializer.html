@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Serialize branch data by ‘jsondata.jsondataserializer’ &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="serialize-branch-data-by-jsondata-jsondataserializer">
+<h1>Serialize branch data by &#8216;jsondata.jsondataserializer&#8217;<a class="headerlink" href="#serialize-branch-data-by-jsondata-jsondataserializer" title="Permalink to this headline">¶</a></h1>
+<p>The module jsondata.jsondataserializer extends the JSONData class
+with serialization for JSON documents and substructures.</p>
+<p>Provided basic operations are:</p>
+<ul class="simple">
+<li><strong>json_import</strong>:  Import a document or a branch into a document.</li>
+<li><strong>json_export</strong>:  Export a document or a branch.</li>
+</ul>
+<div class="section" id="syntax-elements">
+<h2>Syntax Elements<a class="headerlink" href="#syntax-elements" title="Permalink to this headline">¶</a></h2>
+<p>The current release provides the following operators for the class &#8216;JSONPointer&#8217;.</p>
+<p>Import/Export Operations:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="n">json_import</span> <span class="o">|</span> <span class="n">json_export</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples for the provided basic calculations are:</p>
+<div class="section" id="import-document">
+<h3>Import-Document<a class="headerlink" href="#import-document" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Branch Operations - import a JSON document</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># persistent file sources</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;datafile.json&#39;</span><span class="p">)</span>
+<span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;schema.jsd&#39;</span><span class="p">)</span>
+
+<span class="c1">#</span>
+<span class="c1"># set some control keys for the import, refer to API</span>
+<span class="c1">#</span>
+<span class="n">kargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nodefaultpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nosubdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># load JSON data, with validation by draft4</span>
+<span class="n">configdata</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span><span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="import-branch">
+<h3>Import-Branch<a class="headerlink" href="#import-branch" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Branch Operations - import a JSON branch</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import another branch into initial main/master data,</span>
+<span class="c1"># and validate it with branch schema.</span>
+
+<span class="c1"># Use insertion point:</span>
+<span class="c1"># target = configdata.data[&#39;phoneNumber&#39;]</span>
+
+<span class="c1"># partial schema for branch, use here a subtree of main schema,</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-03/schema&quot;</span><span class="p">,</span>
+   <span class="s1">&#39;phoneNumber&#39;</span><span class="p">:</span><span class="n">configdata</span><span class="o">.</span><span class="n">schema</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;phoneNumber&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># import settings</span>
+<span class="n">kargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nodefaultpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nosubdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># target container</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;phoneNumber&#39;</span><span class="p">]</span>
+
+<span class="c1"># do it...</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;branch1.json&#39;</span><span class="p">)</span>
+
+<span class="c1"># use &#39;*args&#39; here</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">json_import</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">datafile</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="export-document">
+<h3>Export-Document<a class="headerlink" href="#export-document" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Branch Operations - export a JSON document</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Export the document.</span>
+<span class="c1">#</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;export-doc.json&#39;</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">json_export</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">datafile</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="export-branch">
+<h3>Export-Branch<a class="headerlink" href="#export-branch" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Branch Operations - export a JSON branch</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Export a branch.</span>
+<span class="c1">#</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;export-doc.json&#39;</span><span class="p">)</span>
+<span class="n">branch</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s1">&#39;/phoneNumber/0&#39;</span><span class="p">)(</span><span class="n">configdata</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">configdata</span><span class="o">.</span><span class="n">json_export</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="n">datafile</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ret</span> <span class="o">==</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Serialize branch data by &#8216;jsondata.jsondataserializer&#8217;</a><ul>
+<li><a class="reference internal" href="#syntax-elements">Syntax Elements</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#import-document">Import-Document</a></li>
+<li><a class="reference internal" href="#import-branch">Import-Branch</a></li>
+<li><a class="reference internal" href="#export-document">Export-Document</a></li>
+<li><a class="reference internal" href="#export-branch">Export-Branch</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_branch_serializer.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

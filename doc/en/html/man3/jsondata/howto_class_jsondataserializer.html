@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JSONDataSerializer - JSON Persistency &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="up" title="Howto" href="howto.html" />
+    <link rel="next" title="JSONPatch - RFC6902" href="howto_class_jsonpatch.html" />
+    <link rel="prev" title="JSON Schema - Validate JSON" href="howto_validate_json.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpatch.html" title="JSONPatch - RFC6902"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto_validate_json.html" title="JSON Schema - Validate JSON"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" accesskey="U">Howto</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondataserializer-json-persistency">
+<h1>JSONDataSerializer - JSON Persistency<a class="headerlink" href="#jsondataserializer-json-persistency" title="Permalink to this headline">¶</a></h1>
+<p>The class <em>JSONDataSerializer</em> provides persistency and modularity
+for JSON data structures and branches.</p>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="load">
+<h2>Load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h2>
+<p>JSON data can be simply loaded from a file, which is either formatted as structured
+tree view, or a simple (long-) line containing the whole JSON data.</p>
+<p>The JSON data:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;address&quot;</span><span class="p">:{</span>
+    <span class="nt">&quot;streetAddress&quot;</span><span class="p">:</span> <span class="s2">&quot;21 2nd Street&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;houseNumber&quot;</span><span class="p">:</span><span class="mi">12</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;phoneNumber&quot;</span><span class="p">:</span>
+    <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;home&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;212 555-1234&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;office&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;313 444-555&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;mobile&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="s2">&quot;777 666-555&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>is easily loaded by the code:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># -*- coding:utf-8   -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">jsondata.jsondataserializer</span> <span class="kn">import</span> <span class="n">JSONDataSerializer</span>
+<span class="kn">from</span> <span class="nn">jsondata</span>  <span class="kn">import</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># name of application, used for several filenames as MS_DRAFT4</span>
+<span class="n">appname</span> <span class="o">=</span> <span class="s2">&quot;jsondc&quot;</span>
+
+
+<span class="c1"># JSON data</span>
+<span class="n">datafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;datafile.json&#39;</span><span class="p">)</span>
+
+<span class="c1"># JSON schema</span>
+<span class="n">schemafile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;schema.jsd&#39;</span><span class="p">)</span>
+
+<span class="c1"># standard call options</span>
+<span class="n">kargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;schemafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schemafile</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nodefaultpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;nosubdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;pathlist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">kargs</span><span class="p">[</span><span class="s1">&#39;validator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MS_DRAFT4</span>
+
+<span class="c1"># load JSON file</span>
+<span class="n">jsondata</span> <span class="o">=</span> <span class="n">JSONDataSerializer</span><span class="p">(</span><span class="n">appname</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">jsondata</span><span class="p">)</span>
+
+<span class="k">pass</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="save">
+<h2>Save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h2>
+<p>The data e.g. as loaded by the previous example could be easily stored in a file
+by the following code.
+Just append the lines to the previous example.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+    <span class="n">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;outfile.json&#39;</span><span class="p">)</span>
+
+<span class="n">jsondata</span><span class="o">.</span><span class="n">json_export</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">pretty</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="import-and-export-branches">
+<h2>Import and Export Branches<a class="headerlink" href="#import-and-export-branches" title="Permalink to this headline">¶</a></h2>
+<p>The package <em>jsondata</em> makes it inparticular easy to import and export subtrees
+called <em>branches</em> into/from a JSON data structucture.</p>
+<p>For examples see <a class="reference internal" href="howto_patch_management.html#howto-jsonmodular"><span class="std std-ref">JSON Patch Management</span></a>.</p>
+</div>
+<div class="section" id="validation-of-branches-by-json-schemes">
+<h2>Validation of Branches By JSON Schemes<a class="headerlink" href="#validation-of-branches-by-json-schemes" title="Permalink to this headline">¶</a></h2>
+<p>The package <em>jsondata</em> provides either for the validation of the whole JSON data by
+one schema, or the modular validation of sub-branches by multiple schemes.</p>
+<p>For examples see <a class="reference internal" href="howto_patch_management.html#howto-jsonmodular"><span class="std std-ref">JSON Patch Management</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JSONDataSerializer - JSON Persistency</a><ul>
+<li><a class="reference internal" href="#load">Load</a></li>
+<li><a class="reference internal" href="#save">Save</a></li>
+<li><a class="reference internal" href="#import-and-export-branches">Import and Export Branches</a></li>
+<li><a class="reference internal" href="#validation-of-branches-by-json-schemes">Validation of Branches By JSON Schemes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto_validate_json.html"
+                        title="previous chapter">JSON Schema - Validate JSON</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto_class_jsonpatch.html"
+                        title="next chapter">JSONPatch - RFC6902</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto_class_jsondataserializer.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="howto_class_jsonpatch.html" title="JSONPatch - RFC6902"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto_validate_json.html" title="JSON Schema - Validate JSON"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="howto.html" >Howto</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

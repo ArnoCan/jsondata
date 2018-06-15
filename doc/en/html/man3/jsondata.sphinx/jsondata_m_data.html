@@ -1,0 +1,380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata.JSONData’ - Module &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-jsondata-module">
+<h1>&#8216;jsondata.JSONData&#8217; - Module<a class="headerlink" href="#jsondata-jsondata-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="compliance-modes">
+<h3>Compliance modes<a class="headerlink" href="#compliance-modes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>MODE_JSON_RFC4927 = 0: Compliant to IETF RFC4927.</li>
+<li>MODE_JSON_RF7951 = 2: Compliant to IETF RF7951.</li>
+<li>MODE_JSON_ECMA264 = 10: Compliant to ECMA-264, refer to Chapter 15.12 The JSON Object.</li>
+<li>MODE_POINTER_RFC6901 = 20: Compliant to IETF RFC6901.</li>
+<li>MODE_PATCH_RFC6902 = 30: Compliant to IETF RFC6902.</li>
+<li>MODE_SCHEMA_DRAFT3 = 43: Compliant to IETF DRAFT3.</li>
+<li>MODE_SCHEMA_DRAFT4 = 44: Compliant to IETF DRAFT4.</li>
+</ul>
+</div>
+<div class="section" id="types-of-validator">
+<h3>Types of validator<a class="headerlink" href="#types-of-validator" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>OFF = 0: No validation.</li>
+<li>DRAFT4 = 1: Use draft4: jsonschema.validator(Draft4Validator)</li>
+<li>DRAFT3 = 2: Use draft3:jsonschema.Draft3Validator</li>
+</ul>
+<p>The default value is:</p>
+<ul class="simple">
+<li>DEFAULT = <em>DRAFT4</em> = 1: Default</li>
+</ul>
+</div>
+<div class="section" id="match-criteria">
+<h3>Match Criteria<a class="headerlink" href="#match-criteria" title="Permalink to this headline">¶</a></h3>
+<p>Match criteria for node comparison:</p>
+<ul class="simple">
+<li>MATCH_INSERT = 0: for dicts</li>
+<li>MATCH_NO = 1: negates the whole set</li>
+<li>MATCH_KEY = 2: for dicts</li>
+<li>MATCH_CHLDATTR = 3: for dicts and lists</li>
+<li>MATCH_INDEX = 4: for lists</li>
+<li>MATCH_MEM = 5: for dicts(value) and lists</li>
+<li>MATCH_NEW = 6: for the creation of new</li>
+</ul>
+</div>
+<div class="section" id="return-sets">
+<h3>Return Sets<a class="headerlink" href="#return-sets" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>FIRST: The first match only.</li>
+<li>ALL: All matches.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="jsondata">
+<h2>JSONData<a class="headerlink" href="#jsondata" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>JSONData.data: JSON object data tree.</li>
+<li>JSONData.schema: JSONschema object data tree.</li>
+</ul>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="init">
+<h4>__init__<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="repr">
+<h4>__repr__<a class="headerlink" href="#repr" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="str">
+<h4>__str__<a class="headerlink" href="#str" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-add">
+<h4>branch_add<a class="headerlink" href="#branch-add" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-copy">
+<h4>branch_copy<a class="headerlink" href="#branch-copy" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-create">
+<h4>branch_create<a class="headerlink" href="#branch-create" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-move">
+<h4>branch_move<a class="headerlink" href="#branch-move" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-remove">
+<h4>branch_remove<a class="headerlink" href="#branch-remove" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-replace">
+<h4>branch_replace<a class="headerlink" href="#branch-replace" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="branch-test">
+<h4>branch_test<a class="headerlink" href="#branch-test" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="getdata">
+<h4>getData<a class="headerlink" href="#getdata" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="getpointerpath">
+<h4>getPointerPath<a class="headerlink" href="#getpointerpath" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="getschema">
+<h4>getSchema<a class="headerlink" href="#getschema" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="gettreediff">
+<h4>getTreeDiff<a class="headerlink" href="#gettreediff" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="getvaluenode">
+<h4>getValueNode<a class="headerlink" href="#getvaluenode" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="isapplicable">
+<h4>isApplicable<a class="headerlink" href="#isapplicable" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="printdata">
+<h4>printData<a class="headerlink" href="#printdata" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="printschema">
+<h4>printSchema<a class="headerlink" href="#printschema" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="pop">
+<h4>pop<a class="headerlink" href="#pop" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="setschema">
+<h4>setSchema<a class="headerlink" href="#setschema" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="validate">
+<h4>validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>&#8216;+&#8217;<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id2">
+<h4>&#8216;&amp;&amp;&#8217;<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id3">
+<h4>&#8216;()&#8217;<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="s-x">
+<h4>&#8216;S==x&#8217;<a class="headerlink" href="#s-x" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id4">
+<h4>&#8216;[]&#8217;<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id5">
+<h4>&#8216;S!=x&#8217;<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id6">
+<h4>&#8216;+=&#8217;<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id7">
+<h4>&#8216;=&amp;&amp;&#8217;<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id8">
+<h4>&#8216;S%x&#8217;<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id11">
+<h4>&#8216;<a href="#id9"><span class="problematic" id="id10">*</span></a>=&#8217;<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id12">
+<h4>&#8216;||=&#8217;<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id13">
+<h4>&#8216;-=&#8217;<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id14">
+<h4>&#8216;^=&#8217;<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id15">
+<h4>&#8216;%&#8217;<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id16">
+<h4>&#8216;*&#8217;<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id17">
+<h4>&#8216;||&#8217;<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id18">
+<h4>&#8216;S+x&#8217;<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id19">
+<h4>&#8216;S&amp;&amp;x&#8217;<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id20">
+<h4>&#8216;S%x&#8217;<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id21">
+<h4>&#8216;S*x&#8221;<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id22">
+<h4>&#8216;S||x&#8221;<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id23">
+<h4>&#8216;S^x&#8221;<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id24">
+<h4>&#8216;-&#8216;<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id25">
+<h4>&#8216;^&#8217;<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="iterators">
+<h3>Iterators<a class="headerlink" href="#iterators" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="iter">
+<h4>__iter__<a class="headerlink" href="#iter" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">&#8216;jsondata.JSONData&#8217; - Module</a><ul>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+<li><a class="reference internal" href="#compliance-modes">Compliance modes</a></li>
+<li><a class="reference internal" href="#types-of-validator">Types of validator</a></li>
+<li><a class="reference internal" href="#match-criteria">Match Criteria</a></li>
+<li><a class="reference internal" href="#return-sets">Return Sets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsondata">JSONData</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#init">__init__</a></li>
+<li><a class="reference internal" href="#repr">__repr__</a></li>
+<li><a class="reference internal" href="#str">__str__</a></li>
+<li><a class="reference internal" href="#branch-add">branch_add</a></li>
+<li><a class="reference internal" href="#branch-copy">branch_copy</a></li>
+<li><a class="reference internal" href="#branch-create">branch_create</a></li>
+<li><a class="reference internal" href="#branch-move">branch_move</a></li>
+<li><a class="reference internal" href="#branch-remove">branch_remove</a></li>
+<li><a class="reference internal" href="#branch-replace">branch_replace</a></li>
+<li><a class="reference internal" href="#branch-test">branch_test</a></li>
+<li><a class="reference internal" href="#getdata">getData</a></li>
+<li><a class="reference internal" href="#getpointerpath">getPointerPath</a></li>
+<li><a class="reference internal" href="#getschema">getSchema</a></li>
+<li><a class="reference internal" href="#gettreediff">getTreeDiff</a></li>
+<li><a class="reference internal" href="#getvaluenode">getValueNode</a></li>
+<li><a class="reference internal" href="#isapplicable">isApplicable</a></li>
+<li><a class="reference internal" href="#printdata">printData</a></li>
+<li><a class="reference internal" href="#printschema">printSchema</a></li>
+<li><a class="reference internal" href="#pop">pop</a></li>
+<li><a class="reference internal" href="#setschema">setSchema</a></li>
+<li><a class="reference internal" href="#validate">validate</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operators">Operators</a><ul>
+<li><a class="reference internal" href="#id1">&#8216;+&#8217;</a></li>
+<li><a class="reference internal" href="#id2">&#8216;&amp;&amp;&#8217;</a></li>
+<li><a class="reference internal" href="#id3">&#8216;()&#8217;</a></li>
+<li><a class="reference internal" href="#s-x">&#8216;S==x&#8217;</a></li>
+<li><a class="reference internal" href="#id4">&#8216;[]&#8217;</a></li>
+<li><a class="reference internal" href="#id5">&#8216;S!=x&#8217;</a></li>
+<li><a class="reference internal" href="#id6">&#8216;+=&#8217;</a></li>
+<li><a class="reference internal" href="#id7">&#8216;=&amp;&amp;&#8217;</a></li>
+<li><a class="reference internal" href="#id8">&#8216;S%x&#8217;</a></li>
+<li><a class="reference internal" href="#id11">&#8216;*=&#8217;</a></li>
+<li><a class="reference internal" href="#id12">&#8216;||=&#8217;</a></li>
+<li><a class="reference internal" href="#id13">&#8216;-=&#8217;</a></li>
+<li><a class="reference internal" href="#id14">&#8216;^=&#8217;</a></li>
+<li><a class="reference internal" href="#id15">&#8216;%&#8217;</a></li>
+<li><a class="reference internal" href="#id16">&#8216;*&#8217;</a></li>
+<li><a class="reference internal" href="#id17">&#8216;||&#8217;</a></li>
+<li><a class="reference internal" href="#id18">&#8216;S+x&#8217;</a></li>
+<li><a class="reference internal" href="#id19">&#8216;S&amp;&amp;x&#8217;</a></li>
+<li><a class="reference internal" href="#id20">&#8216;S%x&#8217;</a></li>
+<li><a class="reference internal" href="#id21">&#8216;S*x&#8221;</a></li>
+<li><a class="reference internal" href="#id22">&#8216;S||x&#8221;</a></li>
+<li><a class="reference internal" href="#id23">&#8216;S^x&#8221;</a></li>
+<li><a class="reference internal" href="#id24">&#8216;-&#8216;</a></li>
+<li><a class="reference internal" href="#id25">&#8216;^&#8217;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iterators">Iterators</a><ul>
+<li><a class="reference internal" href="#iter">__iter__</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_m_data.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+{
+    "api": {
+        "uuid" : "f1ceb833-0cb8-42b6-a5b2-e6af80335b8d",
+        "version" : "01.01.001",
+        "status" : "alpha",
+        "name" : "configuration"
+    },
+    "mainwin" : {
+	},
+    "controlcenter" : {
+		"common": {
+			"nodepath" : [
+				"./misc",
+				"./Plugins"
+			],
+			"model" : {
+				"filesystem": "0",
+				"zip": "0",
+				"jar": "0",
+				"custom": ["0", "0"],
+				"inmemstorage": "0",
+				"cachesize": 4000,
+				"cursorsize": 2000
+			},
+			"nodescanner" : {
+				"treeresolution": "0",
+				"suffixes": ".*",
+				"regexpr": "",
+				"fromdate": [ "0", "0", "0" ],
+				"fromtime": [ "0", "0", "0" ],
+				"todate": [ "0", "0", "0" ],
+				"totime": [ "0", "0", "0" ],
+				"nodetypes": [ "1", "1", "0" ]
+			},
+			"dirwalk" : {
+				"treeresolution": "0"
+			}
+		},
+		"plugins":{
+			"in": {
+				"nodepath" : [
+					"./plugins/in:$HOME/plugins/in"
+				],
+				"entities": {
+				}
+			},
+			"filter":{
+				"nodepath" : [
+					"./plugins/filter:$HOME/plugins/filter"
+				],
+				"entities": {
+				}
+			},
+			"out":{
+				"nodepath" : [
+					"./plugins/out:$HOME/plugins/out"
+				],
+				"entities": {
+				}
+			}
+		}
+	}
+}

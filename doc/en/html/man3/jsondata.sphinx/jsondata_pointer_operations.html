@@ -1,0 +1,693 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Process data by ‘jsondata.jsonpointer’ &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="process-data-by-jsondata-jsonpointer">
+<h1>Process data by &#8216;jsondata.jsonpointer&#8217;<a class="headerlink" href="#process-data-by-jsondata-jsonpointer" title="Permalink to this headline">¶</a></h1>
+<p>The module jsondata.jsonpointer provides for the most important operators for
+the assembly and evaluation of JSON pointers in accordance to RFC6901 <a class="reference internal" href="references.html#rfc6901" id="id1">[RFC6901]</a>
+and the upcoming relative pointers <em>draft-handrews-relative-json-pointer-01</em> <a class="reference internal" href="references.html#relpointer" id="id2">[RELPOINTER]</a>
+.</p>
+<p>Basic types of provided operations are:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Pointer Arithmetics</strong>:</dt>
+<dd>Manipulates and calculates the pointer itself.
+Thus the comparison is related to the resulting contained set.
+Where the shorter matching pointer path contains more elements, than
+the longer, which itself is contained in the matching shorter path.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Pointed Value Evaluation</strong>:</dt>
+<dd>Fetches values from JSON documents.
+Thus the comparison is related to the resulting values pointed
+to by the pointer path.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Calculations with Pointed Values</strong>:</dt>
+<dd>Applies common arithmetics on to evaluated
+values and numeric parts of pointers.</dd>
+</dl>
+</li>
+</ul>
+<p>The supported categories of JSON Pointers are</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="21%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">type</th>
+<th class="head">pattern</th>
+<th class="head">reference</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>JSON Pointer</td>
+<td>&#8216;/...&#8217;</td>
+<td>rfc6901</td>
+</tr>
+<tr class="row-odd"><td>JSON URI fragment</td>
+<td>&#8216;#/...&#8217;</td>
+<td>rfc6901</td>
+</tr>
+<tr class="row-even"><td>JSON Relative Pointer</td>
+<td>&#8216;&lt;pos-integer&gt;/...&#8217;</td>
+<td>draft-handrews-relative-json-pointer-01 / 2018</td>
+</tr>
+<tr class="row-odd"><td>JSON Relative Pointer Index</td>
+<td>&#8216;&lt;pos-integer&gt;#&#8217;</td>
+<td>draft-handrews-relative-json-pointer-01 / 2018</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="syntax-elements">
+<h2>Syntax Elements<a class="headerlink" href="#syntax-elements" title="Permalink to this headline">¶</a></h2>
+<p>The current release provides the standard absolute pointers and the newly upcoming
+relative pointers.
+The JSON Pointer is commonly modeled within the Python implementation as a <em>list</em> of path items.</p>
+<div class="section" id="json-pointer-types">
+<h3>JSON Pointer Types<a class="headerlink" href="#json-pointer-types" title="Permalink to this headline">¶</a></h3>
+<p>The processing of a <em>JSON Pointer</em> is supported for the combined absolute pointers within a document
+in accordance to <em>rfc6901</em> <a class="reference internal" href="references.html#rfc6901" id="id3">[RFC6901]</a> and the relative pointers in accordance to the available draft-01 <a class="reference internal" href="references.html#relpointer" id="id4">[RELPOINTER]</a>.</p>
+<p><a class="reference internal" href="_images/pointer-evaluation.png"><img alt="pointerevaluation" src="_images/pointer-evaluation.png" style="width: 350px;" /></a>
+<a class="reference external" href="_static/pointer-evaluation.png"><img alt="zoom" src="_images/zoom.png" style="width: 16px;" /></a></p>
+<p>The relative pointer within a document is technically an absolute pointer within a document
+mover to an starting point within the document by an relative offset.</p>
+<div class="section" id="absolute-json-pointers">
+<h4>Absolute JSON Pointers<a class="headerlink" href="#absolute-json-pointers" title="Permalink to this headline">¶</a></h4>
+<p>The absolute JSON Pointers are absolute within the current scope,
+actually relative to the top of the current document.
+This is also the case for the supported URI fragments,
+which are formally relative within the current page.
+Thus it could be basically defined, that all JSON Pointers are relative,
+by default with the current scope as the a fixed point of reference.</p>
+<p>The ABNF:</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6901 - JSON Pointer section 3. Syntax <a class="reference internal" href="references.html#rfc6901" id="id5">[RFC6901]</a></p>
+<p>A JSON Pointer is a Unicode string (see [RFC4627], Section 3)
+containing a sequence of zero or more reference tokens, each prefixed
+by a ’/’ (%x2F) character.
+Because the characters ’~’ (%x7E) and ’/’ (%x2F) have special|
+meanings in JSON Pointer, ’~’ needs to be encoded as ’~0’ and ’/’
+needs to be encoded as ’~1’ when these characters appear in a
+reference token.</p>
+<p>The ABNF syntax of a JSON Pointer is:</p>
+<div class="highlight-abnf"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nc">json-pointer</span>      <span class="o">=</span> <span class="o">*</span><span class="p">(</span> <span class="l">&quot;/&quot;</span> <span class="nc">reference-token</span> <span class="p">)</span>
+<span class="nc">reference-token</span>   <span class="o">=</span> <span class="o">*</span><span class="p">(</span> <span class="nc">unescaped</span> <span class="o">/</span> <span class="nc">escaped</span> <span class="p">)</span>
+<span class="nc">unescaped</span>         <span class="o">=</span> <span class="l">%x00-2E</span> <span class="o">/</span> <span class="l">%x30-7D</span> <span class="o">/</span> <span class="l">%x7F-10FFFF</span>
+   <span class="c1">; %x2F (’/’) and %x7E (’~’) are excluded from ’unescaped’</span>
+<span class="nc">escaped</span>           <span class="o">=</span> <span class="l">&quot;~&quot;</span> <span class="p">(</span> <span class="l">&quot;0&quot;</span> <span class="o">/</span> <span class="l">&quot;1&quot;</span> <span class="p">)</span>
+   <span class="c1">; representing ’~’ and ’/’, respectively</span>
+</pre></div>
+</td></tr></table></div>
+<p class="last">It is an error condition if a JSON Pointer value does not conform to
+this syntax (see Section 7).
+Note that JSON Pointers are specified in characters, not as bytes.</p>
+</div>
+<p>RFC6901 compliant examples are:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>/a/b/c    # absolute path
+&#39;&#39;        # empty string, the whole document
+</pre></div>
+</td></tr></table></div>
+<p>The following examples are not valid, as they formally do not comply to the syntax:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>a/b/c    # relative path
+x        # relative path
+</pre></div>
+</td></tr></table></div>
+<p>A special variant resulting from the above syntax defintion is given by multi|ple
+repetition of the slash charcater &#8216;/&#8217;</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">/</span>
+<span class="o">//</span>
+<span class="o">///</span>
+</pre></div>
+</td></tr></table></div>
+<p>The <em>jsondata</em> interprets these in accordance to rfc6901 as a series of empty path items.
+The example document</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="p">:</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="n">null</span><span class="p">}}}</span> <span class="o">=&gt;</span> <span class="n">p</span> <span class="p">:</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}}}</span>
+</pre></div>
+</td></tr></table></div>
+<p>results in the following access paths and values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="31%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">rfc6901</th>
+<th class="head">Python</th>
+<th class="head">Result</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#8216;&#8217;</td>
+<td>p</td>
+<td>{&#8216;&#8217;: {&#8216;&#8217;: {&#8216;&#8217;: None}}}</td>
+</tr>
+<tr class="row-odd"><td>&#8216;/&#8217;</td>
+<td>p[&#8216;&#8217;]</td>
+<td>{&#8216;&#8217;: {&#8216;&#8217;: None}}</td>
+</tr>
+<tr class="row-even"><td>&#8216;//&#8217;</td>
+<td>p[&#8216;&#8217;][&#8216;&#8217;]</td>
+<td>{&#8216;&#8217;: None}</td>
+</tr>
+<tr class="row-odd"><td>&#8216;///&#8217;</td>
+<td>p[&#8216;&#8217;][&#8216;&#8217;][&#8216;&#8217;]</td>
+<td>None</td>
+</tr>
+<tr class="row-even"><td>&#8216;#&#8217;</td>
+<td>p</td>
+<td>{&#8216;&#8217;: {&#8216;&#8217;: {&#8216;&#8217;: None}}}</td>
+</tr>
+<tr class="row-odd"><td>&#8216;#/&#8217;</td>
+<td>p[&#8216;&#8217;]</td>
+<td>{&#8216;&#8217;: {&#8216;&#8217;: None}}</td>
+</tr>
+<tr class="row-even"><td>&#8216;#//&#8217;</td>
+<td>p[&#8216;&#8217;][&#8216;&#8217;]</td>
+<td>{&#8216;&#8217;: None}</td>
+</tr>
+<tr class="row-odd"><td>&#8216;#///&#8217;</td>
+<td>p[&#8216;&#8217;][&#8216;&#8217;][&#8216;&#8217;]</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>For details see <a class="reference internal" href="references.html#rfc6901" id="id6">[RFC6901]</a> section 5 and section 6.</p>
+<p>The specification defines the following evaluation, see <a class="reference internal" href="references.html#rfc6901" id="id7">[RFC6901]</a>
+section &#8220;4. Evaluation&#8221;:</p>
+<p><a class="reference internal" href="_images/rfc6901-evaluation.png"><img alt="absolutepointerevaluation" src="_images/rfc6901-evaluation.png" style="width: 600px;" /></a>
+<a class="reference external" href="_static/rfc6901-evaluation.png"><img alt="zoom" src="_images/zoom.png" style="width: 16px;" /></a></p>
+</div>
+<div class="section" id="json-pointer-as-uri-fragments">
+<h4>JSON Pointer as URI Fragments<a class="headerlink" href="#json-pointer-as-uri-fragments" title="Permalink to this headline">¶</a></h4>
+<p>The RFC6901 defines in addition to the pure JSON document pointers a
+URI fragment syntax for the definition of JSON pointers.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>RFC6901 - section 6. URI Fragment Identifier Representation</p>
+<p class="last">A JSON Pointer can be represented in a URI fragment identifier by
+encoding it into octets using UTF-8 <a class="reference internal" href="references.html#rfc3629" id="id8">[RFC3629]</a>, while percent-encoding
+those characters not allowed by the fragment rule in <a class="reference internal" href="references.html#rfc3986" id="id9">[RFC3986]</a>.</p>
+</div>
+<p>The syntax is quite close to the following definition of relative pointers.</p>
+</div>
+<div class="section" id="relative-json-pointers">
+<h4>Relative JSON Pointers<a class="headerlink" href="#relative-json-pointers" title="Permalink to this headline">¶</a></h4>
+<p>The current draft specification
+&#8220;Relative JSON Pointers - draft-handrews-relative-json-pointer-01&#8221; <a class="reference internal" href="references.html#relpointer" id="id10">[RELPOINTER]</a>
+defines a standard syntax for the common definition of relative JSON Pointers.
+The definition of a relative pointer requires two information points, the anchor
+and the relative distance.</p>
+<p>The draft standard definition combines two conceptual parts unambigously
+into a single path definition:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>jsonpointer := (
+   &lt;upward-distance&gt; &lt;downward-distance&gt;
+   &lt;upward-distance&gt; &#39;#&#39;
+)
+
+upward-distance := [1-9][0-9]*
+downward-distance := &quot;rfc6901-path&quot;
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic">
+<li><p class="first">upward-distance:</p>
+<p>The number of steps comprising the containing arrays and objects
+in direction to the top node.</p>
+</li>
+<li><p class="first">downward-distance:</p>
+<p>The number of index and key steps into the contained arrays and objects
+in direction to a leaf node.</p>
+</li>
+</ol>
+<p>Relative pointers provide advantage in particular within loops.</p>
+<p>The ABNF:</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>draft-handrews-relative-json-pointer-01 - Relative JSON Pointers section 3. Syntax <a class="reference internal" href="references.html#relpointer" id="id11">[RELPOINTER]</a></p>
+<p>A Relative JSON Pointer is a Unicode string (see RFC 4627,
+Section 3 <a class="reference internal" href="references.html#rfc4627" id="id12">[RFC4627]</a> ), comprising a non-negative integer, followed by either a
+’#’ (%x23) character or a JSON Pointer (RFC 6901 <a class="reference internal" href="references.html#rfc6901" id="id13">[RFC6901]</a>).
+The separation between the integer prefix and the JSON Pointer will
+always be unambiguous, because a JSON Pointer must be either zero-
+length or start with a ’/’ (%x2F). Similarly, a JSON Pointer will
+never be ambiguous with the ’#’.</p>
+<p>The ABNF syntax of a Relative JSON Pointer is:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>relative-json-pointer  = non-negative-integer &amp;lt;json-pointer&amp;gt;  (*)
+relative-json-pointer  =/ non-negative-integer &quot;#&quot;                  (**)
+non-negative-integer   = %x30 / %x31-39 *( %x30-39 )
+   ; &quot;0&quot;, or digits without a leading &quot;0&quot;
+</pre></div>
+</td></tr></table></div>
+<p>where &lt;json-pointer&gt; follows the production defined in RFC 6901,
+Section 3 <a class="reference internal" href="references.html#rfc6901" id="id14">[RFC6901]</a> (&#8220;Syntax&#8221;).</p>
+<dl class="last docutils">
+<dt><strong>REMARK</strong>:</dt>
+<dd><p class="first">(*): This production defines a relative pointer to a resulting node.</p>
+<p class="last">(**): This production evaluates the resulting location index.</p>
+</dd>
+</dl>
+</div>
+<p>The draft specification defines the following evaluation, see <a class="reference internal" href="references.html#relpointer" id="id15">[RELPOINTER]</a>
+section &#8220;4. Evaluation&#8221;:</p>
+<p><a class="reference internal" href="_images/relpointer-evaluation.png"><img alt="relpointerevaluation" src="_images/relpointer-evaluation.png" style="width: 700px;" /></a>
+<a class="reference external" href="_static/relpointer-evaluation.png"><img alt="zoom" src="_images/zoom.png" style="width: 16px;" /></a></p>
+<ol class="arabic">
+<li><p class="first">Starts at a node within a document.</p>
+</li>
+<li><p class="first">The integer value at the beginning is extracted.</p>
+<ol class="loweralpha simple">
+<li>If the root is provided as start node, this is an error condition</li>
+<li>If the referenced value is an item within an array, then the new
+referenced value is that array.</li>
+<li>If the referenced value is an object member within an object, then
+the new referenced value is that object.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>Iterpretation</strong>:</p>
+<blockquote>
+<div><p>The integer value is incremented as upward-moves within
+the enfolding stack of arrays and objects. The value &#8216;0&#8217;
+is the initial value itself. For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span>
+         <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;d&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;e&#39;</span><span class="p">,</span>
+      <span class="p">]</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>With the values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">start</span>        <span class="o">=</span> <span class="s1">&#39;/a/b/c&#39;</span>
+<span class="n">rel</span><span class="o">-</span><span class="n">pointer</span>  <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>the result is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s1">&#39;e&#39;</span>   <span class="c1"># 1/2 -&gt; (1)   =&gt; bx = [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]</span>
+      <span class="c1">#        (1/2) =&gt; bx[2] = &#39;e&#39;</span>
+</pre></div>
+</div>
+<p>or with the values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">start</span>        <span class="o">=</span> <span class="s1">&#39;/a/b/c&#39;</span>
+<span class="n">rel</span><span class="o">-</span><span class="n">pointer</span>  <span class="o">=</span> <span class="mi">3</span><span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>the result is:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="s1">&#39;d&#39;</span>   <span class="c1"># 3/a/b/1 -&gt; (3)       =&gt; bx               = {&#39;a&#39;,{&#39;b&#39;: [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]}}</span>
+      <span class="c1">#            (3/a)     =&gt; bx[&#39;a&#39;]          = {&#39;b&#39;: [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]}</span>
+      <span class="c1">#            (3/a/b)   =&gt; bx[&#39;a&#39;][&#39;b&#39;]     = [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]</span>
+      <span class="c1">#            (3/a/b/1) =&gt; bx[&#39;a&#39;][&#39;b&#39;][1]  = &#39;d&#39;</span>
+</pre></div>
+</div>
+</div>
+</li>
+<li><p class="first">If the remainder is a JSON Pointer, continue in accordance to RFC6901.</p>
+</li>
+<li><p class="first">If the remainder is a &#8216;#&#8217;.</p>
+<ol class="loweralpha simple">
+<li>If the root is provided as start node, this is an error condition</li>
+<li>If the referenced value is an item within an array, then the final
+evaluation result is the value’s index position within the array.</li>
+<li>If the referenced value is an object member within an object, then
+the new referenced value is the corresponding member name.</li>
+</ol>
+</li>
+</ol>
+<p>For example data refer to section &#8220;5.1 Examples&#8221; <a class="reference internal" href="references.html#relpointer" id="id16">[RELPOINTER]</a> :</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
+   <span class="nt">&quot;highly&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;nested&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>when starting from <em>/foo/1</em> which is <em>baz</em> with the results:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>relative path               | result   | result-type
+----------------------------+----------+--------------
+&quot;0&quot;                         | &quot;baz&quot;    | node/value
+&quot;1/0&quot;                       | &quot;bar&quot;    | node/value
+&quot;2/highly/nested/objects&quot;   | true     | node/value
+&quot;0#&quot;                        | 1        | key/index
+&quot;1#&quot;                        | &quot;foo&quot;    | key/index
+</pre></div>
+</td></tr></table></div>
+<p>when starting from <em>/highly/nested</em> which is <em>{&#8220;objects&#8221;:true}</em>
+with the results:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>relative path               | result   | result-type
+----------------------------+----------+--------------
+&quot;0/objects&quot;                 | true     | node/value
+&quot;1/nested/objects&quot;          | true     | node/value
+&quot;2/foo/0&quot;                   | &quot;bar&quot;    | node/value
+&quot;0#&quot;                        | &quot;nested&quot; | key/index
+&quot;1#&quot;                        | &quot;highly&quot; | key/index
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="comparison-of-json-pointer-types">
+<h4>Comparison of JSON Pointer Types<a class="headerlink" href="#comparison-of-json-pointer-types" title="Permalink to this headline">¶</a></h4>
+<p>The types of JSON Pointers describe basically all the same.
+A relative distance from a defined anchor.
+While the absolute pointers including the URI fragment use
+the top of the current document, the relative pointers provide
+an offset within a given document.
+The major difference is here the supported resuling upward pointer by
+an integer value prefix.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="24%" />
+<col width="22%" />
+<col width="11%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">type</th>
+<th class="head">downward pointer</th>
+<th class="head">upward pointer</th>
+<th class="head">offset</th>
+<th class="head">Syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>absolute</td>
+<td>X</td>
+<td>&#8211;</td>
+<td>&#8211;</td>
+<td>/a/b</td>
+</tr>
+<tr class="row-odd"><td>absolute-fragment</td>
+<td>X</td>
+<td>&#8211;</td>
+<td>&#8211;</td>
+<td>#/a/b</td>
+</tr>
+<tr class="row-even"><td>relative node/value</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>&lt;int&gt;/a/b</td>
+</tr>
+<tr class="row-odd"><td>relative key/index</td>
+<td>&#8211;</td>
+<td>X</td>
+<td>X</td>
+<td>&lt;int&gt;#</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="pointer-comparison-operators">
+<h3>Pointer Comparison Operators<a class="headerlink" href="#pointer-comparison-operators" title="Permalink to this headline">¶</a></h3>
+<p>Pointer comparison:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="s1">&#39;==&#39;</span> <span class="o">|</span> <span class="s1">&#39;!=&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The comparison operators process the pointers itself, these do not verify whether an
+intermediate result on the concrete JSON data iis valid or not, e.g. due to range-overflow.
+The comparison in performed on the reulst of a dry-run of both pointers on a  hypothetically
+ideal JSON data structure.</p>
+<p>For example the following pointers are equal, even though maybe not applicable:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">offset0</span> <span class="o">=</span> <span class="n">offset1</span> <span class="o">=</span> <span class="n">X</span>  <span class="c1"># comparison allways requires equal offsets/start-modes</span>
+
+<span class="n">pointer0</span> <span class="o">=</span> <span class="s2">&quot;1000/a/b&quot;</span>
+<span class="n">pointer1</span> <span class="o">=</span> <span class="s2">&quot;999/b&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="behavior-operators">
+<h3>Behavior Operators<a class="headerlink" href="#behavior-operators" title="Permalink to this headline">¶</a></h3>
+<p>Pointed value evaluation operators:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ops</span> <span class="p">:</span><span class="o">=</span> <span class="s1">&#39;()&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples for the provided basic calculations are:</p>
+<div class="section" id="arithmetics">
+<h3>Arithmetics<a class="headerlink" href="#arithmetics" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Pointer Arithmetics</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jsondata.jsonpointer</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/x/y&quot;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c/2/x/y/v&quot;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c/2/x/y&quot;</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c/2/x&quot;</span><span class="p">)</span>
+
+<span class="c1"># loop with increment</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+   <span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span> <span class="p">)</span>
+
+<span class="nb">print</span>
+<span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">d</span> <span class="p">)</span>
+
+<span class="nb">print</span>
+<span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &gt; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">e</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>prints the results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span><span class="o">/</span><span class="n">v</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span><span class="o">/</span><span class="n">v</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span><span class="o">/</span><span class="n">v</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span><span class="o">/</span><span class="n">v</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Where the shorter matching pointer path contains more elements, than
+the longer, which itself is contained in the matching shorter path.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="evaluation">
+<h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Pointed Value Evaluation</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jsondata.jsonpointer</span>
+
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/x/y&quot;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/2/x/y/v&quot;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/d&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<span class="nb">print</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">))</span> <span class="o">+</span> <span class="n">d</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">))</span> <span class="o">+</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">jdata</span><span class="p">))</span>
+<span class="nb">print</span> <span class="n">c</span>
+<span class="nb">print</span> <span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span>
+</pre></div>
+</div>
+<p>prints the results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span>
+<span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
+<span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
+<span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">x</span><span class="o">/</span><span class="n">y</span><span class="o">/</span><span class="n">v</span>
+<span class="kc">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="calculation">
+<h3>Calculation<a class="headerlink" href="#calculation" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Calculations with Pointed Values</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jsondata.jsonpointer</span>
+
+<span class="n">jdata</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/c&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/x/y&quot;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/2/x/y/v&quot;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="s2">&quot;/a/b/d&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">JSONPointer</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span><span class="p">(</span><span class="n">jdata</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>prints the results:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">5</span>
+<span class="o">/</span><span class="mi">5</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Process data by &#8216;jsondata.jsonpointer&#8217;</a><ul>
+<li><a class="reference internal" href="#syntax-elements">Syntax Elements</a><ul>
+<li><a class="reference internal" href="#json-pointer-types">JSON Pointer Types</a><ul>
+<li><a class="reference internal" href="#absolute-json-pointers">Absolute JSON Pointers</a></li>
+<li><a class="reference internal" href="#json-pointer-as-uri-fragments">JSON Pointer as URI Fragments</a></li>
+<li><a class="reference internal" href="#relative-json-pointers">Relative JSON Pointers</a></li>
+<li><a class="reference internal" href="#comparison-of-json-pointer-types">Comparison of JSON Pointer Types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pointer-comparison-operators">Pointer Comparison Operators</a></li>
+<li><a class="reference internal" href="#behavior-operators">Behavior Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#arithmetics">Arithmetics</a></li>
+<li><a class="reference internal" href="#evaluation">Evaluation</a></li>
+<li><a class="reference internal" href="#calculation">Calculation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jsondata_pointer_operations.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

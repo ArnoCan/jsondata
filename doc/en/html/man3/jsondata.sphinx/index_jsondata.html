@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>‘jsondata’ - package &mdash; jsondata 0.2.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="jsondata 0.2.22 documentation" href="index.html" />
+    <link rel="next" title="jsondata.__init__" href="jsondata_init_doc.html" />
+    <link rel="prev" title="Development Documents" href="shortcuts.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_init_doc.html" title="jsondata.__init__"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="shortcuts.html" title="Development Documents"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jsondata-package">
+<h1>&#8216;jsondata&#8217; - package<a class="headerlink" href="#jsondata-package" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The package &#8216;jsondata&#8217; is aimed for the management of modular in-memory data
+structures based on JSON. The data is foreseen to be represented by a main data
+tree with dynamically added and/or removed branches. The branches of data
+structures in particular provide for custom data. The data could either be
+related to a module, and/or to specific classes. The components provides by
+the package are:</p>
+<ul>
+<li><p class="first"><strong>JSONData</strong></p>
+<p>The main class JSONData provides for the core interface of the
+integration of JSON based documents and sub-documents including the
+validation by JSONschema - RFC7159/RFC4629 and DRAFT4schema.
+This provides for dynamic incremental construction of data and
+the persistent storage of the modified tree. The data is organized
+into trees and branches managed by the packages &#8216;json&#8217; and &#8216;jsonschema&#8217;.</p>
+</li>
+<li><p class="first"><strong>JSONDataSerializer</strong></p>
+<p>The class JSONDataSerializer derived from JSONData provides for
+serialization and integration of documents and sub-documents. This
+provides for the persistent storage of modified document trees.</p>
+</li>
+<li><p class="first"><strong>JSONPointer</strong></p>
+<p>The JSONPointer module provides for addressing of components within
+JSON based data structures in accordance to RCF7159 and RFC6901.
+The integrated caching of the in-memory address of the pointed node
+provides for native speed in case of repetition, aimed for nested
+hierarchical loop constructs.
+The class JSONPointer in particular provides operators for pointer
+arithmetics in order to simplify the application of navigation
+and loop constructs.</p>
+</li>
+<li><p class="first"><strong>JSONPatch</strong></p>
+<p>The JSONPatch module provides features for the alteration of JSON based
+data structures in accordance to RFC6902. The close design enables the
+fast addressing by combined usage with the class JSONPointer.
+The class JSONPatch in particular provides operators for patch arithmetics
+in order to simplify the modular patch management and loop constructs.
+The patch task lists could be assembled by modules, modified as required
+and stored persistently for reuse.</p>
+</li>
+</ul>
+<p>The close design to the presented in-memory interface by the packages &#8216;json&#8217;
+and &#8216;jsonschema&#8217; provides for reliable and fast access based on the standard
+Python packages, while the &#8216;jsondata&#8217; package adds high-level abstractions
+provided by standards for addressing and data assembly. The native Python
+access to the data entries remains compatible, while due to the
+caching of in-memory addresses of the nodes the access by the &#8216;jsondata&#8217;
+add-ons is close to native Python performance.</p>
+<p>The package &#8216;jsondata&#8217; supports the standards RFC6901, RFC6902, and the
+integration of RFC7159 with DRAFT4Schema, while relying for the syntax
+primitives of underlying layers presented by the packages &#8216;json&#8217; and
+&#8216;jsonschema&#8217;. The JSON language primitives for JSON are conform with
+related ECMA and RFC standards and proposals. Here ECMA-262, ECMA-404,
+RFC7159/RFC4627, &#8216;draft-zyp-json-schema-04&#8217;, and others.</p>
+<p>JSON based data provides for low resource data structure descriptions,
+thus fits in general quite good to distributed interface APIs, beneath
+JavaScript itself to protocols like those based on REST. But it also is
+applicable in case of numerous other requirements, a typical application
+for branch data is the persistent storage of GUI models for
+dynamically loaded and released user elements.</p>
+<p>The core module &#8216;jsondata.jsondata&#8217; provides hereby the load of a master model from a JSON file,
+and the incremental addition and removal of branches to the model by loading additional
+JSON modules into the master model.
+This is accompanied by the additional modules of this package, e.g. for modification in
+accordance to standards, or persistency of the in-memory data.
+The implementation is based on the standard packages &#8216;json&#8217; and &#8216;jsonschema&#8217;.
+The workflow provided by this package is:</p>
+<ol class="arabic simple">
+<li>Create the initial in-memory data model by loading the master JSON data.
+Decide here to use validation or not.
+Even though the validation itself could be shifted to a later state,
+once the data is loaded it may alter the state of the application
+irreversible.</li>
+<li>Add/insert an arbitrary number of branches provided e.g. by plugins
+into an arbitrary position of the data model.
+Now for the branch decide whether to validate or not.</li>
+</ol>
+<p>The data could be validated by provided JSONschema files. The interface
+supports for various types of branch insertion and deletion.
+The supported data resulting into a tree-structure could be depicted as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>root-node
+    |
+APP-schema
+    +- &lt;= import/export A-branches &lt;-&gt; API-schema + A-schema
+    |
+    +- &lt;= import/export B-branches &lt;-&gt; API-schema + B-schema
+    |
+    `- &lt;= import/export C-branches &lt;-&gt; API-schema + C-schema
+</pre></div>
+</div>
+<p>In case of requested validation of multiple components various schema
+files are required.
+The main schema for the application &#8216;APP-schema&#8217; has to be provided
+for the core application.</p>
+<p>The APP-schema provides in case of persistent configuration data the
+structural model for the statically related data of the application
+code. The &#8216;datafile&#8217; with values, e.g. altered by user
+interaction, could be varied and superposed as required, as long
+as the structure is valid.
+The import interface represented in &#8216;API-schema&#8217; is for the case of
+validation mandatory too. This ensures valid interface data is
+imported into the application. Whereas the specific schema
+files(A,B,C-schema) depend on the actual implementation of the imported modules.
+The resulting data could be saved for later reuse.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="jsondata_init_doc.html">jsondata.__init__</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_init_doc.html#module-jsondata.__init__">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_init_doc.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_init_doc.html#json-notation">JSON Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_init_doc.html#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jsondata_jsondata_doc.html">&#8216;jsondata.jsondata&#8217; - Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsondata_doc.html#module-jsondata.jsondata">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsondata_doc.html#jsondata">JSONData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsondata_doc.html#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jsondata_jsonserializer_doc.html">&#8216;jsondata.jsondataserializer&#8217; - Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonserializer_doc.html#module-jsondata.jsondataserializer">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonserializer_doc.html#jsondataserializer">JSONDataSerializer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonserializer_doc.html#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jsondata_jsonpointer_doc.html">&#8216;jsondata.jsonpointer&#8217; - Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpointer_doc.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpointer_doc.html#jsonpointer">JSONPointer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpointer_doc.html#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jsondata_jsonpatch_doc.html">&#8216;jsondata.jsonpatch&#8217; - Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#module-jsondata.jsonpatch">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#constansts">Constansts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#jsonpatch">JSONPatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#jsonpatchitem">JSONPatchItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#jsonpatchitemraw">JSONPatchItemRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#class-jsonpatchfilter">Class: JSONPatchFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsondata_jsonpatch_doc.html#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/jsondata-64x64.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="shortcuts.html"
+                        title="previous chapter">Development Documents</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jsondata_init_doc.html"
+                        title="next chapter">jsondata.__init__</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index_jsondata.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jsondata_init_doc.html" title="jsondata.__init__"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="shortcuts.html" title="Development Documents"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jsondata 0.2.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Arno-Can Uestuensoez.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>
